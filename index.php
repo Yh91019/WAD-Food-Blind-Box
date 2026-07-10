@@ -1,12 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Blind Bite</title>
-</head>
-<body>
-    <?php include('includes/header.php'); ?>
-    <?php include('includes/navigation.php'); ?>
-        <img src="http://localhost/wadassignment/images/bg.jpg" width="100%">
+<?php
+session_start();
+?>
+
+<?php include 'includes/header.php'; ?>
+<?php include 'includes/navigation.php'; ?>
+
+
+<?php
+if(isset($_SESSION['logout_message'])){
+?>
+
+<div id="logout-popup">
+    <?php echo $_SESSION['logout_message']; ?>
+</div>
+
+<?php
+unset($_SESSION['logout_message']);
+}
+?>
+
+<main>
+    <img src="http://localhost/wadassignment/images/bg.png" width="100%">
         <article>
             <p>
         <article>
@@ -15,7 +29,6 @@
             </p>
         </article>            </p>
         </article>
-    <?php include('includes/footer.php'); ?>
-    <script src="js/script.js"></script>
-</body>
-</html>
+
+</main>
+<?php include('includes/footer.php'); ?>

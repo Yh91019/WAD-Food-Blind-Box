@@ -1,116 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
+include 'includes/db_connect.php';
 
-<head>
-    <meta charset="UTF-8">
-    <title>Blind Bite | Login</title>
-    <link rel="stylesheet" href="login.css">
-</head>
+$error = "";
 
-<body>
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-<div class="container">
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-    <div class="left">
-        <a href="index.php"><img src="shop logo.png" alt="Blind Bite Logo"></a>
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
 
-        <h1>Welcome to Blind Bite</h1>
+    $result = $stmt->get_result();
 
-        <p>
-            Discover surprise meals, save money, and help reduce food waste.
-        </p>
-    </div>
+    if ($result->num_rows == 1) {
 
-    <div class="right">
+        $user = $result->fetch_assoc();
 
-        <!-- Login Form -->
-        <div id="loginForm">
+        // If using password_hash() when registering
+        if (password_verify($password, $user['password'])) {
 
-            <h2>Login</h2>
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['name'] = $user['name'];
 
-            <form action="login_process.php" method="post">
+            $_SESSION['login_message'] = "Welcome back, " . $user['name'] . "!";
 
-                <input type="email"
-                       name="email"
-                       placeholder="Email Address"
-                       required>
+            header("Location: profile.php");
+            exit();
 
-                <input type="password"
-                       name="password"
-                       placeholder="Password"
-                       required>
+        } else {
+            $error = "Incorrect password.";
+        }
 
-                <button type="submit">
-                    Login
-                </button>
+    } else {
+        $error = "*Email has not been registered. Please sign up first.*";
+    }
+}
+?>
 
-            </form>
+<?php include 'includes/header.php'; ?>
+<?php include 'includes/navigation.php'; ?>
 
-            <p>
-                Don't have an account?
-                <a href="#" onclick="showRegister()">Register</a>
+<main class="login-page">
+
+    <div class="login-box">
+
+        <h1>Login</h1>
+
+        <?php
+        if($error != ""){
+            echo "<p class='error'>$error</p>";
+        }
+        ?>
+
+        <form method="POST">
+
+            <label>Email</label><br>
+            <input type="email" name="email" required>
+
+            <br><br>
+
+            <label>Password</label><br>
+            <input type="password" name="password" required>
+
+            <br><br>
+
+            <button type="submit">Login</button>
+            <p class='signup-link'>
+                Don't have an account? 
+                <a href='signup.php'>Sign Up Now</a>
             </p>
 
-        </div>
-
-        <!-- Register Form -->
-        <div id="registerForm" style="display:none;">
-
-            <h2>Create Account</h2>
-
-            <form action="register_process.php" method="post">
-
-                <input type="text"
-                       name="fullname"
-                       placeholder="Full Name"
-                       required>
-
-                <input type="email"
-                       name="email"
-                       placeholder="Email Address"
-                       required>
-
-                <input type="password"
-                       name="password"
-                       placeholder="Password"
-                       required>
-
-                <input type="password"
-                       name="confirmPassword"
-                       placeholder="Confirm Password"
-                       required>
-
-                <button type="submit">
-                    Register
-                </button>
-
-            </form>
-
-            <p>
-                Already have an account?
-                <a href="#" onclick="showLogin()">Login</a>
-            </p>
-
-        </div>
+        </form>
 
     </div>
 
-</div>
+</main>
 
-<script>
-
-function showRegister(){
-    document.getElementById("loginForm").style.display="none";
-    document.getElementById("registerForm").style.display="block";
-}
-
-function showLogin(){
-    document.getElementById("registerForm").style.display="none";
-    document.getElementById("loginForm").style.display="block";
-}
-
-</script>
-
-</body>
-
-</html>
+<?php include 'includes/footer.php'; ?>
