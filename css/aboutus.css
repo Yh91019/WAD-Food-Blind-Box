@@ -35,50 +35,6 @@ header{
     width:90px;
     height:auto;
 }
-.menu-icon{
-    font-size:35px;
-    cursor:pointer;
-    color:#0b7d77;
-    user-select:none;
-}
-
-.sidebar{
-    position:fixed;
-    top:0;
-    left:-260px;
-    width:250px;
-    height:100%;
-
-    background:#0b7d77;
-
-    padding-top:80px;
-
-    transition:0.3s;
-
-    box-shadow:3px 0 10px rgba(0,0,0,.3);
-}
-
-.sidebar a{
-    display:block;
-
-    color:white;
-
-    text-decoration:none;
-
-    padding:18px 30px;
-
-    font-size:20px;
-
-    transition:0.3s;
-}
-
-.sidebar a:hover{
-    background:#0f9189;
-}
-
-.sidebar.show{
-    left:0;
-}
 
 .login{
    background:#061212;
