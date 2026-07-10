@@ -15,7 +15,7 @@
             <li><a href="menu.php">Menu</a></li>
             <li><a href="cart.php">Cart</a></li>
             <li><a href="profile.php">Profile</a></li>
-            <li><a href="about.php">About Us</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
             <li><a href="contact.php">Contact</a></li>
             
             <?php if(isset($_SESSION['user_id'])){ ?>
