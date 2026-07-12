@@ -5,6 +5,18 @@ session_start();
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/navigation.php'; ?>
 
+<?php
+if(isset($_SESSION['login_message'])){
+?>
+
+<div id="login-popup">
+    <?php echo $_SESSION['login_message']; ?>
+</div>
+
+<?php
+unset($_SESSION['login_message']);
+}
+?>
 
 <?php
 if(isset($_SESSION['logout_message'])){

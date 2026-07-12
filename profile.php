@@ -20,19 +20,6 @@ include 'includes/header.php';
 include 'includes/navigation.php';
 ?>
 
-<?php
-if(isset($_SESSION['login_message'])){
-?>
-
-<div id="login-popup">
-    <?php echo $_SESSION['login_message']; ?>
-</div>
-
-<?php
-unset($_SESSION['login_message']);
-}
-?>
-
 <main class="profile-page">
 
     <h1>My Profile</h1>
