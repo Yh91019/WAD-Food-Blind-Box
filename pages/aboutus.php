@@ -11,7 +11,8 @@
 
 <body id="aboutus-page">
 
-<?php include "../includes/header.php"; ?>
+    <?php include "../includes/navigation.php"; ?>
+
     <!-- ===================== ABOUT ===================== -->
 
     <section class="aboutus-about">

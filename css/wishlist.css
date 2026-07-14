@@ -1,0 +1,166 @@
+/* ===================== RESET ===================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* ===================== BODY ===================== */
+
+body{
+    background:#eef6f6;
+    color:#333;
+}
+
+/* ===================== CONTAINER ===================== */
+
+.wishlist-container{
+    width:90%;
+    max-width:1200px;
+    margin:50px auto;
+}
+
+.wishlist-container h1{
+    text-align:center;
+    color:#0b7d77;
+    font-size:42px;
+    margin-bottom:30px;
+}
+
+/* ===================== SEARCH ===================== */
+
+.search-box{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.search-box input{
+    width:400px;
+    max-width:90%;
+    padding:12px 18px;
+    font-size:16px;
+    border:2px solid #0b7d77;
+    border-radius:10px;
+}
+
+.search-box input:focus{
+    outline:none;
+    box-shadow:0 0 8px rgba(11,125,119,.3);
+}
+
+/* ===================== GRID ===================== */
+
+.wishlist-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:30px;
+}
+
+/* ===================== CARD ===================== */
+
+.wishlist-card{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 8px 18px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.wishlist-card:hover{
+    transform:translateY(-8px);
+}
+
+/* ===================== RESTAURANT ===================== */
+
+.restaurant{
+    color:#0b7d77;
+    margin-bottom:15px;
+}
+
+/* ===================== IMAGE ===================== */
+
+.food-image{
+    width:180px;
+    height:180px;
+    object-fit:cover;
+    border-radius:15px;
+    margin-bottom:15px;
+}
+
+/* ===================== FOOD NAME ===================== */
+
+.food-name{
+    color:#333;
+    margin-bottom:10px;
+}
+
+/* ===================== PRICE ===================== */
+
+.price{
+    font-size:22px;
+    font-weight:bold;
+    color:#ff9800;
+    margin-bottom:20px;
+}
+
+/* ===================== BUTTONS ===================== */
+
+.button-group{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+/* Add to Cart */
+
+.cart-btn{
+    background:#0b7d77;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.cart-btn:hover{
+    background:#08625d;
+}
+
+/* Remove */
+
+.remove-btn{
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.remove-btn:hover{
+    background:#b52b39;
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+@media(max-width:768px){
+
+    .wishlist-grid{
+        grid-template-columns:1fr;
+    }
+
+    .button-group{
+        flex-direction:column;
+    }
+
+    .cart-btn,
+    .remove-btn{
+        width:100%;
+    }
+
+}
