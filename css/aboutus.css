@@ -1,0 +1,275 @@
+/* ===================== RESET ===================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#eef6f6;
+    color:#333;
+}
+
+/* ===================== HEADER ===================== */
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:15px 60px;
+
+    background:white;
+    /*updown leftright brighterness*/
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.left-header{
+    display:flex;
+    align-items:center;
+    gap:40px;
+}
+.logo{
+    width:90px;
+    height:auto;
+}
+
+.login{
+   background:#061212;
+    color:white;
+    padding:12px 25px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+.login:hover{
+    background:#0b7d77;
+}
+/* ===================== ABOUT ===================== */
+
+.about{
+    width:80%;
+    margin:70px auto;
+    text-align:left;
+}
+
+.about h1{
+    font-size:55px;
+    color:#0b7d77;
+    margin-bottom:30px;
+}
+
+.about p{
+    font-size:20px;
+    line-height:1.8;
+    color:#555;
+    margin-bottom:20px;
+}
+
+/* ===================== IMAGE ===================== */
+
+.image-section{
+    text-align:center;
+    margin:50px 0;
+}
+
+.banner{
+    width:70%;
+    max-width:900px;
+    height:auto;
+    border-radius:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+/* ===================== TITLE ===================== */
+
+.choose-us{
+    width:90%;
+    margin:80px auto;
+}
+
+.choose-us h2{
+    text-align:center;
+    font-size:45px;
+    color:#0b7d77;
+    margin-bottom:50px;
+}
+
+/* ===================== CARDS ===================== */
+
+.cards{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+.card{
+
+    width:300px;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 20px rgba(0,0,0,.12);
+
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+.card h3{
+    font-size:26px;
+    color:#ff9800;
+    margin-bottom:20px;
+}
+
+.card p{
+    color:#555;
+    line-height:1.7;
+    font-size:17px;
+}
+
+.mission{
+    width:90%;
+    margin:80px auto;
+}
+.mission p{
+    color:white;
+    line-height:1.7;
+    font-size:17px;
+}
+.mission h3{
+    color:white;
+    margin-bottom:20px;
+    font-size:26px;
+}
+
+.mission-cards{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:nowrap;      /* Keep them on one row */
+}
+
+.mission-card{
+    flex:1;                /* Both cards have equal width */
+    max-width:450px;
+    min-height:220px;
+
+    background:black;
+    color:white;
+
+    padding:30px;
+    border-radius:20px;
+
+    box-shadow:0 10px 20px rgba(0,0,0,.12);
+}
+
+.story{
+    width:90%;
+    margin:80px auto;
+    display:flex;
+    justify-content:center;
+}
+
+.story p{
+    color:white;
+    line-height:1.7;
+    font-size:17px;
+}
+.story h3{
+    color:white;
+    margin-bottom:20px;
+    font-size:26px;
+}
+.story-card{
+    flex:1;
+    width:100%;
+    max-width:930px;
+    min-height:150px;
+
+    background:black;
+    color:white;
+
+    padding:30px;
+
+    border-radius:20px;
+}
+
+
+/* ===================== RESPONSIVE ===================== */
+
+@media(max-width:900px){
+
+    .about h1{
+        font-size:38px;
+    }
+
+    .about p{
+        font-size:18px;
+    }
+
+    .banner{
+        width:90%;
+    }
+
+    .card{
+        width:100%;
+    }
+
+    header{
+        padding:15px 25px;
+    }
+}
+
+/* ===================== WHATSAPP BUTTON ===================== */
+
+.whatsapp-btn{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    background:#25D366;
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:50px;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+
+    transition:.3s;
+
+    z-index:999;
+}
+
+.whatsapp-btn:hover{
+    background:#1ebe5d;
+    transform:scale(1.08);
+}
+
+.whatsapp-btn img{
+    width:32px;
+    height:32px;
+    object-fit:contain;
+}
+
+.whatsapp-btn span{
+    font-size:17px;
+}
