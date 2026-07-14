@@ -1,49 +1,150 @@
-/* ===================== SEARCH ===================== */
+/* ===================== RESTAURANT LIST ===================== */
 
-function searchWishlist(){
+const restaurants = [
 
-    let input = document.getElementById("searchInput");
+    "McDonald's",
 
-    let filter = input.value.toUpperCase();
+    "KFC",
 
-    let cards = document.getElementsByClassName("wishlist-card");
+    "Pizza Hut",
 
-    for(let i=0;i<cards.length;i++){
+    "Subway",
 
-        let restaurant = cards[i]
-            .getElementsByClassName("restaurant")[0]
-            .innerText;
+    "Domino's",
 
-        let food = cards[i]
-            .getElementsByClassName("food-name")[0]
-            .innerText;
+    "Sushi King"
 
-        if(
-            restaurant.toUpperCase().indexOf(filter)>-1 ||
-            food.toUpperCase().indexOf(filter)>-1
-        ){
+];
 
-            cards[i].style.display="block";
+/* ===================== SEARCH SUGGESTIONS ===================== */
 
-        }else{
+function showSuggestions(){
 
-            cards[i].style.display="none";
+    let input =
+        document.getElementById("wishlist-search-input")
+        .value
+        .toLowerCase();
+
+    let suggestionBox =
+        document.getElementById("suggestion-box");
+
+    suggestionBox.innerHTML = "";
+
+    if(input === ""){
+
+        suggestionBox.style.display = "none";
+
+        searchWishlist("");
+
+        return;
+
+    }
+
+    let found = false;
+
+    restaurants.forEach(function(name){
+
+        if(name.toLowerCase().startsWith(input)){
+
+            found = true;
+
+            let div = document.createElement("div");
+
+            div.className = "suggestion-item";
+
+            div.innerHTML = name;
+
+            div.onclick = function(){
+
+                document.getElementById("wishlist-search-input").value = name;
+
+                suggestionBox.style.display = "none";
+
+                searchWishlist(name);
+
+            };
+
+            suggestionBox.appendChild(div);
 
         }
 
+    });
+
+    suggestionBox.style.display = found ? "block" : "none";
+
+    searchWishlist(input);
+
+}
+
+/* ===================== SEARCH CARDS ===================== */
+
+function searchWishlist(keyword = ""){
+
+    let filter;
+
+    if(keyword === ""){
+
+        filter = document.getElementById("wishlist-search-input")
+        .value
+        .toUpperCase();
+
+    }else{
+
+        filter = keyword.toUpperCase();
+
     }
+
+    let cards =
+        document.querySelectorAll(".wishlist-card");
+
+    cards.forEach(function(card){
+
+        let restaurant =
+            card.querySelector(".wishlist-restaurant")
+            .innerText
+            .toUpperCase();
+
+        let food =
+            card.querySelector(".wishlist-food-name")
+            .innerText
+            .toUpperCase();
+
+        if(
+
+            restaurant.includes(filter)
+
+            ||
+
+            food.includes(filter)
+
+        ){
+
+            card.style.display = "block";
+
+        }else{
+
+            card.style.display = "none";
+
+        }
+
+    });
 
 }
 
 /* ===================== REMOVE ===================== */
 
-let removeButtons = document.querySelectorAll(".remove-btn");
+let removeButtons =
+    document.querySelectorAll(".wishlist-remove-btn");
 
 removeButtons.forEach(function(button){
 
-    button.addEventListener("click",function(){
+    button.addEventListener("click", function(){
 
-        this.closest(".wishlist-card").remove();
+        if(confirm("Remove this item from wishlist?")){
+
+            this.closest(".wishlist-card").remove();
+
+        }
 
     });
 
@@ -51,14 +152,41 @@ removeButtons.forEach(function(button){
 
 /* ===================== ADD TO CART ===================== */
 
-let cartButtons = document.querySelectorAll(".cart-btn");
+let cartButtons =
+    document.querySelectorAll(".wishlist-cart-btn");
 
 cartButtons.forEach(function(button){
 
-    button.addEventListener("click",function(){
+    button.addEventListener("click", function(){
 
-        alert("Item added to cart!");
+        alert("Item added to cart successfully!");
 
     });
+
+});
+
+/* ===================== CLICK OUTSIDE ===================== */
+
+document.addEventListener("click", function(e){
+
+    let input =
+        document.getElementById("wishlist-search-input");
+
+    let suggestion =
+        document.getElementById("suggestion-box");
+
+    if(
+
+        e.target !== input
+
+        &&
+
+        !suggestion.contains(e.target)
+
+    ){
+
+        suggestion.style.display = "none";
+
+    }
 
 });
