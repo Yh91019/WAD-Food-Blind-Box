@@ -78,4 +78,3 @@ $result = $conn->query($sql);
 <?php
         $conn->close();
         include 'includes/footer.php';
-?>

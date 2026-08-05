@@ -1,45 +1,54 @@
 <?php
-include 'includes/db_connect.php';
+session_start();
+include 'config/db_connect.php';
 
 $error = "";
-$success = false;
+$success = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $username = trim($_POST['username']);
+    $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+    $email = trim($_POST['email']);
+    $gender = $_POST['gender'];
+    $dob = $_POST['date_of_birth'];
+    $address = trim($_POST['address']);
+    $phone = trim($_POST['phone_number']);
 
-    // Check if email already exists
-    $check = "SELECT * FROM users WHERE email = ?";
-    $stmt = $conn->prepare($check);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
+    $check = $conn->prepare("SELECT * FROM users WHERE username=? OR email=?");
+    $check->bind_param("ss",$username,$email);
+    $check->execute();
 
-    $result = $stmt->get_result();
+    if($check->get_result()->num_rows > 0){
 
-    if ($result->num_rows > 0) {
+        $error = "Username or Email already exists.";
 
-        $error = "Email already registered. Please login.";
+    }else{
 
-    } else {
-
-        // Encrypt password
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        // Insert new user
-        $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO users
+        (username,password,email,gender,date_of_birth,address,phone_number)
+        VALUES (?,?,?,?,?,?,?)";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $name, $email, $hashedPassword);
 
-        if ($stmt->execute()) {
+        $stmt->bind_param(
+            "sssssss",
+            $username,
+            $password,
+            $email,
+            $gender,
+            $dob,
+            $address,
+            $phone
+        );
 
-            $success = true;
+        if($stmt->execute()){
 
-        } else {
+            $success = "Registration Successful!";
 
-            $error = "Registration failed. Please try again.";
+        }else{
+
+            $error = "Registration failed.";
 
         }
     }
@@ -51,69 +60,71 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <main class="signup-page">
 
-    <div class="signup-box">
-        <?php if($success){ ?>
+<div class="signup-box">
 
-        <div class="success-box">
-            <h2>✅ Registration Successful!</h2>
+<h1>Create Account</h1>
 
-            <p>Your account has been created successfully.</p>
-            <p>You can now log in using your email and password.</p>
+<?php
+if($error!=""){
+    echo "<p class='error'>$error</p>";
+}
 
-            <form action="login.php" method="get">
-                <button type="submit" class="success-btn">
-                     Go to Login
-                </button>
-            </form>
-        </div>
+if($success!=""){
+    echo "<p class='success'>$success</p>";
+}
+?>
 
-        <?php } else { ?>
+<form method="POST">
 
-        <h1>Sign Up</h1>
+<label>Username</label><br>
+<input type="text" name="username" required>
 
-        <?php
-        if($error != ""){
-            echo "<p class='error'>$error</p>";
-        }
-        ?>
+<br><br>
 
+<label>Email</label><br>
+<input type="email" name="email" required>
 
-        <form method="POST">
+<br><br>
 
-            <label>Name</label><br>
-            <input type="text" name="name" required>
+<label>Password</label><br>
+<input type="password" name="password" required>
 
-            <br><br>
+<br><br>
 
+<label>Gender</label><br>
 
-            <label>Email</label><br>
-            <input type="email" name="email" required>
+<select name="gender" required>
+    <option value="">Select Gender</option>
+    <option value="MALE">Male</option>
+    <option value="FEMALE">Female</option>
+    <option value="OTHER">Other</option>
+</select>
 
-            <br><br>
+<br><br>
 
+<label>Date of Birth</label><br>
+<input type="date" name="date_of_birth" required>
 
-            <label>Password</label><br>
-            <input type="password" name="password" required>
+<br><br>
 
-            <br><br>
+<label>Address</label><br>
+<textarea name="address" rows="4" required></textarea>
 
+<br><br>
 
-            <button type="submit">
-                Sign Up
-            </button>
+<label>Phone Number</label><br>
+<input type="text" name="phone_number" required>
 
-        </form>
+<br><br>
 
+<button type="submit">
+Sign Up
+</button>
 
-        <p class='login-link'>
-            Already have an account?
-            <a href="login.php">Login</a>
-        </p>
+</form>
 
-        <?php } ?>
-    </div>
+</div>
 
 </main>
-
 
 <?php include 'includes/footer.php'; ?>
