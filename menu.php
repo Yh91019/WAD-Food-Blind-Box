@@ -1,5 +1,12 @@
-<?php include 'includes/header.php'; ?>
-<?php include 'includes/navigation.php'; ?>
+<?php
+include 'config/db_connect.php';
+include 'includes/header.php';
+include 'includes/navigation.php';
+
+// Get all restaurants
+$sql = "SELECT * FROM restaurants";
+$result = $conn->query($sql);
+?>
 
 <main class="menu-page">
 
@@ -7,39 +14,68 @@
 
     <div class="restaurant-container">
 
-        <div class="restaurant-card">
-            <img src="images/BBbox.png" width="200" height="150">
+        <?php
+        if ($result->num_rows > 0) {
 
-            <div class="restaurant-info">
-                <h2>RESTAURANT NAME</h2>
-                <p><strong>Opening Hours:</strong> </p>
-                <p><strong>Location:</strong> </p>
-                <p><strong>Blind Box Price:</strong> RM </p>
-                <p><strong>Remaining Quantity:</strong> 50 Boxes</p>
-                <p><strong>Food Category:</strong> </p>
-                <a href="details.php?id=1" class="details-btn">Details</a>
+            while ($row = $result->fetch_assoc()) {
+        ?>
 
-            </div>
-        </div>
+                <div class="restaurant-card">
 
-        <div class="restaurant-card">
-            <img src="images/BBbox.png" width="200" height="150">
+                    <!-- Restaurant Image -->
+                    <img src="images/BBbox.png" width="200" height="150" alt="Blind Box">
 
-            <div class="restaurant-info">
-                <h2>RESTAURANT NAME</h2>
-                <p><strong>Opening Hours:</strong> </p>
-                <p><strong>Location:</strong> </p>
-                <p><strong>Blind Box Price:</strong> RM </p>
-                <p><strong>Remaining Quantity:</strong> 50 Boxes</p>
-                <p><strong>Food Category:</strong> </p>
-                <a href="details.php?id=2" class="details-btn">Details</a>
+                    <div class="restaurant-info">
 
-            </div>
-        </div>
+                        <h2>
+                            <?php echo htmlspecialchars($row['restaurant_name']); ?>
+                        </h2>
+
+                        <p>
+                            <strong>Opening Hours:</strong>
+                            <?php echo htmlspecialchars($row['restaurant_opening_hours']); ?>
+                        </p>
+
+                        <p>
+                            <strong>Location:</strong>
+                            <?php echo htmlspecialchars($row['restaurant_address']); ?>
+                        </p>
+
+                        <p>
+                            <strong>Blind Box Price:</strong>
+                            RM <?php echo number_format($row['blind_box_price'], 2); ?>
+                        </p>
+
+                        <p>
+                            <strong>Remaining Quantity:</strong>
+                            <?php echo $row['blind_box_remaining_quantity']; ?> Boxes
+                        </p>
+
+                        <p>
+                            <strong>Food Category:</strong>
+                            <?php echo htmlspecialchars($row['blind_box_food_category']); ?>
+                        </p>
+
+                        <a href="details.php?restaurant=<?php echo urlencode($row['restaurant_name']); ?>" class="details-btn">
+                            Details
+                        </a>
+
+                    </div>
+
+                </div>
+
+        <?php
+            }
+        } else {
+            echo "<h2>No restaurants available.</h2>";
+        }
+        ?>
 
     </div>
 
 </main>
 
-
-<?php include 'includes/footer.php'; ?>
+<?php
+        $conn->close();
+        include 'includes/footer.php';
+?>
