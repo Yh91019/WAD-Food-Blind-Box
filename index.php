@@ -32,7 +32,7 @@ unset($_SESSION['logout_message']);
 ?>
 
 <main>
-    <img src="http://localhost/wadassignment/images/bg.png" width="100%">
+    <img src="../images/bg.jpg" width="100%">
         <article>
             <p>
         <article>

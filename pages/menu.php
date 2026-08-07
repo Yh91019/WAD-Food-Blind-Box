@@ -1,7 +1,7 @@
 <?php
-include 'config/db_connect.php';
-include 'includes/header.php';
-include 'includes/navigation.php';
+include '../config/db_connect.php';
+include '../includes/header.php';
+include '../includes/navigation.php';
 
 // Get all restaurants
 $sql = "SELECT * FROM restaurants";
@@ -23,7 +23,7 @@ $result = $conn->query($sql);
                 <div class="restaurant-card">
 
                     <!-- Restaurant Image -->
-                    <img src="images/BBbox.png" width="200" height="150" alt="Blind Box">
+                    <img src="../images/BBbox.png" width="200" height="150" alt="Blind Box">
 
                     <div class="restaurant-info">
 
@@ -75,6 +75,9 @@ $result = $conn->query($sql);
 
 </main>
 
+<script src="../js/script.js"></script>
+
 <?php
         $conn->close();
-        include 'includes/footer.php';
+        include '../includes/footer.php';
+?>

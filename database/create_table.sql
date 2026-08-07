@@ -16,7 +16,7 @@ CREATE TABLE restaurants(
 -- create users
 CREATE TABLE users (
     username VARCHAR(50) PRIMARY KEY,
-    password VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     gender ENUM("MALE", "FEMALE", "OTHER") NOT NULL,
     date_of_birth DATE,
@@ -24,8 +24,5 @@ CREATE TABLE users (
     phone_number INTEGER(20) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-ALTER TABLE users
-MODIFY password VARCHAR(255) NOT NULL;
 
 

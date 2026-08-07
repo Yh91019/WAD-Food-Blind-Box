@@ -1,3 +1,3 @@
 function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("show");
+    document.getElementById("sidebar").classList.toggle("active");
 }

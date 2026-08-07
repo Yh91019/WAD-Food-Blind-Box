@@ -11,6 +11,6 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blind Bite</title>
 
-    <link rel="stylesheet" href="/wadassignment/WAD-Food-Blind-Box/css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>

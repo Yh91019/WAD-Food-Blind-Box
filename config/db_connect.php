@@ -1,10 +1,10 @@
 <?php
 
-$servername = "localhost";
+$servername = "autorack.proxy.rlwy.net";
 $username = "root";
-$password = "";
-$dbname = "blindbite";
-$port = 3308;
+$password = "nZSXmESUUBlkgkyRfgoSIOXhdLGWZDke";
+$dbname = "railway";
+$port = 29249;
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname, $port);

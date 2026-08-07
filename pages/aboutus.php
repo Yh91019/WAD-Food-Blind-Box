@@ -11,6 +11,7 @@
 
 <body id="aboutus-page">
 
+    <?php include "../includes/header.php"; ?>
     <?php include "../includes/navigation.php"; ?>
 
     <!-- ===================== ABOUT ===================== -->
@@ -180,7 +181,7 @@
 
     </a>
 
-    <script src="../js/aboutus.js"></script>
+   <script src="../js/script.js"></script> 
 
 </body>
 

@@ -6,7 +6,7 @@ if(!isset($_SESSION['user_id'])){
     exit();
 }
 
-include 'includes/db_connect.php';
+include '../config/db_connect.php';
 
 $sql = "SELECT * FROM users WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
@@ -16,8 +16,8 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-include 'includes/header.php';
-include 'includes/navigation.php';
+include '../includes/header.php';
+include '../includes/navigation.php';
 ?>
 
 <main class="profile-page">
