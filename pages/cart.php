@@ -7,21 +7,21 @@ $cart = [
         "restaurant" => "McDonald's",
         "food"       => "Big Mac",
         "price"      => 18.90,
-        "image"      => "images/burger.jpg",
+        "image"      => "../images/burger.jpg",
         "quantity"   => 1
     ],
     [
         "restaurant" => "KFC",
         "food"       => "Snack Plate",
         "price"      => 29.80,
-        "image"      => "images/chicken.jpg",
+        "image"      => "../images/chicken.jpg",
         "quantity"   => 2
     ],
     [
         "restaurant" => "Pizza Hut",
         "food"       => "Pepperoni Pizza",
         "price"      => 35.50,
-        "image"      => "images/pizza.jpg",
+        "image"      => "../images/pizza.jpg",
         "quantity"   => 1
     ]
 ];
@@ -34,7 +34,7 @@ $cart = [
     <meta charset="UTF-8">
     <title>My Cart</title>
 
-    <link rel="stylesheet" href="/wadassignment/WAD-Food-Blind-Box/css/cart.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
