@@ -1,16 +1,16 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['user_id'])){
-    header("Location: ../login.php");
+if(!isset($_SESSION['username'])){
+    header("Location: login.php");
     exit();
 }
 
 include '../config/db_connect.php';
 
-$sql = "SELECT * FROM users WHERE user_id = ?";
+$sql = "SELECT * FROM users WHERE username = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $_SESSION['user_id']);
+$stmt->bind_param("s", $_SESSION['username']);
 $stmt->execute();
 
 $result = $stmt->get_result();
@@ -28,9 +28,9 @@ include '../includes/navigation.php';
         <h2>Personal Details</h2>
 
         <h3>Account</h3>
-        <p><strong>Name:</strong> <?php echo $user['name']; ?></p>
+        <p><strong>Name:</strong> <?php echo $user['username']; ?></p>
         <p><strong>Email:</strong> <?php echo $user['email']; ?></p>
-        <p><strong>Phone Number:</strong> <?php echo $user['phone']; ?></p>
+        <p><strong>Phone Number:</strong> <?php echo $user['phone_number']; ?></p>
         <p><strong>Address:</strong> <?php echo $user['address']; ?></p>
         <p><strong>Payment Method:</strong> <?php echo $user['paymentmethod']; ?></p>
 
@@ -41,6 +41,8 @@ include '../includes/navigation.php';
 
     </div>
 
+    <script src="../js/script.js"></script>
+    
 </main>
 
 <?php include '../includes/footer.php'; ?>
