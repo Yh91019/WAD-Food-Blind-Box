@@ -7,61 +7,27 @@
     font-family:Arial, Helvetica, sans-serif;
 }
 
-body{
+/* ===================== BODY ===================== */
+
+#aboutus-page{
     background:#eef6f6;
     color:#333;
 }
 
-/* ===================== HEADER ===================== */
-
-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:15px 60px;
-
-    background:white;
-    /*updown leftright brighterness*/
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-.left-header{
-    display:flex;
-    align-items:center;
-    gap:40px;
-}
-.logo{
-    width:90px;
-    height:auto;
-}
-
-.login{
-   background:#061212;
-    color:white;
-    padding:12px 25px;
-    border-radius:10px;
-    text-decoration:none;
-    font-weight:bold;
-}
-.login:hover{
-    background:#0b7d77;
-}
 /* ===================== ABOUT ===================== */
 
-.about{
+.aboutus-about{
     width:80%;
     margin:70px auto;
-    text-align:left;
 }
 
-.about h1{
+.aboutus-about h1{
     font-size:55px;
     color:#0b7d77;
     margin-bottom:30px;
 }
 
-.about p{
+.aboutus-about p{
     font-size:20px;
     line-height:1.8;
     color:#555;
@@ -70,12 +36,12 @@ header{
 
 /* ===================== IMAGE ===================== */
 
-.image-section{
+.aboutus-image-section{
     text-align:center;
     margin:50px 0;
 }
 
-.banner{
+.aboutus-banner{
     width:70%;
     max-width:900px;
     height:auto;
@@ -83,193 +49,194 @@ header{
     box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 
-/* ===================== TITLE ===================== */
+/* ===================== WHY CHOOSE US ===================== */
 
-.choose-us{
+.aboutus-choose{
     width:90%;
     margin:80px auto;
 }
 
-.choose-us h2{
+.aboutus-choose h2{
     text-align:center;
     font-size:45px;
     color:#0b7d77;
     margin-bottom:50px;
 }
 
-/* ===================== CARDS ===================== */
-
-.cards{
+.aboutus-cards{
     display:flex;
     justify-content:center;
     gap:30px;
     flex-wrap:wrap;
 }
 
-.card{
-
+.aboutus-card{
     width:300px;
-
     background:white;
-
     padding:30px;
-
     border-radius:20px;
-
     box-shadow:0 10px 20px rgba(0,0,0,.12);
-
-    transition:.3s;
+    transition:0.3s;
 }
 
-.card:hover{
+.aboutus-card:hover{
     transform:translateY(-10px);
 }
 
-.card h3{
-    font-size:26px;
+.aboutus-card h3{
+    font-size:25px;
     color:#ff9800;
     margin-bottom:20px;
 }
 
-.card p{
+.aboutus-card p{
     color:#555;
     line-height:1.7;
     font-size:17px;
 }
 
-.mission{
+/* ===================== STORY ===================== */
+
+.aboutus-story{
     width:90%;
     margin:80px auto;
-}
-.mission p{
-    color:white;
-    line-height:1.7;
-    font-size:17px;
-}
-.mission h3{
-    color:white;
-    margin-bottom:20px;
-    font-size:26px;
-}
-
-.mission-cards{
     display:flex;
     justify-content:center;
-    gap:30px;
-    flex-wrap:nowrap;      /* Keep them on one row */
 }
 
-.mission-card{
-    flex:1;                /* Both cards have equal width */
-    max-width:450px;
-    min-height:220px;
-
-    background:black;
+.aboutus-story-card{
+    width:100%;
+    max-width:930px;
+    background:#000;
     color:white;
-
-    padding:30px;
+    padding:35px;
     border-radius:20px;
-
     box-shadow:0 10px 20px rgba(0,0,0,.12);
 }
 
-.story{
-    width:90%;
-    margin:80px auto;
-    display:flex;
-    justify-content:center;
+.aboutus-story-card h3{
+    font-size:28px;
+    margin-bottom:20px;
 }
 
-.story p{
-    color:white;
-    line-height:1.7;
+.aboutus-story-card p{
+    line-height:1.8;
     font-size:17px;
 }
-.story h3{
-    color:white;
-    margin-bottom:20px;
-    font-size:26px;
+
+/* ===================== MISSION ===================== */
+
+.aboutus-mission{
+    width:90%;
+    margin:80px auto;
 }
-.story-card{
+
+.aboutus-mission-cards{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:nowrap;
+}
+
+.aboutus-mission-card{
     flex:1;
-    width:100%;
-    max-width:930px;
-    min-height:150px;
-
-    background:black;
+    max-width:450px;
+    min-height:220px;
+    background:#000;
     color:white;
-
-    padding:30px;
-
+    padding:35px;
     border-radius:20px;
+    box-shadow:0 10px 20px rgba(0,0,0,.12);
 }
 
+.aboutus-mission-card h3{
+    font-size:26px;
+    margin-bottom:20px;
+}
+
+.aboutus-mission-card p{
+    line-height:1.8;
+    font-size:17px;
+}
+
+/* ===================== WHATSAPP ===================== */
+
+.aboutus-whatsapp-btn{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#25D366;
+    color:white;
+    text-decoration:none;
+    padding:12px 20px;
+    border-radius:50px;
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+    transition:.3s;
+    z-index:999;
+}
+
+.aboutus-whatsapp-btn:hover{
+    background:#1ebe5d;
+    transform:scale(1.08);
+}
+
+.aboutus-whatsapp-btn img{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.aboutus-whatsapp-btn span{
+    font-size:17px;
+    font-weight:bold;
+}
 
 /* ===================== RESPONSIVE ===================== */
 
 @media(max-width:900px){
 
-    .about h1{
-        font-size:38px;
-    }
-
-    .about p{
-        font-size:18px;
-    }
-
-    .banner{
+    .aboutus-about{
         width:90%;
     }
 
-    .card{
+    .aboutus-about h1{
+        font-size:38px;
+    }
+
+    .aboutus-about p{
+        font-size:18px;
+    }
+
+    .aboutus-banner{
+        width:90%;
+    }
+
+    .aboutus-card{
         width:100%;
     }
 
-    header{
-        padding:15px 25px;
+    .aboutus-story-card{
+        width:100%;
     }
-}
 
-/* ===================== WHATSAPP BUTTON ===================== */
+    .aboutus-mission-cards{
+        flex-direction:column;
+    }
 
-.whatsapp-btn{
-    position:fixed;
-    bottom:30px;
-    right:30px;
+    .aboutus-mission-card{
+        max-width:100%;
+    }
 
-    display:flex;
-    align-items:center;
-    gap:10px;
+    .aboutus-whatsapp-btn{
+        right:15px;
+        bottom:15px;
+    }
 
-    background:#25D366;
-    color:white;
-
-    padding:12px 18px;
-
-    border-radius:50px;
-
-    text-decoration:none;
-
-    font-weight:bold;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.25);
-
-    transition:.3s;
-
-    z-index:999;
-}
-
-.whatsapp-btn:hover{
-    background:#1ebe5d;
-    transform:scale(1.08);
-}
-
-.whatsapp-btn img{
-    width:32px;
-    height:32px;
-    object-fit:contain;
-}
-
-.whatsapp-btn span{
-    font-size:17px;
+    .aboutus-whatsapp-btn span{
+        display:none;
+    }
 }

@@ -33,7 +33,7 @@ $cart = [
 
 <title>My Cart</title>
 
-<link rel="stylesheet" href="cart.css">
+<link rel="stylesheet" href="/wadassignment/WAD-Food-Blind-Box/css/cart.css">
 
 </head>
 

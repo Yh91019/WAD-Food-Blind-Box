@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'includes/db_connect.php';
+include 'config/db_connect.php';
 
 $error = "";
 
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $_SESSION['login_message'] = "Welcome back, " . $user['name'] . "!";
 
-            header("Location: profile.php");
+            header("Location: index.php");
             exit();
 
         } else {
