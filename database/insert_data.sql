@@ -8,6 +8,3 @@ INSERT INTO restaurants (restaurant_name, restaurant_address, restaurant_opening
 ('Burger Haven', '321 Burger Blvd, Fastfood City', '08:00', '4449876543', 8.99, 'Juicy burgers with a variety of toppings.', 60, 'Fast Food'),
 ('Vegan Delights', '654 Green Street, Plantville', '10:30', '3335678901', 11.25, 'Delicious vegan meals for everyone.', 35, 'Vegan');
 
-
-SELECT * FROM restaurants;
-

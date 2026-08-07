@@ -1,154 +1,67 @@
-<?php include "../includes/header.php"; ?>
-<?php include "../includes/navigation.php"; ?>
-
 <?php
-$cart = [
-    [
-        "restaurant" => "McDonald's",
-        "food"       => "Big Mac",
-        "price"      => 18.90,
-        "image"      => "../images/burger.jpg",
-        "quantity"   => 1
-    ],
-    [
-        "restaurant" => "KFC",
-        "food"       => "Snack Plate",
-        "price"      => 29.80,
-        "image"      => "../images/chicken.jpg",
-        "quantity"   => 2
-    ],
-    [
-        "restaurant" => "Pizza Hut",
-        "food"       => "Pepperoni Pizza",
-        "price"      => 35.50,
-        "image"      => "../images/pizza.jpg",
-        "quantity"   => 1
-    ]
-];
+session_start();
+include '../config/db_connect.php';
+include '../includes/header.php';
+include '../includes/navigation.php';
+
+$cart_items = [];
+$total = 0;
+
+if (isset($_SESSION['username'])) {
+
+    $sql = "SELECT * FROM cart WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $_SESSION['username']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $cart_items[] = $row;
+        $total += $row['price'] * $row['quantity'];
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<main class="cart-page">
 
-<head>
-    <meta charset="UTF-8">
-    <title>My Cart</title>
+    <h1>My Cart</h1>
 
-    <link rel="stylesheet" href="../css/style.css">
-</head>
+    <?php if (!isset($_SESSION['username'])) : ?>
 
-<body>
+        <p>Please <a href="../authentication/login.php">log in</a> to view your cart.</p>
 
-    <div class="cart-container">
+    <?php elseif (empty($cart_items)) : ?>
 
-        <h1>🛒 My Cart</h1>
+        <p>Your cart is empty.</p>
+        <a href="../pages/menu.php" class="browse-menu-btn">Browse Menu</a>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Restaurant</th>
-                    <th>Food</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Subtotal</th>
-                    <th>Remove</th>
-                </tr>
-            </thead>
+    <?php else : ?>
 
-            <tbody id="cartBody">
-                <?php foreach ($cart as $item) { ?>
+        <div class="cart-container">
 
-                    <tr>
-                        <td>
-                            <?php echo $item['restaurant']; ?>
-                        </td>
+            <?php foreach ($cart_items as $item) : ?>
 
-                        <td>
-                            <img src="<?php echo $item['image']; ?>" class="food-img">
-                            <br>
-                            <?php echo $item['food']; ?>
-                        </td>
+                <div class="cart-item">
+                    <h3><?php echo htmlspecialchars($item['restaurant']); ?></h3>
+                    <p><?php echo htmlspecialchars($item['food_name']); ?></p>
+                    <p><strong>Quantity:</strong> <?php echo htmlspecialchars($item['quantity']); ?></p>
+                    <p><strong>Price:</strong> RM <?php echo number_format($item['price'], 2); ?></p>
+                </div>
 
-                        <td>
-                            <div class="quantity">
-                                <button class="minus">-</button>
+            <?php endforeach; ?>
 
-                                <input
-                                    type="text"
-                                    class="qty"
-                                    value="<?php echo $item['quantity']; ?>"
-                                    readonly>
-
-                                <button class="plus">+</button>
-                            </div>
-                        </td>
-
-                        <td class="price">
-                            <?php echo number_format($item['price'], 2); ?>
-                        </td>
-
-                        <td class="subtotal">
-                            <?php echo number_format($item['price'] * $item['quantity'], 2); ?>
-                        </td>
-
-                        <td>
-                            <button class="remove-btn">
-                                Remove
-                            </button>
-                        </td>
-                    </tr>
-
-                <?php } ?>
-            </tbody>
-        </table>
-
-        <div class="order-type">
-            <h2>Order Type</h2>
-
-            <label>
-                <input
-                    type="radio"
-                    name="delivery"
-                    value="pickup"
-                    checked>
-                Pickup
-            </label>
-
-            <label>
-                <input
-                    type="radio"
-                    name="delivery"
-                    value="delivery">
-                Delivery (+RM5)
-            </label>
         </div>
 
-        <div class="summary">
-            <h2>
-                Subtotal :
-                RM <span id="subtotal">0.00</span>
-            </h2>
+        <p class="cart-total"><strong>Total:</strong> RM <?php echo number_format($total, 2); ?></p>
 
-            <h3>
-                Delivery Fee :
-                RM <span id="deliveryFee">0.00</span>
-            </h3>
+        <a href="../pages/menu.php" class="browse-menu-btn">Add More from Menu</a>
 
-            <h2>
-                Grand Total :
-                RM <span id="grandTotal">0.00</span>
-            </h2>
+    <?php endif; ?>
 
-            <button class="checkout-btn">
-                Checkout
-            </button>
-        </div>
+</main>
 
-    </div>
-
-    <script src="../js/cart.js"></script>
-    <script src="../js/script.js"></script>
-
-</body>
-
-</html>
+<?php include '../includes/footer.php'; ?>
