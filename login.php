@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'includes/db_connect.php';
+include 'config/db_connect.php';
 
 $error = "";
 
