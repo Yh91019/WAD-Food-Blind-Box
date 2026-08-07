@@ -23,7 +23,7 @@ if(isset($_SESSION['logout_message'])){
 ?>
 
 <div id="logout-popup">
-    <?php echo $_SESSION['logout_message']; ?>
+    <?php echo  $_SESSION['logout_message']; ?>
 </div>
 
 <?php
