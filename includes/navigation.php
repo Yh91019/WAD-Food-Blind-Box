@@ -16,7 +16,6 @@
             <li><a href="../pages/cart.php">Cart</a></li>
             <li><a href="../authentication/profile.php">Profile</a></li>
             <li><a href="../pages/aboutus.php">About Us</a></li>
-            <li><a href="../contact.php">Contact</a></li>
             
             <?php if(isset($_SESSION['username'])){ ?>
                 <li><a href="../authentication/logout.php">Log Out</a></li>
