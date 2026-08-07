@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['login_message'] = "Welcome back, " . $user['username'] . "!";
 
             // Redirect after successful login
-            header("Location: index.php");
+            header("Location: ../index.php");
             exit();
 
         } else {
@@ -102,6 +102,8 @@ $conn->close();
 
     </div>
 
+    <script src="../js/script.js"></script>
+    
 </main>
 
 <?php include '../includes/footer.php'; ?>
