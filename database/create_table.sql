@@ -74,9 +74,11 @@ CREATE TABLE history (
     blind_box_price DECIMAL(10,2) NOT NULL,
     quantity INT NOT NULL,
     payment_method VARCHAR(50),
+    order_type ENUM('Pickup', 'Delivery') NOT NULL DEFAULT 'Pickup',
+    status ENUM('Preparing', 'Completed', 'Cancelled') NOT NULL DEFAULT 'Preparing',
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (username)
         REFERENCES users(username)
         ON DELETE CASCADE
-);
+)

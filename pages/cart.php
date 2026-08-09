@@ -62,6 +62,8 @@ $conn->close();
 
     <?php endif; ?>
 
+    <script src="../js/script.js"></script>
+    
 </main>
 
 <?php include '../includes/footer.php'; ?>

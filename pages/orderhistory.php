@@ -1,126 +1,86 @@
 <?php
+include '../config/db_connect.php';
 
-$orders = [
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-    [
-        "id" => "BB1001",
-        "restaurant" => "McDonald's",
-        "food" => "Big Mac Blind Box",
-        "date" => "10 July 2026",
-        "type" => "Pickup",
-        "status" => "Completed",
-        "price" => 18.90
-    ],
+$orders = [];
 
-    [
-        "id" => "BB1002",
-        "restaurant" => "KFC",
-        "food" => "Snack Plate Blind Box",
-        "date" => "8 July 2026",
-        "type" => "Delivery",
-        "status" => "Completed",
-        "price" => 29.80
-    ],
+if (isset($_SESSION['username'])) {
 
-    [
-        "id" => "BB1003",
-        "restaurant" => "Pizza Hut",
-        "food" => "Pizza Surprise Box",
-        "date" => "5 July 2026",
-        "type" => "Delivery",
-        "status" => "Preparing",
-        "price" => 35.50
-    ],
+    $sql = "SELECT history_id, restaurant_name, blind_box_price, quantity, payment_method, order_type, status, order_date
+            FROM history
+            WHERE username = ?
+            ORDER BY order_date DESC";
 
-    [
-        "id" => "BB1004",
-        "restaurant" => "Starbucks",
-        "food" => "Coffee Surprise Box",
-        "date" => "2 July 2026",
-        "type" => "Pickup",
-        "status" => "Cancelled",
-        "price" => 15.90
-    ]
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $_SESSION['username']);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-];
+    while ($row = $result->fetch_assoc()) {
+        $row['total'] = $row['blind_box_price'] * $row['quantity'];
+        $orders[] = $row;
+    }
 
+    $stmt->close();
+}
+
+$conn->close();
+
+include '../includes/header.php';
+include '../includes/navigation.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Order History</title>
-
-    <link rel="stylesheet" href="orderhistory.css">
-
-</head>
-
-<body>
-
-<header>
+<main class="orderhistory-page">
 
     <h1>📦 Order History</h1>
 
-</header>
+    <?php if (!isset($_SESSION['username'])) : ?>
 
-<div class="history-container">
+        <p>Please <a href="../authentication/login.php">log in</a> to view your order history.</p>
 
-<?php foreach($orders as $order){ ?>
+    <?php elseif (empty($orders)) : ?>
 
-    <div class="history-card">
+        <p>You haven't placed any orders yet.</p>
+        <a href="../pages/menu.php" class="browse-menu-btn">Browse Menu</a>
 
-        <div class="top">
+    <?php else : ?>
 
-            <h2><?php echo $order['restaurant']; ?></h2>
+        <div class="history-container">
 
-            <span class="status <?php echo strtolower($order['status']); ?>">
+            <?php foreach ($orders as $order) : ?>
 
-                <?php echo $order['status']; ?>
+                <div class="history-card">
 
-            </span>
+                    <div class="top">
+                        <h2><?php echo htmlspecialchars($order['restaurant_name']); ?></h2>
+                        <span class="status <?php echo strtolower($order['status']); ?>">
+                            <?php echo htmlspecialchars($order['status']); ?>
+                        </span>
+                    </div>
 
-        </div>
+                    <hr>
 
-        <hr>
+                    <p><strong>Order #:</strong> <?php echo (int) $order['history_id']; ?></p>
+                    <p><strong>Quantity:</strong> <?php echo (int) $order['quantity']; ?> Blind Box(es)</p>
+                    <p><strong>Order Type:</strong> <?php echo htmlspecialchars($order['order_type']); ?></p>
+                    <p><strong>Order Date:</strong> <?php echo date('d F Y, g:i A', strtotime($order['order_date'])); ?></p>
+                    <p><strong>Payment Method:</strong> <?php echo htmlspecialchars($order['payment_method']); ?></p>
+                    <p><strong>Total Paid:</strong> RM <?php echo number_format($order['total'], 2); ?></p>
 
-        <p><strong>Order ID:</strong> <?php echo $order['id']; ?></p>
+                </div>
 
-        <p><strong>Food Item:</strong> <?php echo $order['food']; ?></p>
-
-        <p><strong>Order Date:</strong> <?php echo $order['date']; ?></p>
-
-        <p><strong>Order Type:</strong> <?php echo $order['type']; ?></p>
-
-        <p><strong>Total Paid:</strong> RM <?php echo number_format($order['price'],2); ?></p>
-
-        <div class="buttons">
-
-            <button class="view-btn">
-
-                View Details
-
-            </button>
-
-            <button class="reorder-btn">
-
-                Reorder
-
-            </button>
+            <?php endforeach; ?>
 
         </div>
 
-    </div>
+    <?php endif; ?>
+    
+    <script src="../js/script.js"></script>
 
-<?php } ?>
 
-</div>
+</main>
 
-</body>
-
-</html>
+<?php include '../includes/footer.php'; ?>
