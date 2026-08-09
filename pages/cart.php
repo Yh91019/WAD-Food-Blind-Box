@@ -3,7 +3,141 @@
 session_start();
 
 include '../config/db_connect.php';
+/* ============================================================
+   PLACE ORDER
+   ============================================================ */
 
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST'
+    && isset($_POST['place_order'])
+) {
+
+    if (!isset($_SESSION['username'])) {
+
+        header("Location: ../authentication/login.php");
+        exit();
+
+    }
+
+    $username = $_SESSION['username'];
+
+    /* Get all cart items */
+    $order_sql = "
+        SELECT
+            cart.restaurant_name,
+            cart.quantity,
+            restaurants.blind_box_price
+        FROM cart
+        INNER JOIN restaurants
+            ON cart.restaurant_name = restaurants.restaurant_name
+        WHERE cart.username = ?
+    ";
+
+    $order_stmt = $conn->prepare($order_sql);
+
+    if (!$order_stmt) {
+        die("Error preparing order: " . $conn->error);
+    }
+
+    $order_stmt->bind_param("s", $username);
+
+    $order_stmt->execute();
+
+    $order_result = $order_stmt->get_result();
+
+
+    /* Check cart is not empty */
+
+    if ($order_result->num_rows > 0) {
+
+        /* Insert every cart item into history */
+
+        while ($item = $order_result->fetch_assoc()) {
+
+            $restaurant_name = $item['restaurant_name'];
+            $price = $item['blind_box_price'];
+            $quantity = $item['quantity'];
+
+            $payment_method = "Cash";
+            $order_type = "Pickup";
+            $status = "Completed";
+
+
+            $history_sql = "
+                INSERT INTO history
+                (
+                    username,
+                    restaurant_name,
+                    blind_box_price,
+                    quantity,
+                    payment_method,
+                    order_type,
+                    status,
+                    order_date
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+            ";
+
+            $history_stmt = $conn->prepare($history_sql);
+
+            if (!$history_stmt) {
+                die("Error preparing history: " . $conn->error);
+            }
+
+            $history_stmt->bind_param(
+                "ssdisss",
+                $username,
+                $restaurant_name,
+                $price,
+                $quantity,
+                $payment_method,
+                $order_type,
+                $status
+            );
+
+            $history_stmt->execute();
+
+            $history_stmt->close();
+        }
+
+
+        $order_stmt->close();
+
+
+        /* Remove items from cart */
+
+        $delete_sql = "
+            DELETE FROM cart
+            WHERE username = ?
+        ";
+
+        $delete_stmt = $conn->prepare($delete_sql);
+
+        $delete_stmt->bind_param("s", $username);
+
+        $delete_stmt->execute();
+
+        $delete_stmt->close();
+
+
+        /* Go to success page */
+
+        $conn->close();
+
+        header("Location: order_complete.php");
+        exit();
+
+    }
+
+    else {
+
+        $order_stmt->close();
+
+        header("Location: cart.php");
+        exit();
+
+    }
+}
 
 // ============================================================
 // CART ITEMS
@@ -348,33 +482,31 @@ include '../includes/navigation.php';
 
         <!-- TOTAL -->
 
-        <div class="cart-summary">
+<div class="cart-summary">
 
-            <h2>
+    <h2>
+        Total: RM <?php echo number_format($total, 2); ?>
+    </h2>
 
-                Total:
+    <div class="cart-summary-buttons">
 
-                RM
+        <a href="../pages/menu.php" class="browse-menu-btn">
+            🍔 Add More from Menu
+        </a>
 
-                <?php
-                echo number_format(
-                    $total,
-                    2
-                );
-                ?>
+        <form method="POST" action="cart.php">
+    <button
+        type="submit"
+        name="place_order"
+        class="place-order-btn"
+    >
+        🛒 Place Order
+    </button>
+</form>
 
-            </h2>
+    </div>
 
-
-            <a
-                href="menu.php"
-                class="browse-menu-btn"
-            >
-                Add More from Menu
-            </a>
-
-        </div>
-
+</div>
 
     <?php endif; ?>
 

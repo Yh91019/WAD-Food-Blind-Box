@@ -919,3 +919,480 @@
         visibility:hidden;
     }
 }
+
+/* ============================================================
+   PLACE ORDER BUTTON
+   ============================================================ */
+
+.cart-summary-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+
+/* Place Order */
+
+.place-order-btn {
+    background: #2e7d32;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 12px 25px;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+
+.place-order-btn:hover {
+    background: #256b29;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   ORDER COMPLETE PAGE
+   ============================================================ */
+
+.order-complete-page {
+    min-height: 70vh;
+
+    background: #f8f5f2;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 50px 20px;
+}
+
+
+.order-complete-box {
+    width: 90%;
+    max-width: 600px;
+
+    background: white;
+
+    padding: 45px 35px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Success Icon */
+
+.success-icon {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    background: #2e7d32;
+
+    color: white;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 45px;
+
+    font-weight: bold;
+}
+
+
+/* Title */
+
+.order-complete-box h1 {
+    color: #2e7d32;
+
+    font-size: 32px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Text */
+
+.order-complete-box p {
+    color: #555;
+
+    font-size: 16px;
+
+    line-height: 1.6;
+
+    margin: 10px 0;
+}
+
+
+/* Buttons */
+
+.order-complete-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+    margin-top: 30px;
+}
+
+
+.history-btn,
+.menu-btn-complete {
+    display: inline-block;
+
+    padding: 12px 22px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    transition: all 0.3s ease;
+}
+
+
+/* Order History */
+
+.history-btn {
+    background: #ab794b;
+
+    color: white;
+}
+
+
+.history-btn:hover {
+    background: #8f623c;
+
+    transform: translateY(-2px);
+}
+
+
+/* Continue Shopping */
+
+.menu-btn-complete {
+    background: #333;
+
+    color: white;
+}
+
+
+.menu-btn-complete:hover {
+    background: #555;
+
+    transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   CART SUMMARY BUTTONS
+   ============================================================ */
+
+.cart-summary-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+
+/* Make both buttons the same size */
+
+.cart-summary-buttons .browse-menu-btn,
+.cart-summary-buttons .place-order-btn {
+    width: 180px;
+    height: 48px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: all 0.3s ease;
+}
+
+
+/* ============================================================
+   ADD MORE FROM MENU
+   ============================================================ */
+
+.cart-summary-buttons .browse-menu-btn {
+    background: #ab794b;
+    color: white;
+
+    border: none;
+}
+
+
+.cart-summary-buttons .browse-menu-btn:hover {
+    background: #8f623c;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   PLACE ORDER
+   ============================================================ */
+
+.cart-summary-buttons form {
+    margin: 0;
+    padding: 0;
+}
+
+
+.cart-summary-buttons .place-order-btn {
+    background: #2e7d32;
+    color: white;
+
+    border: none;
+}
+
+
+.cart-summary-buttons .place-order-btn:hover {
+    background: #256b29;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .cart-summary-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cart-summary-buttons form {
+        width: 100%;
+    }
+
+    .cart-summary-buttons .browse-menu-btn,
+    .cart-summary-buttons .place-order-btn {
+        width: 100%;
+    }
+
+}
+
+/* ============================================================
+   ORDER COMPLETE PAGE
+   ============================================================ */
+
+.order-complete-page {
+    min-height: 70vh;
+
+    background: #f8f5f2;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 50px 20px;
+}
+
+
+.order-complete-box {
+    width: 90%;
+    max-width: 600px;
+
+    background: white;
+
+    padding: 45px 35px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Success Circle */
+
+.success-icon {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    background: #2e7d32;
+
+    color: white;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 45px;
+
+    font-weight: bold;
+}
+
+
+/* Success Heading */
+
+.order-complete-box h1 {
+    color: #2e7d32;
+
+    font-size: 30px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Text */
+
+.order-complete-box p {
+    color: #555;
+
+    font-size: 16px;
+
+    line-height: 1.6;
+
+    margin: 10px 0;
+}
+
+
+/* Buttons */
+
+.order-complete-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+
+.history-btn,
+.menu-btn-complete {
+    width: 190px;
+    height: 48px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    transition: all 0.3s ease;
+}
+
+
+/* Order History */
+
+.history-btn {
+    background: #ab794b;
+    color: white;
+}
+
+
+.history-btn:hover {
+    background: #8f623c;
+
+    transform: translateY(-2px);
+}
+
+
+/* Continue Shopping */
+
+.menu-btn-complete {
+    background: #333;
+    color: white;
+}
+
+
+.menu-btn-complete:hover {
+    background: #555;
+
+    transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   SUCCESS PAGE MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .order-complete-box {
+        padding: 35px 20px;
+    }
+
+    .order-complete-box h1 {
+        font-size: 26px;
+    }
+
+    .order-complete-buttons {
+        flex-direction: column;
+    }
+
+    .history-btn,
+    .menu-btn-complete {
+        width: 100%;
+    }
+
+}
