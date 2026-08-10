@@ -77,10 +77,12 @@ include '../includes/navigation.php';
         </div>
 
     <?php endif; ?>
-    
-    <script src="../js/script.js"></script>
+
+   
 
 
 </main>
+
+ <script src="../js/script.js"></script>
 
 <?php include '../includes/footer.php'; ?>
