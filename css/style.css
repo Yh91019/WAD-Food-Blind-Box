@@ -115,15 +115,560 @@
     margin: 100px auto 50px;
 }
 
-.details-card {
-    display: flex;
-    gap: 30px;
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 25px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+/* =========================
+   Details Page
+   ========================= */
+
+.details-page {
+    width: 90%;
+    max-width: 1100px;
+    margin: 100px auto 50px;
 }
 
+.details-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 35px;
+
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+
+    box-sizing: border-box;
+}
+
+
+/* Restaurant Image */
+
+.details-card > img {
+    width: 250px;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+
+/* Information section */
+
+.details-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.details-info h1 {
+    margin: 0 0 20px 0;
+    font-size: 32px;
+    color: #333;
+}
+
+.details-info p {
+    margin: 10px 0;
+    line-height: 1.5;
+    color: #444;
+}
+
+.details-info strong {
+    color: #333;
+}
+
+
+/* =========================
+   Buttons
+   ========================= */
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.action-buttons form {
+    margin: 0;
+}
+
+
+/* Add to Cart */
+
+.add-cart-btn {
+    background: #ab794b;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 13px 25px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.add-cart-btn:hover {
+    background: #8f623c;
+    transform: translateY(-2px);
+}
+
+
+/* Wishlist */
+
+.wishlist-btn {
+    background: white;
+    color: #ab794b;
+
+    border: 2px solid #ab794b;
+    border-radius: 8px;
+
+    padding: 11px 25px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.wishlist-btn:hover {
+    background: #ab794b;
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+/* Success message */
+
+.success-message {
+    color: #2e7d32;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+
+/* =========================
+   View Cart / Wishlist
+   ========================= */
+
+.view-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.view-cart-btn,
+.view-wishlist-btn {
+    display: inline-block;
+
+    padding: 10px 20px;
+
+    border-radius: 7px;
+
+    text-decoration: none;
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.view-cart-btn {
+    background: #333;
+    color: white;
+}
+
+.view-cart-btn:hover {
+    background: #555;
+}
+
+.view-wishlist-btn {
+    background: #f1f1f1;
+    color: #333;
+}
+
+.view-wishlist-btn:hover {
+    background: #ddd;
+}
+
+
+/* =========================
+   Mobile
+   ========================= */
+
+@media (max-width: 800px) {
+
+    .details-page {
+        width: 90%;
+        margin-top: 60px;
+    }
+
+    .details-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .details-card > img {
+        width: 100%;
+        max-width: 350px;
+        height: 220px;
+    }
+
+    .details-info {
+        width: 100%;
+    }
+
+    .details-info h1 {
+        text-align: center;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-buttons form {
+        width: 100%;
+    }
+
+    .add-cart-btn,
+    .wishlist-btn {
+        width: 100%;
+    }
+
+}
+/* ============================================================
+   CART PAGE
+   ============================================================ */
+
+.cart-page {
+    min-height: 100vh;
+    background: #f8f5f2;
+    padding: 40px 20px 60px;
+}
+
+
+/* ============================================================
+   CART TITLE
+   ============================================================ */
+
+.cart-page > h1 {
+    text-align: center;
+    color: #ab794b;
+    font-size: 40px;
+    margin: 20px 0 35px;
+    font-weight: bold;
+}
+
+
+/* ============================================================
+   CART CONTAINER
+   ============================================================ */
+
+.cart-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+
+/* ============================================================
+   CART ITEM BOX
+   ============================================================ */
+
+.cart-item {
+    width: 100%;
+    max-width: 800px;
+
+    margin: 0 auto 25px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 15px;
+
+    padding: 25px 30px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+
+    box-sizing: border-box;
+
+    transition: all 0.3s ease;
+}
+
+
+/* Hover */
+
+.cart-item:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+
+/* ============================================================
+   RESTAURANT NAME
+   ============================================================ */
+
+.cart-item h3 {
+    color: #ab794b;
+
+    font-size: 27px;
+
+    text-align: center;
+
+    margin: 0 0 20px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #eee;
+}
+
+
+/* ============================================================
+   FOOD DESCRIPTION
+   ============================================================ */
+
+.cart-food-name {
+    text-align: center;
+
+    color: #444;
+
+    font-size: 17px;
+
+    line-height: 1.5;
+
+    margin: 15px 0 20px;
+}
+
+
+/* ============================================================
+   CART INFORMATION
+   ============================================================ */
+
+.cart-item p {
+    color: #555;
+
+    font-size: 15px;
+
+    margin: 12px 0;
+
+    line-height: 1.5;
+}
+
+
+.cart-item p strong {
+    color: #333;
+}
+
+
+/* ============================================================
+   SUBTOTAL
+   ============================================================ */
+
+.cart-item p:last-of-type {
+    color: #ab794b;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    margin-top: 20px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid #eee;
+}
+
+
+/* ============================================================
+   REMOVE BUTTON
+   ============================================================ */
+
+.remove-cart-btn {
+    display: block;
+
+    margin: 20px auto 0;
+
+    background: #dc3545;
+
+    color: #ffffff;
+
+    border: none;
+
+    padding: 11px 25px;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+
+.remove-cart-btn:hover {
+    background: #b52b39;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   CART SUMMARY
+   ============================================================ */
+
+.cart-summary {
+    width: 100%;
+
+    max-width: 800px;
+
+    margin: 30px auto;
+
+    background: #ffffff;
+
+    border-radius: 15px;
+
+    padding: 25px 30px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+
+    border: 1px solid #e5e5e5;
+}
+
+
+.cart-summary h2 {
+    color: #ab794b;
+
+    font-size: 28px;
+
+    margin: 0 0 20px;
+}
+
+
+/* ============================================================
+   ADD MORE FROM MENU
+   ============================================================ */
+
+.browse-menu-btn {
+    display: inline-block;
+
+    background: #ab794b;
+
+    color: white;
+
+    padding: 12px 25px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    transition: all 0.3s ease;
+}
+
+
+.browse-menu-btn:hover {
+    background: #8f623c;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   EMPTY CART / LOGIN MESSAGE
+   ============================================================ */
+
+.cart-message {
+    max-width: 600px;
+
+    margin: 60px auto;
+
+    background: #ffffff;
+
+    padding: 50px 30px;
+
+    text-align: center;
+
+    border-radius: 15px;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+
+    border: 1px solid #e5e5e5;
+}
+
+
+.cart-message h2 {
+    color: #333;
+
+    font-size: 28px;
+
+    margin-bottom: 15px;
+}
+
+
+.cart-message p {
+    color: #666;
+
+    font-size: 16px;
+
+    margin-bottom: 25px;
+}
+
+
+/* ============================================================
+   CART MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .cart-page {
+        padding: 25px 15px 40px;
+    }
+
+    .cart-page > h1 {
+        font-size: 32px;
+    }
+
+    .cart-container {
+        width: 100%;
+    }
+
+    .cart-item {
+        padding: 20px;
+    }
+
+    .cart-item h3 {
+        font-size: 23px;
+    }
+
+    .cart-food-name {
+        font-size: 15px;
+    }
+
+    .cart-summary {
+        padding: 20px;
+    }
+
+    .cart-summary h2 {
+        font-size: 24px;
+    }
+
+}
 /*Login*/
 .login-page{
     width:100%;
@@ -373,4 +918,481 @@
         opacity:0;
         visibility:hidden;
     }
+}
+
+/* ============================================================
+   PLACE ORDER BUTTON
+   ============================================================ */
+
+.cart-summary-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+
+/* Place Order */
+
+.place-order-btn {
+    background: #2e7d32;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 12px 25px;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+
+.place-order-btn:hover {
+    background: #256b29;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   ORDER COMPLETE PAGE
+   ============================================================ */
+
+.order-complete-page {
+    min-height: 70vh;
+
+    background: #f8f5f2;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 50px 20px;
+}
+
+
+.order-complete-box {
+    width: 90%;
+    max-width: 600px;
+
+    background: white;
+
+    padding: 45px 35px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Success Icon */
+
+.success-icon {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    background: #2e7d32;
+
+    color: white;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 45px;
+
+    font-weight: bold;
+}
+
+
+/* Title */
+
+.order-complete-box h1 {
+    color: #2e7d32;
+
+    font-size: 32px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Text */
+
+.order-complete-box p {
+    color: #555;
+
+    font-size: 16px;
+
+    line-height: 1.6;
+
+    margin: 10px 0;
+}
+
+
+/* Buttons */
+
+.order-complete-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+    margin-top: 30px;
+}
+
+
+.history-btn,
+.menu-btn-complete {
+    display: inline-block;
+
+    padding: 12px 22px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    transition: all 0.3s ease;
+}
+
+
+/* Order History */
+
+.history-btn {
+    background: #ab794b;
+
+    color: white;
+}
+
+
+.history-btn:hover {
+    background: #8f623c;
+
+    transform: translateY(-2px);
+}
+
+
+/* Continue Shopping */
+
+.menu-btn-complete {
+    background: #333;
+
+    color: white;
+}
+
+
+.menu-btn-complete:hover {
+    background: #555;
+
+    transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   CART SUMMARY BUTTONS
+   ============================================================ */
+
+.cart-summary-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+
+/* Make both buttons the same size */
+
+.cart-summary-buttons .browse-menu-btn,
+.cart-summary-buttons .place-order-btn {
+    width: 180px;
+    height: 48px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: all 0.3s ease;
+}
+
+
+/* ============================================================
+   ADD MORE FROM MENU
+   ============================================================ */
+
+.cart-summary-buttons .browse-menu-btn {
+    background: #ab794b;
+    color: white;
+
+    border: none;
+}
+
+
+.cart-summary-buttons .browse-menu-btn:hover {
+    background: #8f623c;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   PLACE ORDER
+   ============================================================ */
+
+.cart-summary-buttons form {
+    margin: 0;
+    padding: 0;
+}
+
+
+.cart-summary-buttons .place-order-btn {
+    background: #2e7d32;
+    color: white;
+
+    border: none;
+}
+
+
+.cart-summary-buttons .place-order-btn:hover {
+    background: #256b29;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .cart-summary-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cart-summary-buttons form {
+        width: 100%;
+    }
+
+    .cart-summary-buttons .browse-menu-btn,
+    .cart-summary-buttons .place-order-btn {
+        width: 100%;
+    }
+
+}
+
+/* ============================================================
+   ORDER COMPLETE PAGE
+   ============================================================ */
+
+.order-complete-page {
+    min-height: 70vh;
+
+    background: #f8f5f2;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 50px 20px;
+}
+
+
+.order-complete-box {
+    width: 90%;
+    max-width: 600px;
+
+    background: white;
+
+    padding: 45px 35px;
+
+    text-align: center;
+
+    border-radius: 18px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Success Circle */
+
+.success-icon {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    background: #2e7d32;
+
+    color: white;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 45px;
+
+    font-weight: bold;
+}
+
+
+/* Success Heading */
+
+.order-complete-box h1 {
+    color: #2e7d32;
+
+    font-size: 30px;
+
+    margin-bottom: 20px;
+}
+
+
+/* Text */
+
+.order-complete-box p {
+    color: #555;
+
+    font-size: 16px;
+
+    line-height: 1.6;
+
+    margin: 10px 0;
+}
+
+
+/* Buttons */
+
+.order-complete-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+
+.history-btn,
+.menu-btn-complete {
+    width: 190px;
+    height: 48px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    transition: all 0.3s ease;
+}
+
+
+/* Order History */
+
+.history-btn {
+    background: #ab794b;
+    color: white;
+}
+
+
+.history-btn:hover {
+    background: #8f623c;
+
+    transform: translateY(-2px);
+}
+
+
+/* Continue Shopping */
+
+.menu-btn-complete {
+    background: #333;
+    color: white;
+}
+
+
+.menu-btn-complete:hover {
+    background: #555;
+
+    transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   SUCCESS PAGE MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .order-complete-box {
+        padding: 35px 20px;
+    }
+
+    .order-complete-box h1 {
+        font-size: 26px;
+    }
+
+    .order-complete-buttons {
+        flex-direction: column;
+    }
+
+    .history-btn,
+    .menu-btn-complete {
+        width: 100%;
+    }
+
 }
