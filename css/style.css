@@ -4,7 +4,7 @@
     align-items:center;
     height:70px;
     padding:0 20px;
-    background:#ab794b;
+    background:#d8a06b;
     box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 /* Hamburger */
@@ -1517,4 +1517,161 @@
 
 .cancel-btn:hover{
     background:#ddd;
+}
+
+.home-hero {
+    width: 100%;
+    overflow: hidden;
+}
+
+.home-hero img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* =========================================
+   RESTAURANT SECTION
+   ========================================= */
+
+.home-restaurants {
+    background-color: #d8a06b;
+    padding: 60px 7%;
+}
+
+.restaurants-header {
+    max-width: 1200px;
+    margin: 0 auto 35px;
+    text-align: center;
+}
+
+.restaurants-header h1 {
+    margin: 0 0 12px;
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.restaurants-header p {
+    margin: 0;
+    font-size: 20px;
+    color: #f5f5f5;
+}
+
+
+/* Restaurant cards */
+
+.home-restaurant-container {
+    display: flex;
+    gap: 25px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 10px 5px 25px;
+
+    scroll-behavior: smooth;
+}
+
+.home-restaurant-card {
+    flex: 0 0 280px;
+
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    text-decoration: none;
+    color: inherit;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-restaurant-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Image */
+
+.home-restaurant-image {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.home-restaurant-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* Information */
+
+.home-restaurant-info {
+    padding: 18px;
+}
+
+.home-restaurant-info h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    color: #222;
+}
+
+.restaurant-category {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.restaurant-price {
+    margin: 10px 0 5px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #cf8010;
+}
+
+.restaurant-location {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #777;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* View All */
+
+.view-all-container {
+    text-align: center;
+    margin-top: 35px;
+}
+
+.view-all-btn {
+    display: inline-block;
+
+    padding: 13px 30px;
+
+    background-color: #ffffff;
+    color: #d8a06b;
+
+    text-decoration: none;
+
+    border-radius: 6px;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.view-all-btn:hover {
+    background-color: #f2f2f2;
 }
