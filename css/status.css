@@ -1,0 +1,23 @@
+/* ===================== RESTAURANT STATUS BADGE ===================== */
+
+.status-badge{
+    display:inline-block;
+    margin-left:10px;
+    padding:3px 10px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:bold;
+    vertical-align:middle;
+    background:#eee;
+    color:#666;
+}
+
+.status-open{
+    background:#e3f6e5;
+    color:#2e7d32;
+}
+
+.status-closed{
+    background:#fdeaea;
+    color:#d32f2f;
+}

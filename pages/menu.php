@@ -1,12 +1,15 @@
 <?php
 include '../config/db_connect.php';
-include '../includes/header.php';
-include '../includes/navigation.php';
 
 // Get all restaurants
 $sql = "SELECT * FROM restaurants";
 $result = $conn->query($sql);
+
+include '../includes/header.php';
+include '../includes/navigation.php';
 ?>
+
+<link rel="stylesheet" href="../css/status.css">
 
 <main class="menu-page">
 
@@ -29,6 +32,10 @@ $result = $conn->query($sql);
 
                         <h2>
                             <?php echo htmlspecialchars($row['restaurant_name']); ?>
+                            <span
+                                class="status-badge"
+                                data-opening="<?php echo htmlspecialchars($row['restaurant_opening_hours']); ?>"
+                            >Checking...</span>
                         </h2>
 
                         <p>
@@ -36,7 +43,7 @@ $result = $conn->query($sql);
                             <?php echo htmlspecialchars($row['restaurant_opening_hours']); ?>
                         </p>
 
-                         <p>
+                        <p>
                             <strong>Closing Hours:</strong>
                             <?php echo htmlspecialchars($row['restaurant_closing_hours']); ?>
                         </p>
@@ -81,6 +88,7 @@ $result = $conn->query($sql);
 </main>
 
 <script src="../js/script.js"></script>
+<script src="../js/status.js"></script>
 
 <?php
         $conn->close();
