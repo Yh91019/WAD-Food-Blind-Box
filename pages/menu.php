@@ -36,6 +36,11 @@ $result = $conn->query($sql);
                             <?php echo htmlspecialchars($row['restaurant_opening_hours']); ?>
                         </p>
 
+                         <p>
+                            <strong>Closing Hours:</strong>
+                            <?php echo htmlspecialchars($row['restaurant_closing_hours']); ?>
+                        </p>
+
                         <p>
                             <strong>Location:</strong>
                             <?php echo htmlspecialchars($row['restaurant_address']); ?>

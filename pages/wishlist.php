@@ -567,6 +567,7 @@ include '../includes/navigation.php';
 
 </main>
 
+<script src="../js/script.js"></script>
 
 <?php
 
