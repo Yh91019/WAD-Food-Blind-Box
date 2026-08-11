@@ -14,8 +14,8 @@
             <li><a href="../index.php">Home</a></li>
             <li><a href="../pages/menu.php">Menu</a></li>
             <li><a href="../pages/cart.php">Cart</a></li>
-            <li><a href="../pages/orderhistory.php">Order</a></li>
             <li><a href="../pages/wishlist.php">Wishlist</a></li>
+            <li><a href="../pages/orderhistory.php">Order</a></li>
             <li><a href="../authentication/profile.php">Profile</a></li>
             <li><a href="../pages/aboutus.php">About Us</a></li>
             

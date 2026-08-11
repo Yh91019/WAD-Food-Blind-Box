@@ -84,5 +84,6 @@ include '../includes/navigation.php';
 </main>
 
  <script src="../js/script.js"></script>
-
+                
+<link rel="stylesheet" href="../css/orderhistory.css">
 <?php include '../includes/footer.php'; ?>
