@@ -21,6 +21,12 @@ if (
 
     $username = $_SESSION['username'];
 
+    /* Payment method chosen by the user in the modal (defaults to Cash) */
+    $payment_method =
+        (isset($_POST['payment_method']) && $_POST['payment_method'] === 'Card')
+        ? 'Card'
+        : 'Cash';
+
     /* Get all cart items */
     $order_sql = "
         SELECT
@@ -58,7 +64,6 @@ if (
             $price = $item['blind_box_price'];
             $quantity = $item['quantity'];
 
-            $payment_method = "Cash";
             $order_type = "Pickup";
             $status = "Completed";
 
@@ -494,10 +499,14 @@ include '../includes/navigation.php';
             🍔 Add More from Menu
         </a>
 
-        <form method="POST" action="cart.php">
+        <form method="POST" action="cart.php" id="placeOrderForm">
+
+    <input type="hidden" name="place_order" value="1">
+    <input type="hidden" name="payment_method" id="paymentMethodInput" value="">
+
     <button
-        type="submit"
-        name="place_order"
+        type="button"
+        id="openPaymentModalBtn"
         class="place-order-btn"
     >
         🛒 Place Order
@@ -508,14 +517,41 @@ include '../includes/navigation.php';
 
 </div>
 
+<!-- PAYMENT METHOD MODAL -->
+<div id="paymentModalOverlay" class="payment-modal-overlay">
+
+    <div class="payment-modal">
+
+        <h2>Select Payment Method</h2>
+
+        <p>Choose how you'd like to pay for this order.</p>
+
+        <div class="payment-method-buttons">
+
+            <button type="button" class="payment-method-btn" data-method="Cash">
+                💵 Cash
+            </button>
+
+            <button type="button" class="payment-method-btn" data-method="Card">
+                💳 Card
+            </button>
+
+        </div>
+
+        <button type="button" id="cancelPaymentBtn" class="cancel-payment-btn">
+            Cancel
+        </button>
+
+    </div>
+
+</div>
+
+<script src="../js/payment.js"></script>
+
     <?php endif; ?>
 
 
 </main>
 
 
-<?php
-
-include '../includes/footer.php';
-
-?>
+<?php include('../includes/footer.php'); ?>
