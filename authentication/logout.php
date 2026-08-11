@@ -8,6 +8,6 @@ session_start();
 
 $_SESSION['logout_message'] = "You have successfully logged out.";
 
-header("Location: ../index.php");
+header("Location: ../authentication/login.php");
 exit();
 ?>

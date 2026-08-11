@@ -6,37 +6,44 @@ $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = trim($_POST['email']);
+    $login_id = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // Find user by email
-    $sql = "SELECT * FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
+    // ----------------------------------------------------------
+    // 1) Check the admin table first (admin_username / admin_password)
+    // ----------------------------------------------------------
+    $admin_sql = "SELECT * FROM admin WHERE admin_username = ?";
+    $admin_stmt = $conn->prepare($admin_sql);
 
-    if (!$stmt) {
+    if (!$admin_stmt) {
         die("Database error: " . $conn->error);
     }
 
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
+    $admin_stmt->bind_param("s", $login_id);
+    $admin_stmt->execute();
+    $admin_result = $admin_stmt->get_result();
 
-    $result = $stmt->get_result();
+    if ($admin_result->num_rows == 1) {
 
-    if ($result->num_rows == 1) {
+        $admin = $admin_result->fetch_assoc();
+        $stored_admin_password = $admin['admin_password'];
 
-        $user = $result->fetch_assoc();
+        // Supports both a plain-text password and a password_hash() hash
+        if (password_get_info($stored_admin_password)['algo'] !== null) {
+            $admin_password_ok = password_verify($password, $stored_admin_password);
+        } else {
+            $admin_password_ok = hash_equals($stored_admin_password, $password);
+        }
 
-        // Verify hashed password
-        if (password_verify($password, $user['password'])) {
+        if ($admin_password_ok) {
 
-            // Store user session
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['email'] = $user['email'];
+            $_SESSION['username'] = $admin['admin_username'];
+            $_SESSION['is_admin'] = true;
 
-            $_SESSION['login_message'] = "Welcome back, " . $user['username'] . "!";
+            $admin_stmt->close();
+            $conn->close();
 
-            // Redirect after successful login
-            header("Location: ../index.php");
+            header("Location: ../admin/dashboard.php");
             exit();
 
         } else {
@@ -45,13 +52,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         }
 
+        $admin_stmt->close();
+
     } else {
 
-        $error = "Email has not been registered.";
+        $admin_stmt->close();
 
+        // ----------------------------------------------------------
+        // 2) Not an admin username — fall back to the regular users table
+        // ----------------------------------------------------------
+        $sql = "SELECT * FROM users WHERE username = ? OR email = ?";
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Database error: " . $conn->error);
+        }
+
+        $stmt->bind_param("ss", $login_id, $login_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 1) {
+
+            $user = $result->fetch_assoc();
+
+            // Verify password. Supports properly hashed passwords (password_hash),
+            // and also a plain-text password.
+            $stored_password = $user['password'];
+
+            if (password_get_info($stored_password)['algo'] !== null) {
+                $password_ok = password_verify($password, $stored_password);
+            } else {
+                $password_ok = hash_equals($stored_password, $password);
+            }
+
+            if ($password_ok) {
+
+                // Store user session
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['login_message'] = "Welcome back, " . $user['username'] . "!";
+
+                $stmt->close();
+                $conn->close();
+
+                // Redirect after successful login
+                header("Location: ../index.php");
+                exit();
+
+            } else {
+
+                $error = "Incorrect password.";
+
+            }
+
+        } else {
+
+            $error = "Username/email has not been registered.";
+
+        }
+
+        $stmt->close();
     }
-
-    $stmt->close();
 }
 
 $conn->close();
@@ -72,9 +135,9 @@ $conn->close();
 
         <form method="POST" action="">
 
-            <label for="email">Email</label><br>
+            <label for="email">Username or Email</label><br>
             <input
-                type="email"
+                type="text"
                 id="email"
                 name="email"
                 value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>"
