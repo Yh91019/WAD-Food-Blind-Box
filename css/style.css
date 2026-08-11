@@ -7,6 +7,16 @@
     background:#d8a06b;
     box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
+
+footer {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 15px 0px;
+    background-color: #f8f5f2;
+    text-align: left;
+}
+
 /* Hamburger */
 .menu-btn{
     font-size:30px;
@@ -677,6 +687,7 @@
     display:flex;
     justify-content:center;
     align-items: center;
+    background:#f8f5f2
 }
 
 .login-box{

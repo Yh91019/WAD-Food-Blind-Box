@@ -5,80 +5,116 @@ require_admin_login();
 
 include '../config/db_connect.php';
 
-$sql = "SELECT * FROM restaurants ORDER BY restaurant_name";
-$result = $conn->query($sql);
+
+$result = $conn->query(
+    "SELECT * FROM restaurants ORDER BY restaurant_name"
+);
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Restaurants - Blind Bite Admin</title>
-    <link rel="stylesheet" href="../css/admin.css">
-</head>
-<body>
 
-    <div class="admin-page">
 
-        <div class="admin-card admin-card-wide">
+<?php include '../includes/header.php'; ?>
 
-            <div class="admin-header">
-                <h1>🍱 Manage Restaurants</h1>
-            </div>
+<?php include '../includes/adminNavigation.php'; ?>
 
-            <div class="admin-body">
 
-                <?php if (isset($_SESSION['admin_message'])) : ?>
-                    <p class="admin-success"><?php echo htmlspecialchars($_SESSION['admin_message']); unset($_SESSION['admin_message']); ?></p>
-                <?php endif; ?>
+<section class="admin-page">
 
-                <?php if (isset($_SESSION['admin_error'])) : ?>
-                    <p class="admin-error"><?php echo htmlspecialchars($_SESSION['admin_error']); unset($_SESSION['admin_error']); ?></p>
-                <?php endif; ?>
+    <div class="admin-card">
+
+        <!-- Page Header -->
+
+        <div class="admin-header">
+
+            <h1>🍱Manage Restaurants</h1>
+
+        </div>
+
+
+        <div class="admin-body">
+
+
+            <!-- Messages -->
+
+            <?php if (isset($_SESSION['admin_message'])) : ?>
+
+                <p class="admin-success">
+
+                    <?php
+                    echo htmlspecialchars(
+                        $_SESSION['admin_message']
+                    );
+
+                    unset($_SESSION['admin_message']);
+                    ?>
+
+                </p>
+
+            <?php endif; ?>
+
+
+            <?php if (isset($_SESSION['admin_error'])) : ?>
+
+                <p class="admin-error">
+
+                    <?php
+                    echo htmlspecialchars(
+                        $_SESSION['admin_error']
+                    );
+
+                    unset($_SESSION['admin_error']);
+                    ?>
+
+                </p>
+
+            <?php endif; ?>
 
                 <div class="admin-actions-bar">
                     <a href="add_restaurant.php" class="manage-btn">+ Add Restaurant</a>
                     <a href="dashboard.php" class="admin-back-link">&larr; Back to Dashboard</a>
                 </div>
 
-                <!-- Search Restaurant -->
-                <div class="admin-search-bar">
-                    <input
-                        type="text"
-                        id="restaurantSearchInput"
-                        placeholder="Search restaurant name..."
-                        autocomplete="off"
-                    >
-                </div>
 
-                <p id="restaurantNoResults" class="admin-no-results" style="display: none;">
-                    No restaurants match your search.
-                </p>
+            <!-- Restaurant Table -->
 
-                <div class="admin-table-wrap">
+            <div class="restaurant-table-container">
 
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Restaurant</th>
-                                <th>Address</th>
-                                <th>Hours</th>
-                                <th>Phone</th>
-                                <th>Box Price</th>
-                                <th>Qty</th>
-                                <th>Category</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <table class="restaurant-table">
 
-                            <?php if ($result && $result->num_rows > 0) : ?>
+                    <thead>
 
-                                <?php while ($row = $result->fetch_assoc()) : ?>
+                        <tr>
 
-                                    <tr class="restaurant-row"
-                                        data-name="<?php echo htmlspecialchars(strtolower($row['restaurant_name'])); ?>">
+                            <th>Restaurant</th>
+
+                            <th>Address</th>
+
+                            <th>Opening</th>
+
+                            <th>Closing</th>
+
+                            <th>Phone</th>
+
+                            <th>Box Price</th>
+
+                            <th>Qty</th>
+
+                            <th>Category</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <?php if ($result && $result->num_rows > 0) : ?>
+
+                            <?php while ($row = $result->fetch_assoc()) : ?>
+
+                                    <tr>
                                         <td><?php echo htmlspecialchars($row['restaurant_name']); ?></td>
                                         <td><?php echo htmlspecialchars($row['restaurant_address']); ?></td>
                                         <td>
@@ -99,28 +135,57 @@ $result = $conn->query($sql);
                                             <form
                                                 method="POST"
                                                 action="delete_restaurant.php"
-                                                onsubmit="return confirm('Delete &quot;<?php echo htmlspecialchars(addslashes($row['restaurant_name'])); ?>&quot;? This cannot be undone.');"
+                                                onsubmit="return confirm(
+                                                    'Are you sure you want to delete this restaurant?'
+                                                );"
                                             >
-                                                <input type="hidden" name="restaurant_name" value="<?php echo htmlspecialchars($row['restaurant_name']); ?>">
-                                                <button type="submit" class="admin-delete-btn">Delete</button>
+
+                                                <input
+                                                    type="hidden"
+                                                    name="restaurant_name"
+                                                    value="<?php
+                                                        echo htmlspecialchars(
+                                                            $row['restaurant_name']
+                                                        );
+                                                    ?>"
+                                                >
+
+
+                                                <button
+                                                    type="submit"
+                                                    class="delete-btn"
+                                                >
+                                                    Delete
+                                                </button>
+
                                             </form>
-                                        </td>
-                                    </tr>
 
-                                <?php endwhile; ?>
+                                        </div>
 
-                            <?php else : ?>
+                                    </td>
 
-                                <tr>
-                                    <td colspan="8">No restaurants yet. Click "+ Add Restaurant" to create one.</td>
                                 </tr>
 
-                            <?php endif; ?>
+                            <?php endwhile; ?>
 
-                        </tbody>
-                    </table>
+                        <?php else : ?>
 
-                </div>
+                            <tr>
+
+                                <td
+                                    colspan="9"
+                                    class="no-restaurants"
+                                >
+                                    No restaurants available.
+                                </td>
+
+                            </tr>
+
+                        <?php endif; ?>
+
+                    </tbody>
+
+                </table>
 
             </div>
 
@@ -128,32 +193,7 @@ $result = $conn->query($sql);
 
     </div>
 
-    <script>
-        const searchInput = document.getElementById("restaurantSearchInput");
-        const restaurantRows = document.querySelectorAll(".restaurant-row");
-        const noResults = document.getElementById("restaurantNoResults");
-
-        searchInput.addEventListener("input", function () {
-            const searchValue = this.value.trim().toLowerCase();
-            let visibleCount = 0;
-
-            restaurantRows.forEach(function (row) {
-                const restaurantName = row.getAttribute("data-name");
-
-                if (restaurantName.includes(searchValue)) {
-                    row.style.display = "";
-                    visibleCount++;
-                } else {
-                    row.style.display = "none";
-                }
-            });
-
-            noResults.style.display =
-                visibleCount === 0 && restaurantRows.length > 0
-                    ? "block"
-                    : "none";
-        });
-    </script>
+</section>
 
 </body>
 </html>
