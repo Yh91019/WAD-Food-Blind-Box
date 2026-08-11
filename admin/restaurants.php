@@ -101,27 +101,17 @@ $result = $conn->query(
             <!-- Admin Actions -->
 
 
-            <div class="admin-actions-bar">
+            <div class="restaurant-page-actions">
 
+                <a href="dashboard.php" class="admin-action-btn back-btn">
+                    ← Back to Dashboard
+                </a>
 
-                <a
-                    href="add_restaurant.php"
-                    class="manage-btn"
-                >
+                <a href="add_restaurant.php" class="admin-action-btn add-btn">
                     + Add Restaurant
                 </a>
 
-
-                <a
-                    href="dashboard.php"
-                    class="admin-back-link"
-                >
-                    &larr; Back to Dashboard
-                </a>
-
-
             </div>
-
 
 
             <!-- Search Restaurant -->
@@ -298,7 +288,7 @@ $result = $conn->query(
                                     </td>
 
 
-                                    <td class="admin-table-actions">
+                                    <td class="table-actions">
 
 
                                         <a
@@ -307,7 +297,7 @@ $result = $conn->query(
                                                     $row['restaurant_name']
                                                 );
                                             ?>"
-                                            class="admin-edit-link"
+                                            class="edit-btn"
                                         >
                                             Edit
                                         </a>
@@ -317,6 +307,7 @@ $result = $conn->query(
                                         <form
                                             method="POST"
                                             action="delete_restaurant.php"
+                                            class="delete-form"
                                             onsubmit="return confirm(
                                                 'Are you sure you want to delete this restaurant?'
                                             );"

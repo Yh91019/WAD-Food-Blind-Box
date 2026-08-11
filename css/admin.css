@@ -306,24 +306,52 @@
    EDIT / DELETE
    ============================================================ */
 
-.table-actions {
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
+.admin-table th:last-child,
+.admin-table td:last-child {
+    min-width: 170px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
 
+/* Actions cell */
+
+.table-actions {
+    text-align: center !important;
+    vertical-align: middle !important;
+    white-space: nowrap;
+}
+
+
+/* Delete form */
+
+.delete-form {
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    vertical-align: middle;
+}
+
+
+/* Edit and Delete buttons */
+
 .edit-btn,
 .delete-btn {
+    display: inline-block !important;
+
     padding: 7px 13px;
+
+    margin: 0 3px;
 
     border-radius: 5px;
 
     font-size: 14px;
 
     font-weight: bold;
+
+    font-family: inherit;
 
     text-decoration: none;
 
@@ -333,28 +361,30 @@
 
     white-space: nowrap;
 
-    font-family: inherit;
+    box-sizing: border-box;
+
+    vertical-align: middle;
 }
 
+
+/* Edit */
 
 .edit-btn {
     background-color: #ab794b;
-
     color: white;
 }
-
 
 .edit-btn:hover {
     background-color: #8f623c;
 }
 
 
+/* Delete */
+
 .delete-btn {
     background-color: #ca4350;
-
     color: white;
 }
-
 
 .delete-btn:hover {
     background-color: #a12532;
@@ -500,4 +530,52 @@
 
 .restaurant-form-actions .back-btn:hover {
     background-color: #d8cec4;
+}
+
+/* ============================================================
+   RESTAURANT SEARCH
+   ============================================================ */
+
+.restaurant-search {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+
+.restaurant-search input {
+    width: 350px;
+
+    padding: 12px 15px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d5cec8;
+
+    border-radius: 7px;
+
+    background-color: white;
+
+    color: #5d4938;
+
+    font-size: 16px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+
+.restaurant-search input::placeholder {
+    color: #999;
+}
+
+
+.restaurant-search input:focus {
+    border-color: #ab794b;
+
+    box-shadow:
+        0 0 0 2px rgba(171, 121, 75, 0.15);
 }
