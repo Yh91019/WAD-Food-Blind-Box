@@ -12,5 +12,10 @@ if (session_status() === PHP_SESSION_NONE) {
     <title>Blind Bite</title>
 
     <link rel="stylesheet" href="../css/style.css">
+    <?php if (strpos($_SERVER['PHP_SELF'], '/admin/') !== false): ?>
+
+    <link rel="stylesheet" href="../css/admin.css">
+
+    <?php endif; ?>
 </head>
 <body>
