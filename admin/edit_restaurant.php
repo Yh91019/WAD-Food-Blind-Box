@@ -186,81 +186,264 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Restaurant - Blind Bite Admin</title>
-    <link rel="stylesheet" href="../css/admin.css">
-</head>
-<body>
+<?php include '../includes/header.php'; ?>
+<?php include '../includes/adminNavigation.php'; ?>
 
-    <div class="admin-page">
+<section class="admin-page">
 
-        <div class="admin-card">
+    <div class="admin-card">
 
-            <div class="admin-header">
-                <h1>🍱 Edit Restaurant</h1>
-            </div>
+        <!-- Page Header -->
 
-            <div class="admin-body">
+        <div class="admin-header">
 
-                <?php if (!empty($error)) : ?>
-                    <p class="admin-error"><?php echo htmlspecialchars($error); ?></p>
-                <?php endif; ?>
+            <h1>🍱 Edit Restaurant</h1>
 
-                <form method="POST" action="edit_restaurant.php" class="admin-form">
+        </div>
 
-                    <input type="hidden" name="original_restaurant_name" value="<?php echo htmlspecialchars($original_name); ?>">
 
-                    <label for="restaurant_name">Restaurant Name</label>
-                    <input type="text" id="restaurant_name" name="restaurant_name"
-                           value="<?php echo htmlspecialchars($form['restaurant_name']); ?>" required>
+        <div class="admin-body">
 
-                    <label for="restaurant_address">Address</label>
-                    <input type="text" id="restaurant_address" name="restaurant_address"
-                           value="<?php echo htmlspecialchars($form['restaurant_address']); ?>" required>
+            <?php if (!empty($error)) : ?>
 
-                    <label for="restaurant_opening_hours">Opening Hours</label>
-                    <input type="time" id="restaurant_opening_hours" name="restaurant_opening_hours"
-                           value="<?php echo htmlspecialchars(substr($form['restaurant_opening_hours'], 0, 5)); ?>" required>
+                <p class="admin-error">
+                    <?php echo htmlspecialchars($error); ?>
+                </p>
 
-                    <label for="restaurant_closing_hours">Closing Hours</label>
-                    <input type="time" id="restaurant_closing_hours" name="restaurant_closing_hours"
-                           value="<?php echo htmlspecialchars(substr($form['restaurant_closing_hours'], 0, 5)); ?>" required>
+            <?php endif; ?>
 
-                    <label for="restaurant_phone_number">Phone Number</label>
-                    <input type="text" id="restaurant_phone_number" name="restaurant_phone_number"
-                           value="<?php echo htmlspecialchars($form['restaurant_phone_number']); ?>" required>
 
-                    <label for="blind_box_price">Blind Box Price (RM)</label>
-                    <input type="number" step="0.01" min="0" id="blind_box_price" name="blind_box_price"
-                           value="<?php echo htmlspecialchars($form['blind_box_price']); ?>" required>
+            <form
+                method="POST"
+                action="edit_restaurant.php"
+                class="restaurant-form"
+            >
 
-                    <label for="blind_box_remaining_quantity">Remaining Quantity</label>
-                    <input type="number" step="1" min="0" id="blind_box_remaining_quantity" name="blind_box_remaining_quantity"
-                           value="<?php echo htmlspecialchars($form['blind_box_remaining_quantity']); ?>" required>
+                <!-- Keep original restaurant name -->
 
-                    <label for="blind_box_food_category">Food Category</label>
-                    <input type="text" id="blind_box_food_category" name="blind_box_food_category"
-                           value="<?php echo htmlspecialchars($form['blind_box_food_category']); ?>" required>
+                <input
+                    type="hidden"
+                    name="original_restaurant_name"
+                    value="<?php echo htmlspecialchars($original_name); ?>"
+                >
 
-                    <label for="blind_box_description">Blind Box Description</label>
-                    <textarea id="blind_box_description" name="blind_box_description" rows="4" required><?php echo htmlspecialchars($form['blind_box_description']); ?></textarea>
 
-                    <div class="admin-form-actions">
-                        <button type="submit" class="manage-btn">Save Changes</button>
-                        <a href="restaurants.php" class="admin-back-link">Cancel</a>
-                    </div>
+                <!-- Restaurant Name -->
 
-                </form>
+                <div class="form-group">
 
-            </div>
+                    <label for="restaurant_name">
+                        Restaurant Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="restaurant_name"
+                        name="restaurant_name"
+                        value="<?php echo htmlspecialchars($form['restaurant_name']); ?>"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Address -->
+
+                <div class="form-group">
+
+                    <label for="restaurant_address">
+                        Address
+                    </label>
+
+                    <input
+                        type="text"
+                        id="restaurant_address"
+                        name="restaurant_address"
+                        value="<?php echo htmlspecialchars($form['restaurant_address']); ?>"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Opening Hours -->
+
+                <div class="form-group">
+
+                    <label for="restaurant_opening_hours">
+                        Opening Hours
+                    </label>
+
+                    <input
+                        type="time"
+                        id="restaurant_opening_hours"
+                        name="restaurant_opening_hours"
+                        value="<?php echo htmlspecialchars(
+                            substr($form['restaurant_opening_hours'], 0, 5)
+                        ); ?>"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Closing Hours -->
+
+                <div class="form-group">
+
+                    <label for="restaurant_closing_hours">
+                        Closing Hours
+                    </label>
+
+                    <input
+                        type="time"
+                        id="restaurant_closing_hours"
+                        name="restaurant_closing_hours"
+                        value="<?php echo htmlspecialchars(
+                            substr($form['restaurant_closing_hours'], 0, 5)
+                        ); ?>"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Phone Number -->
+
+                <div class="form-group">
+
+                    <label for="restaurant_phone_number">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="restaurant_phone_number"
+                        name="restaurant_phone_number"
+                        value="<?php echo htmlspecialchars(
+                            $form['restaurant_phone_number']
+                        ); ?>"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Blind Box Price -->
+
+                <div class="form-group">
+
+                    <label for="blind_box_price">
+                        Blind Box Price (RM)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        id="blind_box_price"
+                        name="blind_box_price"
+                        value="<?php echo htmlspecialchars(
+                            $form['blind_box_price']
+                        ); ?>"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Remaining Quantity -->
+
+                <div class="form-group">
+
+                    <label for="blind_box_remaining_quantity">
+                        Remaining Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        step="1"
+                        min="0"
+                        id="blind_box_remaining_quantity"
+                        name="blind_box_remaining_quantity"
+                        value="<?php echo htmlspecialchars(
+                            $form['blind_box_remaining_quantity']
+                        ); ?>"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Food Category -->
+
+                <div class="form-group">
+
+                    <label for="blind_box_food_category">
+                        Food Category
+                    </label>
+
+                    <input
+                        type="text"
+                        id="blind_box_food_category"
+                        name="blind_box_food_category"
+                        value="<?php echo htmlspecialchars(
+                            $form['blind_box_food_category']
+                        ); ?>"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="form-group form-full">
+
+                    <label for="blind_box_description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="blind_box_description"
+                        name="blind_box_description"
+                        rows="5"
+                        required
+                    ><?php echo htmlspecialchars(
+                        $form['blind_box_description']
+                    ); ?></textarea>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="restaurant-form-actions">
+
+                    <button
+                        type="submit"
+                        class="admin-action-btn add-btn"
+                    >
+                        Save Changes
+                    </button>
+
+
+                    <a
+                        href="restaurants.php"
+                        class="admin-action-btn back-btn"
+                    >
+                        ← Cancel
+                    </a>
+
+                </div>
+
+            </form>
 
         </div>
 
     </div>
 
-</body>
-</html>
+</section>
+
+
+<?php include '../includes/footer.php'; ?>
