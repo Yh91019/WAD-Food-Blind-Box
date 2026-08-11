@@ -35,7 +35,7 @@ include '../includes/navigation.php';
 
 <main class="orderhistory-page">
 
-    <h1>📦 Order History</h1>
+    <h1>Order History</h1>
 
     <?php if (!isset($_SESSION['username'])) : ?>
 

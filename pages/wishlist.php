@@ -353,7 +353,7 @@ include '../includes/navigation.php';
 
 
         <h1 class="wishlist-title">
-            ❤️ My Wishlist
+            My Wishlist
         </h1>
 
 

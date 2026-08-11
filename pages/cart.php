@@ -298,7 +298,7 @@ include '../includes/navigation.php';
 
 
     <h1>
-        🛒 My Cart
+        My Cart
     </h1>
 
 
@@ -509,7 +509,7 @@ include '../includes/navigation.php';
         id="openPaymentModalBtn"
         class="place-order-btn"
     >
-        🛒 Place Order
+        Place Order
     </button>
 </form>
 

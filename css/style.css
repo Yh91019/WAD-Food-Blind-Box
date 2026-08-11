@@ -181,6 +181,7 @@
 
 .action-buttons {
     display: flex;
+    align-items: flex-end;
     gap: 15px;
     margin-top: 25px;
 }
@@ -1784,6 +1785,7 @@
     background: #f2f2f2;
 }
 
+
 /* ============================================================
    MENU SEARCH BAR
    ============================================================ */
@@ -1791,18 +1793,25 @@
 .menu-search-bar {
     display: flex;
     justify-content: center;
+
     margin-bottom: 30px;
 }
 
 .menu-search-bar input {
     width: 100%;
     max-width: 500px;
+
     padding: 14px 20px;
+
     font-size: 15px;
+
     border: 2px solid #e5ddd3;
     border-radius: 30px;
+
     outline: none;
+
     background: #fff;
+
     transition: all 0.3s ease;
 }
 
@@ -1817,8 +1826,173 @@
 
 .menu-no-results {
     display: none;
+
     text-align: center;
+
     color: #888;
     font-size: 16px;
+
     margin: 10px 0 30px;
+}
+
+
+/* ============================================================
+   ORDER TYPE (PICKUP / DELIVERY)
+   ============================================================ */
+
+.order-type-section {
+    text-align: center;
+
+    margin: 20px 0;
+}
+
+.order-type-label {
+    font-size: 14px;
+    font-weight: bold;
+
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    margin-bottom: 10px;
+}
+
+.order-type-buttons {
+    display: inline-flex;
+
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Hide the actual radio input, style its label as the button */
+
+.order-type-buttons input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.order-type-btn {
+    display: inline-block;
+
+    background: #fff;
+    color: #ab794b;
+
+    border: 2px solid #e5ddd3;
+    border-radius: 25px;
+
+    padding: 10px 22px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+    user-select: none;
+
+    transition: all 0.3s ease;
+}
+
+.order-type-btn:hover {
+    border-color: #ab794b;
+}
+
+.order-type-buttons input[type="radio"]:checked + .order-type-btn {
+    background: #ab794b;
+    color: white;
+    border-color: #ab794b;
+}
+
+.order-type-buttons input[type="radio"]:focus-visible + .order-type-btn {
+    outline: 2px solid #ab794b;
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   QUANTITY SELECTOR (DETAILS PAGE)
+   ============================================================ */
+
+.quantity-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    margin-bottom: 15px;
+}
+
+.quantity-label {
+    font-size: 13px;
+    font-weight: bold;
+
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.quantity-controls {
+    display: inline-flex;
+    align-items: center;
+
+    border: 2px solid #ab794b;
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    width: fit-content;
+}
+
+.qty-btn {
+    background: white;
+    color: #ab794b;
+
+    border: none;
+
+    width: 40px;
+    height: 40px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.qty-btn:hover:not(:disabled) {
+    background: #ab794b;
+    color: white;
+}
+
+.qty-btn:disabled {
+    color: #ddd;
+    cursor: not-allowed;
+}
+
+.qty-input {
+    width: 50px;
+    height: 40px;
+
+    border: none;
+    border-left: 2px solid #ab794b;
+    border-right: 2px solid #ab794b;
+
+    text-align: center;
+
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+
+    background: white;
+
+    /* Hide number input spinners */
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

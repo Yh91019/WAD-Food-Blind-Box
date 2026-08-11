@@ -80,6 +80,26 @@ if (
         $restaurant_name_db =
             $restaurant['restaurant_name'];
 
+        // ====================================================
+        // QUANTITY (from the quantity selector, default 1)
+        // ====================================================
+
+        $quantity_to_add =
+            isset($_POST['quantity'])
+            ? (int) $_POST['quantity']
+            : 1;
+
+        if ($quantity_to_add < 1) {
+            $quantity_to_add = 1;
+        }
+
+        $max_quantity =
+            (int) $restaurant['blind_box_remaining_quantity'];
+
+        if ($max_quantity > 0 && $quantity_to_add > $max_quantity) {
+            $quantity_to_add = $max_quantity;
+        }
+
 
         // ====================================================
         // CHECK IF RESTAURANT ALREADY IN CART
@@ -116,7 +136,7 @@ if (
 
             $update_sql = "
                 UPDATE cart
-                SET quantity = quantity + 1
+                SET quantity = quantity + ?
                 WHERE username = ?
                 AND restaurant_name = ?
             ";
@@ -125,7 +145,8 @@ if (
                 $conn->prepare($update_sql);
 
             $update_stmt->bind_param(
-                "ss",
+                "iss",
+                $quantity_to_add,
                 $username,
                 $restaurant_name_db
             );
@@ -155,16 +176,17 @@ if (
                     restaurant_name,
                     quantity
                 )
-                VALUES (?, ?, 1)
+                VALUES (?, ?, ?)
             ";
 
             $insert_stmt =
                 $conn->prepare($insert_sql);
 
             $insert_stmt->bind_param(
-                "ss",
+                "ssi",
                 $username,
-                $restaurant_name_db
+                $restaurant_name_db,
+                $quantity_to_add
             );
 
             $insert_stmt->execute();
@@ -506,7 +528,46 @@ include '../includes/navigation.php';
 
                     <!-- ADD TO CART -->
 
-                    <form method="POST">
+                    <form method="POST" id="addToCartForm">
+
+                        <!-- QUANTITY SELECTOR -->
+
+                        <div class="quantity-selector">
+
+                            <span class="quantity-label">Quantity</span>
+
+                            <div class="quantity-controls">
+
+                                <button
+                                    type="button"
+                                    class="qty-btn qty-minus"
+                                    aria-label="Decrease quantity"
+                                >
+                                    −
+                                </button>
+
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    id="quantityInput"
+                                    class="qty-input"
+                                    value="1"
+                                    min="1"
+                                    max="<?php echo (int) $restaurant['blind_box_remaining_quantity']; ?>"
+                                    readonly
+                                >
+
+                                <button
+                                    type="button"
+                                    class="qty-btn qty-plus"
+                                    aria-label="Increase quantity"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
 
                         <button
                             type="submit"
@@ -585,6 +646,7 @@ include '../includes/navigation.php';
 
 
     <script src="../js/script.js"></script>
+    <script src="../js/quantity.js"></script>
 
 </main>
 
