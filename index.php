@@ -33,7 +33,7 @@ unset($_SESSION['logout_message']);
 
 <main>
     <section class="home-hero">
-        <img src="/WAD-Food-Blind-Box/images/bg.jpg" alt="Blind Bite">
+        <img src="images/bg.jpg" alt="Blind Bite">
     </section>
 
 
@@ -75,7 +75,7 @@ unset($_SESSION['logout_message']);
 
                         <div class="home-restaurant-image">
 
-                            <img src="/WAD-Food-Blind-Box/images/BBbox.png"
+                            <img src="images/BBbox.png"
                                  alt="Blind Box">
 
                         </div>
