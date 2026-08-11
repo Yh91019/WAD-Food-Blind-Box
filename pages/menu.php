@@ -15,7 +15,21 @@ include '../includes/navigation.php';
 
     <h1>Blind Box Restaurants</h1>
 
-    <div class="restaurant-container">
+    <div class="menu-search-bar">
+
+        <input
+            type="text"
+            id="menuSearchInput"
+            placeholder="Search by restaurant name or food category..."
+        >
+
+    </div>
+
+    <p id="menuNoResults" class="menu-no-results">
+        No restaurants match your search.
+    </p>
+
+    <div class="restaurant-container" id="restaurantContainer">
 
         <?php
         if ($result->num_rows > 0) {
@@ -23,7 +37,11 @@ include '../includes/navigation.php';
             while ($row = $result->fetch_assoc()) {
         ?>
 
-                <div class="restaurant-card">
+                <div
+                    class="restaurant-card"
+                    data-name="<?php echo strtolower(htmlspecialchars($row['restaurant_name'])); ?>"
+                    data-category="<?php echo strtolower(htmlspecialchars($row['blind_box_food_category'])); ?>"
+                >
 
                     <!-- Restaurant Image -->
                     <img src="../images/BBbox.png" width="200" height="150" alt="Blind Box">
@@ -89,6 +107,7 @@ include '../includes/navigation.php';
 
 <script src="../js/script.js"></script>
 <script src="../js/status.js"></script>
+<script src="../js/menu-search.js"></script>
 
 <?php
         $conn->close();
