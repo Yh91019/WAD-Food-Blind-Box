@@ -21,7 +21,7 @@
 
         <li>
             <a href="../admin/restaurants.php">
-                Restaurants
+                Manage Restaurants
             </a>
         </li>
 
