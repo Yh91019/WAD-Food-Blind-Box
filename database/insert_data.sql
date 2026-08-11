@@ -67,3 +67,6 @@ INSERT INTO restaurants (
     35,
     'Vegan'
 );
+
+INSERT INTO admin (admin_username, admin_password)
+VALUES ('admin', 'admin123');
