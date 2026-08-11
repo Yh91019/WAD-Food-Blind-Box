@@ -74,7 +74,7 @@ $conn->close();
                     Manage Restaurants
                 </a>
 
-                <a href="logout.php" class="admin-logout-link">
+                <a href="../authentication/logout.php" class="admin-logout-link">
                     Log Out
                 </a>
 
