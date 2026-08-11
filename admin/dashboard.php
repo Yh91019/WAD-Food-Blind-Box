@@ -112,5 +112,5 @@ $conn->close();
     </div>
 
 </div>
-
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/admin.css">
 <?php include '../includes/footer.php'; ?>

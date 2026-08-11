@@ -9,6 +9,7 @@ include '../config/db_connect.php';
 
 
 
+
 $result = $conn->query(
     "SELECT * FROM restaurants ORDER BY restaurant_name"
 );
@@ -460,6 +461,5 @@ $result = $conn->query(
 
 </body>
 </html>
-
 
 <?php $conn->close(); ?>
