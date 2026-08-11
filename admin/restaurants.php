@@ -42,6 +42,20 @@ $result = $conn->query($sql);
                     <a href="dashboard.php" class="admin-back-link">&larr; Back to Dashboard</a>
                 </div>
 
+                <!-- Search Restaurant -->
+                <div class="admin-search-bar">
+                    <input
+                        type="text"
+                        id="restaurantSearchInput"
+                        placeholder="Search restaurant name..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <p id="restaurantNoResults" class="admin-no-results" style="display: none;">
+                    No restaurants match your search.
+                </p>
+
                 <div class="admin-table-wrap">
 
                     <table class="admin-table">
@@ -63,7 +77,8 @@ $result = $conn->query($sql);
 
                                 <?php while ($row = $result->fetch_assoc()) : ?>
 
-                                    <tr>
+                                    <tr class="restaurant-row"
+                                        data-name="<?php echo htmlspecialchars(strtolower($row['restaurant_name'])); ?>">
                                         <td><?php echo htmlspecialchars($row['restaurant_name']); ?></td>
                                         <td><?php echo htmlspecialchars($row['restaurant_address']); ?></td>
                                         <td>
@@ -112,6 +127,33 @@ $result = $conn->query($sql);
         </div>
 
     </div>
+
+    <script>
+        const searchInput = document.getElementById("restaurantSearchInput");
+        const restaurantRows = document.querySelectorAll(".restaurant-row");
+        const noResults = document.getElementById("restaurantNoResults");
+
+        searchInput.addEventListener("input", function () {
+            const searchValue = this.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            restaurantRows.forEach(function (row) {
+                const restaurantName = row.getAttribute("data-name");
+
+                if (restaurantName.includes(searchValue)) {
+                    row.style.display = "";
+                    visibleCount++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            noResults.style.display =
+                visibleCount === 0 && restaurantRows.length > 0
+                    ? "block"
+                    : "none";
+        });
+    </script>
 
 </body>
 </html>
