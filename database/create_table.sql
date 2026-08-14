@@ -1,3 +1,5 @@
+Create Database blindbite CHARACTER SET utf8 COLLATE utf8_general_ci;
+
 USE blindbite;
 
 -- Create Restaurants Table
@@ -82,4 +84,9 @@ CREATE TABLE history (
     FOREIGN KEY (username)
         REFERENCES users(username)
         ON DELETE CASCADE
-)
+);
+
+CREATE TABLE admin (
+    admin_username VARCHAR(50) NOT NULL PRIMARY KEY,
+    admin_password VARCHAR(50) NOT NULL
+);
