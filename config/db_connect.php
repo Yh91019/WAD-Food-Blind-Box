@@ -1,13 +1,14 @@
 <?php
 
-$servername = "autorack.proxy.rlwy.net";
-$username = "root";
-$password = "nZSXmESUUBlkgkyRfgoSIOXhdLGWZDke";
-$dbname = "railway";
-$port = 29249;
+$dbhost = "localhost";
+$dbUser = "root";
+$dbPass = "";
+$dbName = "blindbite";
+// port: 3306 / 3308
+$port = 3308;
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname, $port);
+$conn = mysqli_connect($dbhost, $dbUser, $dbPass, $dbName, $port);
 
 // Check connection
 if ($conn->connect_error) {
