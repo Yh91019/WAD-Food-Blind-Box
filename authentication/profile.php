@@ -12,6 +12,19 @@ $username = $_SESSION['username'];
 $error = "";
 $success = "";
 
+// Load the current details before processing the form.
+$stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+$pmStmt = $conn->prepare("SELECT * FROM paymentmethod WHERE username = ?");
+$pmStmt->bind_param("s", $username);
+$pmStmt->execute();
+$paymentMethod = $pmStmt->get_result()->fetch_assoc();
+$pmStmt->close();
+
 // Show a one-time success message after a redirect (Post/Redirect/Get)
 if (isset($_SESSION['profile_message'])) {
     $success = $_SESSION['profile_message'];
@@ -21,16 +34,59 @@ if (isset($_SESSION['profile_message'])) {
 // Handle profile update submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $phone_number   = trim($_POST['phone_number']);
-    $address        = trim($_POST['address']);
-    $cardholder_name = trim($_POST['cardholder_name']);
-    $card_number    = trim($_POST['card_number']);
-    $expiry_date    = trim($_POST['expiry_date']);
-    $cvv            = trim($_POST['cvv']);
+    $phone_number    = trim($_POST['phone_number'] ?? '');
+    $address         = trim($_POST['address'] ?? '');
+    $cardholder_name = trim($_POST['cardholder_name'] ?? '');
+    $card_number     = preg_replace('/[\s-]+/', '', trim($_POST['card_number'] ?? ''));
+    $expiry_date     = trim($_POST['expiry_date'] ?? '');
+    $cvv             = trim($_POST['cvv'] ?? '');
+    $has_payment_details = $cardholder_name !== '' || $card_number !== '' ||
+                           $expiry_date !== '' || $cvv !== '';
 
     if ($phone_number === "" || $address === "") {
 
         $error = "Phone number and address cannot be empty.";
+
+    } elseif (!preg_match('/^01[0-9]{8,9}$/', $phone_number)) {
+
+        $error = "Enter a valid Malaysian phone number, for example 0123456789.";
+
+    } elseif (strlen($address) < 5 || strlen($address) > 255) {
+
+        $error = "Address must be between 5 and 255 characters.";
+
+    } elseif ($has_payment_details &&
+              ($cardholder_name === '' || $card_number === '' || $expiry_date === '')) {
+
+        $error = "Complete all payment fields, or leave all of them blank.";
+
+    } elseif ($has_payment_details &&
+              !preg_match("/^[\\p{L} .'-]{2,100}$/u", $cardholder_name)) {
+
+        $error = "Cardholder name contains invalid characters.";
+
+    } elseif ($has_payment_details && !preg_match('/^[0-9]{13,19}$/', $card_number)) {
+
+        $error = "Card number must contain 13 to 19 digits.";
+
+    } elseif ($has_payment_details && !preg_match('/^(0[1-9]|1[0-2])\/([0-9]{2})$/', $expiry_date, $expiry_parts)) {
+
+        $error = "Expiry date must use MM/YY format.";
+
+    } elseif ($has_payment_details &&
+              ((int) ('20' . $expiry_parts[2]) < (int) date('Y') ||
+              ((int) ('20' . $expiry_parts[2]) === (int) date('Y') &&
+               (int) $expiry_parts[1] < (int) date('n')))) {
+
+        $error = "The card has expired.";
+
+    } elseif ($has_payment_details && $cvv === '' && !$paymentMethod) {
+
+        $error = "CVV is required for a new payment method.";
+
+    } elseif ($has_payment_details && $cvv !== '' && !preg_match('/^[0-9]{3,4}$/', $cvv)) {
+
+        $error = "CVV must contain 3 or 4 digits.";
 
     } else {
 
@@ -38,8 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $check = $conn->prepare("SELECT username FROM users WHERE phone_number = ? AND username != ?");
         $check->bind_param("ss", $phone_number, $username);
         $check->execute();
+        $phone_in_use = $check->get_result()->num_rows > 0;
+        $check->close();
 
-        if ($check->get_result()->num_rows > 0) {
+        if ($phone_in_use) {
 
             $error = "That phone number is already in use by another account.";
 
@@ -51,8 +109,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
             $stmt->close();
 
-            // Update payment method only if the user filled in the fields
-            if ($cardholder_name !== "" || $card_number !== "" || $expiry_date !== "" || $cvv !== "") {
+            // A blank CVV keeps the saved value when other card details change.
+            if ($has_payment_details) {
+
+                $cvv_to_save = $cvv !== '' ? $cvv : $paymentMethod['cvv'];
 
                 $existing = $conn->prepare("SELECT payment_id FROM paymentmethod WHERE username = ?");
                 $existing->bind_param("s", $username);
@@ -64,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $pm = $conn->prepare("UPDATE paymentmethod
                                            SET cardholder_name = ?, card_number = ?, expiry_date = ?, cvv = ?
                                            WHERE username = ?");
-                    $pm->bind_param("sssss", $cardholder_name, $card_number, $expiry_date, $cvv, $username);
+                    $pm->bind_param("sssss", $cardholder_name, $card_number, $expiry_date, $cvv_to_save, $username);
                     $pm->execute();
                     $pm->close();
 
@@ -72,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $pm = $conn->prepare("INSERT INTO paymentmethod (username, cardholder_name, card_number, expiry_date, cvv)
                                            VALUES (?, ?, ?, ?, ?)");
-                    $pm->bind_param("sssss", $username, $cardholder_name, $card_number, $expiry_date, $cvv);
+                    $pm->bind_param("sssss", $username, $cardholder_name, $card_number, $expiry_date, $cvv_to_save);
                     $pm->execute();
                     $pm->close();
 
@@ -84,22 +144,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
     }
+
+    // Keep valid entries visible when another field needs correction.
+    if ($error !== '') {
+        $user['phone_number'] = $phone_number;
+        $user['address'] = $address;
+        $paymentMethod = [
+            'cardholder_name' => $cardholder_name,
+            'card_number' => $card_number,
+            'expiry_date' => $expiry_date,
+        ];
+    }
 }
-
-// Fetch user account details
-$sql = "SELECT * FROM users WHERE username = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$user = $stmt->get_result()->fetch_assoc();
-$stmt->close();
-
-// Fetch saved payment method (if any)
-$pmStmt = $conn->prepare("SELECT * FROM paymentmethod WHERE username = ?");
-$pmStmt->bind_param("s", $username);
-$pmStmt->execute();
-$paymentMethod = $pmStmt->get_result()->fetch_assoc();
-$pmStmt->close();
 
 $conn->close();
 
@@ -155,24 +211,38 @@ include '../includes/navigation.php';
                     type="text"
                     id="phone_number"
                     name="phone_number"
+                    pattern="01[0-9]{8,9}"
+                    maxlength="11"
+                    inputmode="numeric"
+                    title="Enter 10 or 11 digits starting with 01"
                     value="<?php echo htmlspecialchars($user['phone_number']); ?>"
                     required>
 
                 <br><br>
 
                 <label for="address">Address</label><br>
-                <textarea id="address" name="address" rows="3" required><?php echo htmlspecialchars($user['address']); ?></textarea>
+                <textarea id="address" name="address" rows="3" minlength="5" maxlength="255" required><?php echo htmlspecialchars($user['address']); ?></textarea>
 
                 <br><br>
 
                 <h3>Payment Method</h3>
-                <p class="field-hint">Leave these fields blank to keep your payment method unchanged.</p>
+                <p class="field-hint">
+                    <?php if ($paymentMethod) : ?>
+                        Update the details if needed. Leave CVV blank to keep the saved security code.
+                    <?php else : ?>
+                        Complete all payment fields to save a payment method.
+                    <?php endif; ?>
+                </p>
 
                 <label for="cardholder_name">Cardholder Name</label><br>
                 <input
                     type="text"
                     id="cardholder_name"
                     name="cardholder_name"
+                    minlength="2"
+                    maxlength="100"
+                    pattern="[A-Za-z .'-]{2,100}"
+                    title="Use letters, spaces, apostrophes, full stops, or hyphens"
                     value="<?php echo $paymentMethod ? htmlspecialchars($paymentMethod['cardholder_name']) : ''; ?>">
 
                 <br><br>
@@ -182,7 +252,11 @@ include '../includes/navigation.php';
                     type="text"
                     id="card_number"
                     name="card_number"
-                    maxlength="20"
+                    minlength="13"
+                    maxlength="23"
+                    inputmode="numeric"
+                    pattern="[0-9 -]{13,23}"
+                    title="Enter 13 to 19 digits; spaces or hyphens are allowed"
                     value="<?php echo $paymentMethod ? htmlspecialchars($paymentMethod['card_number']) : ''; ?>">
 
                 <br><br>
@@ -193,7 +267,10 @@ include '../includes/navigation.php';
                     id="expiry_date"
                     name="expiry_date"
                     placeholder="MM/YY"
-                    maxlength="10"
+                    maxlength="5"
+                    inputmode="numeric"
+                    pattern="(0[1-9]|1[0-2])/[0-9]{2}"
+                    title="Enter the expiry date as MM/YY"
                     value="<?php echo $paymentMethod ? htmlspecialchars($paymentMethod['expiry_date']) : ''; ?>">
 
                 <br><br>
@@ -203,7 +280,11 @@ include '../includes/navigation.php';
                     type="password"
                     id="cvv"
                     name="cvv"
-                    maxlength="4">
+                    minlength="3"
+                    maxlength="4"
+                    inputmode="numeric"
+                    pattern="[0-9]{3,4}"
+                    title="Enter the 3 or 4 digit security code">
 
                 <br><br>
 
