@@ -38,14 +38,14 @@ $stmt->close();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $new_name              = trim($_POST['restaurant_name']);
-    $restaurant_address    = trim($_POST['restaurant_address']);
-    $opening_hours         = $_POST['restaurant_opening_hours'];
-    $closing_hours         = $_POST['restaurant_closing_hours'];
-    $phone_number          = trim($_POST['restaurant_phone_number']);
-    $blind_box_price       = $_POST['blind_box_price'];
-    $blind_box_description = trim($_POST['blind_box_description']);
-    $blind_box_category    = trim($_POST['blind_box_food_category']);
+    $new_name              = trim($_POST['restaurant_name'] ?? '');
+    $restaurant_address    = trim($_POST['restaurant_address'] ?? '');
+    $opening_hours         = $_POST['restaurant_opening_hours'] ?? '';
+    $closing_hours         = $_POST['restaurant_closing_hours'] ?? '';
+    $phone_number          = trim($_POST['restaurant_phone_number'] ?? '');
+    $blind_box_price       = $_POST['blind_box_price'] ?? '';
+    $blind_box_description = trim($_POST['blind_box_description'] ?? '');
+    $blind_box_category    = trim($_POST['blind_box_food_category'] ?? '');
 
     // Keep entered values so the form re-fills correctly on error
     $form = [
@@ -68,24 +68,71 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $error = "Please fill in all fields.";
 
-    } elseif (!is_numeric($blind_box_price) || $blind_box_price < 0) {
+    } elseif (strlen($new_name) < 2 || strlen($new_name) > 100) {
 
-        $error = "Blind box price must be a valid, non-negative number.";
+        $error = "Restaurant name must be between 2 and 100 characters.";
+
+    } elseif (strlen($restaurant_address) < 5 || strlen($restaurant_address) > 100) {
+
+        $error = "Address must be between 5 and 100 characters.";
+
+    } elseif (!preg_match('/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $opening_hours) ||
+              !preg_match('/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $closing_hours)) {
+
+        $error = "Enter valid opening and closing hours.";
+
+    } elseif ($opening_hours === $closing_hours) {
+
+        $error = "Opening and closing hours cannot be the same.";
+
+    } elseif (!preg_match('/^01[0-9]{8,9}$/', $phone_number)) {
+
+        $error = "Enter a valid Malaysian phone number, for example 0123456789.";
+
+    } elseif (!is_numeric($blind_box_price) ||
+              (float) $blind_box_price <= 0 ||
+              (float) $blind_box_price > 99999999.99) {
+
+        $error = "Blind box price must be between RM0.01 and RM99,999,999.99.";
+
+    } elseif (strlen($blind_box_category) < 2 || strlen($blind_box_category) > 50) {
+
+        $error = "Food category must be between 2 and 50 characters.";
+
+    } elseif (strlen($blind_box_description) < 10 || strlen($blind_box_description) > 1000) {
+
+        $error = "Description must be between 10 and 1,000 characters.";
 
     } else {
 
-        // If the name changed, make sure the new name isn't already taken
-        if ($new_name !== $original_name) {
+        // Check unique fields against every restaurant except the current one.
+        $check = $conn->prepare(
+            "SELECT restaurant_name, restaurant_address, restaurant_phone_number
+             FROM restaurants
+             WHERE (restaurant_name = ? OR restaurant_address = ? OR restaurant_phone_number = ?)
+             AND restaurant_name <> ?
+             LIMIT 1"
+        );
+        $check->bind_param(
+            "ssss",
+            $new_name,
+            $restaurant_address,
+            $phone_number,
+            $original_name
+        );
+        $check->execute();
+        $existing_restaurant = $check->get_result()->fetch_assoc();
+        $check->close();
 
-            $check = $conn->prepare("SELECT restaurant_name FROM restaurants WHERE restaurant_name = ?");
-            $check->bind_param("s", $new_name);
-            $check->execute();
+        if ($existing_restaurant) {
 
-            if ($check->get_result()->num_rows > 0) {
+            if (strcasecmp($existing_restaurant['restaurant_name'], $new_name) === 0) {
                 $error = "A restaurant with that name already exists.";
+            } elseif (strcasecmp($existing_restaurant['restaurant_address'], $restaurant_address) === 0) {
+                $error = "That restaurant address is already in use.";
+            } else {
+                $error = "That restaurant phone number is already in use.";
             }
-
-            $check->close();
         }
 
         if ($error === "") {
@@ -230,6 +277,8 @@ $conn->close();
                         type="text"
                         id="restaurant_name"
                         name="restaurant_name"
+                        minlength="2"
+                        maxlength="100"
                         value="<?php echo htmlspecialchars($form['restaurant_name']); ?>"
                         required
                     >
@@ -249,6 +298,8 @@ $conn->close();
                         type="text"
                         id="restaurant_address"
                         name="restaurant_address"
+                        minlength="5"
+                        maxlength="100"
                         value="<?php echo htmlspecialchars($form['restaurant_address']); ?>"
                         required
                     >
@@ -310,6 +361,10 @@ $conn->close();
                         type="text"
                         id="restaurant_phone_number"
                         name="restaurant_phone_number"
+                        pattern="01[0-9]{8,9}"
+                        maxlength="11"
+                        inputmode="numeric"
+                        title="Enter 10 or 11 digits starting with 01"
                         value="<?php echo htmlspecialchars(
                             $form['restaurant_phone_number']
                         ); ?>"
@@ -330,7 +385,8 @@ $conn->close();
                     <input
                         type="number"
                         step="0.01"
-                        min="0"
+                        min="0.01"
+                        max="99999999.99"
                         id="blind_box_price"
                         name="blind_box_price"
                         value="<?php echo htmlspecialchars(
@@ -353,6 +409,8 @@ $conn->close();
                         type="text"
                         id="blind_box_food_category"
                         name="blind_box_food_category"
+                        minlength="2"
+                        maxlength="50"
                         value="<?php echo htmlspecialchars(
                             $form['blind_box_food_category']
                         ); ?>"
@@ -374,6 +432,8 @@ $conn->close();
                         id="blind_box_description"
                         name="blind_box_description"
                         rows="5"
+                        minlength="10"
+                        maxlength="1000"
                         required
                     ><?php echo htmlspecialchars(
                         $form['blind_box_description']
