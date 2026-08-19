@@ -44,7 +44,12 @@ include '../includes/navigation.php';
                 >
 
                     <!-- Restaurant Image -->
-                    <img src="../images/BBbox.png" width="200" height="150" alt="Blind Box">
+                    <img
+                        src="<?php echo htmlspecialchars(restaurant_image_url($row['blind_box_image'] ?? null)); ?>"
+                        width="200"
+                        height="150"
+                        alt="<?php echo htmlspecialchars($row['restaurant_name']); ?> blind box"
+                    >
 
                     <div class="restaurant-info">
 

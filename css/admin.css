@@ -579,3 +579,11 @@
     box-shadow:
         0 0 0 2px rgba(171, 121, 75, 0.15);
 }
+.restaurant-image-preview {
+    display: block;
+    width: 180px;
+    height: 130px;
+    margin: 8px 0 14px;
+    border-radius: 8px;
+    object-fit: cover;
+}

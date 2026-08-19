@@ -4,6 +4,7 @@ include 'admin_auth.php';
 require_admin_login();
 
 include '../config/db_connect.php';
+require_once '../includes/restaurant_image.php';
 
 $error = "";
 
@@ -34,6 +35,7 @@ if ($result->num_rows !== 1) {
 }
 
 $form = $result->fetch_assoc();
+$current_image = $form['blind_box_image'] ?? null;
 $stmt->close();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -56,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'restaurant_phone_number' => $phone_number,
         'blind_box_price' => $blind_box_price,
         'blind_box_description' => $blind_box_description,
+        'blind_box_image' => $current_image,
         'blind_box_food_category' => $blind_box_category,
     ];
 
@@ -137,84 +140,103 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($error === "") {
 
-            $blind_box_price_f = (float) $blind_box_price;
-            $renaming = ($new_name !== $original_name);
+            $uploaded_image = store_restaurant_image(
+                $_FILES['blind_box_image'] ?? [],
+                $error
+            );
 
-            try {
+            if ($uploaded_image !== false) {
 
-                $conn->begin_transaction();
+                $image_filename = $uploaded_image ?: $current_image;
+                $blind_box_price_f = (float) $blind_box_price;
+                $renaming = ($new_name !== $original_name);
 
-                if ($renaming) {
-                    // Renaming changes the primary key. cart/wishlist only cascade
-                    // on DELETE, not UPDATE, so briefly disable FK checks while we
-                    // update the restaurant row and its dependent rows together.
-                    $conn->query("SET FOREIGN_KEY_CHECKS = 0");
-                }
+                try {
 
-                $sql = "UPDATE restaurants SET
-                            restaurant_name = ?,
-                            restaurant_address = ?,
-                            restaurant_opening_hours = ?,
-                            restaurant_closing_hours = ?,
-                            restaurant_phone_number = ?,
-                            blind_box_price = ?,
-                            blind_box_description = ?,
-                            blind_box_food_category = ?
-                        WHERE restaurant_name = ?";
+                    $conn->begin_transaction();
 
-                $update_stmt = $conn->prepare($sql);
-
-                $update_stmt->bind_param(
-                    "sssssdsss",
-                    $new_name,
-                    $restaurant_address,
-                    $opening_hours,
-                    $closing_hours,
-                    $phone_number,
-                    $blind_box_price_f,
-                    $blind_box_description,
-                    $blind_box_category,
-                    $original_name
-                );
-
-                $update_stmt->execute();
-                $update_stmt->close();
-
-                if ($renaming) {
-
-                    // Keep every table that stores restaurant_name in sync
-                    foreach (['cart', 'wishlist', 'history'] as $table) {
-
-                        $sync_stmt = $conn->prepare(
-                            "UPDATE $table SET restaurant_name = ? WHERE restaurant_name = ?"
-                        );
-                        $sync_stmt->bind_param("ss", $new_name, $original_name);
-                        $sync_stmt->execute();
-                        $sync_stmt->close();
-
+                    if ($renaming) {
+                        // Renaming changes the primary key. cart/wishlist only cascade
+                        // on DELETE, not UPDATE, so briefly disable FK checks while we
+                        // update the restaurant row and its dependent rows together.
+                        $conn->query("SET FOREIGN_KEY_CHECKS = 0");
                     }
 
-                    $conn->query("SET FOREIGN_KEY_CHECKS = 1");
+                    $sql = "UPDATE restaurants SET
+                                restaurant_name = ?,
+                                restaurant_address = ?,
+                                restaurant_opening_hours = ?,
+                                restaurant_closing_hours = ?,
+                                restaurant_phone_number = ?,
+                                blind_box_price = ?,
+                                blind_box_description = ?,
+                                blind_box_image = ?,
+                                blind_box_food_category = ?
+                            WHERE restaurant_name = ?";
+
+                    $update_stmt = $conn->prepare($sql);
+
+                    $update_stmt->bind_param(
+                        "sssssdssss",
+                        $new_name,
+                        $restaurant_address,
+                        $opening_hours,
+                        $closing_hours,
+                        $phone_number,
+                        $blind_box_price_f,
+                        $blind_box_description,
+                        $image_filename,
+                        $blind_box_category,
+                        $original_name
+                    );
+
+                    $update_stmt->execute();
+                    $update_stmt->close();
+
+                    if ($renaming) {
+
+                        // Keep every table that stores restaurant_name in sync
+                        foreach (['cart', 'wishlist', 'history'] as $table) {
+
+                            $sync_stmt = $conn->prepare(
+                                "UPDATE $table SET restaurant_name = ? WHERE restaurant_name = ?"
+                            );
+                            $sync_stmt->bind_param("ss", $new_name, $original_name);
+                            $sync_stmt->execute();
+                            $sync_stmt->close();
+
+                        }
+
+                        $conn->query("SET FOREIGN_KEY_CHECKS = 1");
+                    }
+
+                    $conn->commit();
+
+                    if ($uploaded_image && $current_image !== $uploaded_image) {
+                        delete_restaurant_image($current_image);
+                    }
+
+                    $conn->close();
+
+                    $_SESSION['admin_message'] = "Restaurant \"$new_name\" updated successfully.";
+                    header("Location: restaurants.php");
+                    exit();
+
+                } catch (mysqli_sql_exception $e) {
+
+                    $conn->rollback();
+
+                    if ($renaming) {
+                        $conn->query("SET FOREIGN_KEY_CHECKS = 1");
+                    }
+
+                    if ($uploaded_image) {
+                        delete_restaurant_image($uploaded_image);
+                    }
+
+                    $error = "Failed to update restaurant: " . $e->getMessage();
+
                 }
-
-                $conn->commit();
-
-                $conn->close();
-
-                $_SESSION['admin_message'] = "Restaurant \"$new_name\" updated successfully.";
-                header("Location: restaurants.php");
-                exit();
-
-            } catch (mysqli_sql_exception $e) {
-
-                $conn->rollback();
-
-                if ($renaming) {
-                    $conn->query("SET FOREIGN_KEY_CHECKS = 1");
-                }
-
-                $error = "Failed to update restaurant: " . $e->getMessage();
-
             }
         }
     }
@@ -254,6 +276,7 @@ $conn->close();
                 method="POST"
                 action="edit_restaurant.php"
                 class="restaurant-form"
+                enctype="multipart/form-data"
             >
 
                 <!-- Keep original restaurant name -->
@@ -416,6 +439,34 @@ $conn->close();
                         ); ?>"
                         required
                     >
+
+                </div>
+
+
+                <!-- Blind Box Image -->
+
+                <div class="form-group form-full">
+
+                    <label for="blind_box_image">
+                        Blind Box Picture
+                    </label>
+
+                    <img
+                        src="<?php echo htmlspecialchars(restaurant_image_url($form['blind_box_image'] ?? null)); ?>"
+                        class="restaurant-image-preview"
+                        alt="Current blind box picture"
+                    >
+
+                    <input
+                        type="file"
+                        id="blind_box_image"
+                        name="blind_box_image"
+                        accept="image/jpeg,image/png,image/webp"
+                    >
+
+                    <p class="field-hint">
+                        Leave this empty to keep the current picture. New images must be JPG, PNG, or WebP and smaller than 5 MB.
+                    </p>
 
                 </div>
 

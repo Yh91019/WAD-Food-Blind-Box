@@ -75,8 +75,10 @@ unset($_SESSION['logout_message']);
 
                         <div class="home-restaurant-image">
 
-                            <img src="images/BBbox.png"
-                                 alt="Blind Box">
+                            <img
+                                src="<?php echo htmlspecialchars(restaurant_image_url($row['blind_box_image'] ?? null)); ?>"
+                                alt="<?php echo htmlspecialchars($row['restaurant_name']); ?> blind box"
+                            >
 
                         </div>
 

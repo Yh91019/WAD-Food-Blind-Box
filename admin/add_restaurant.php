@@ -4,6 +4,7 @@ include 'admin_auth.php';
 require_admin_login();
 
 include '../config/db_connect.php';
+require_once '../includes/restaurant_image.php';
 
 $error = "";
 
@@ -110,46 +111,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } else {
 
-            $sql = "INSERT INTO restaurants
-                    (restaurant_name, restaurant_address, restaurant_opening_hours,
-                     restaurant_closing_hours, restaurant_phone_number, blind_box_price,
-                     blind_box_description, blind_box_food_category)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-            $stmt = $conn->prepare($sql);
-
-            if (!$stmt) {
-                die("Database error: " . $conn->error);
-            }
-
-            $blind_box_price_f = (float) $blind_box_price;
-
-            $stmt->bind_param(
-                "sssssdss",
-                $restaurant_name,
-                $restaurant_address,
-                $opening_hours,
-                $closing_hours,
-                $phone_number,
-                $blind_box_price_f,
-                $blind_box_description,
-                $blind_box_category
+            $image_filename = store_restaurant_image(
+                $_FILES['blind_box_image'] ?? [],
+                $error
             );
 
-            if ($stmt->execute()) {
+            if ($image_filename !== false) {
 
-                $stmt->close();
-                $conn->close();
+                try {
 
-                $_SESSION['admin_message'] = "Restaurant \"$restaurant_name\" added successfully.";
-                header("Location: restaurants.php");
-                exit();
+                    $sql = "INSERT INTO restaurants
+                            (restaurant_name, restaurant_address, restaurant_opening_hours,
+                             restaurant_closing_hours, restaurant_phone_number, blind_box_price,
+                             blind_box_description, blind_box_image, blind_box_food_category)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            } else {
+                    $stmt = $conn->prepare($sql);
+                    $blind_box_price_f = (float) $blind_box_price;
 
-                $error = "Failed to add restaurant: " . $stmt->error;
-                $stmt->close();
+                    $stmt->bind_param(
+                        "sssssdsss",
+                        $restaurant_name,
+                        $restaurant_address,
+                        $opening_hours,
+                        $closing_hours,
+                        $phone_number,
+                        $blind_box_price_f,
+                        $blind_box_description,
+                        $image_filename,
+                        $blind_box_category
+                    );
 
+                    $stmt->execute();
+
+                    $stmt->close();
+                    $conn->close();
+
+                    $_SESSION['admin_message'] = "Restaurant \"$restaurant_name\" added successfully.";
+                    header("Location: restaurants.php");
+                    exit();
+
+                } catch (mysqli_sql_exception $e) {
+
+                    delete_restaurant_image($image_filename);
+                    $error = "Failed to add restaurant. Please try again.";
+
+                }
             }
         }
     }
@@ -190,6 +197,7 @@ $conn->close();
                 method="POST"
                 action="add_restaurant.php"
                 class="restaurant-form"
+                enctype="multipart/form-data"
             >
 
                 <!-- Restaurant Name -->
@@ -334,6 +342,28 @@ $conn->close();
                         value="<?php echo htmlspecialchars($form['blind_box_food_category']); ?>"
                         required
                     >
+
+                </div>
+
+
+                <!-- Blind Box Image -->
+
+                <div class="form-group form-full">
+
+                    <label for="blind_box_image">
+                        Blind Box Picture
+                    </label>
+
+                    <input
+                        type="file"
+                        id="blind_box_image"
+                        name="blind_box_image"
+                        accept="image/jpeg,image/png,image/webp"
+                    >
+
+                    <p class="field-hint">
+                        Optional. Upload a JPG, PNG, or WebP image smaller than 5 MB.
+                    </p>
 
                 </div>
 

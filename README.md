@@ -62,6 +62,7 @@ Administrators can manage the restaurant list.
 | `includes/navigation.php` | Displays the customer side menu and its open/close behaviour. |
 | `includes/adminNavigation.php` | Displays the admin side menu and its open/close behaviour. |
 | `includes/footer.php` | Closes the page and displays the site footer. |
+| `includes/restaurant_image.php` | Validates restaurant image uploads and provides the default image when needed. |
 
 ## JavaScript files
 
@@ -103,6 +104,7 @@ Administrators can manage the restaurant list.
 | --- | --- |
 | `images/BBlogo.png` | Blind Bite logo used in the page header. |
 | `images/BBbox.png` | Blind box picture used on restaurant cards. |
+| `images/restaurants/` | Stores blind box pictures uploaded by administrators. |
 | `images/bg.jpg` | Large banner image used on the home page. |
 | `images/image1.png` | Illustration used on the About Us page. |
 | `images/whatsappimage.jpg` | Additional project image asset. |

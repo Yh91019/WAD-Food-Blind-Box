@@ -282,6 +282,7 @@ $sql = "
         wishlist.restaurant_name,
         restaurants.blind_box_price,
         restaurants.blind_box_description,
+        restaurants.blind_box_image,
         restaurants.blind_box_food_category,
         restaurants.restaurant_address,
         restaurants.restaurant_opening_hours
@@ -426,9 +427,9 @@ include '../includes/navigation.php';
                         <!-- IMAGE -->
 
                         <img
-                            src="../images/BBbox.png"
+                            src="<?php echo htmlspecialchars(restaurant_image_url($item['blind_box_image'] ?? null)); ?>"
                             class="wishlist-food-image"
-                            alt="Blind Box"
+                            alt="<?php echo htmlspecialchars($item['restaurant_name']); ?> blind box"
                         >
 
 

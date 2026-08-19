@@ -29,6 +29,8 @@ if (!defined('BASE_URL')) {
 
     define('BASE_URL', rtrim($base, '/'));
 }
+
+require_once __DIR__ . '/restaurant_image.php';
 ?>
 
 <!DOCTYPE html>

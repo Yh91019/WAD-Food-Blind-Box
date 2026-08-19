@@ -329,10 +329,10 @@ include '../includes/navigation.php';
             <!-- IMAGE -->
 
             <img
-                src="../images/BBbox.png"
+                src="<?php echo htmlspecialchars(restaurant_image_url($restaurant['blind_box_image'] ?? null)); ?>"
                 width="200"
                 height="150"
-                alt="Blind Box"
+                alt="<?php echo htmlspecialchars($restaurant['restaurant_name']); ?> blind box"
             >
 
 
