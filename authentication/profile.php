@@ -31,6 +31,11 @@ if (isset($_SESSION['profile_message'])) {
     unset($_SESSION['profile_message']);
 }
 
+if (isset($_SESSION['profile_error'])) {
+    $error = $_SESSION['profile_error'];
+    unset($_SESSION['profile_error']);
+}
+
 // Handle profile update submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 

@@ -11,7 +11,6 @@ CREATE TABLE restaurants (
     restaurant_phone_number VARCHAR(20) NOT NULL UNIQUE,
     blind_box_price DECIMAL(10,2) NOT NULL,
     blind_box_description TEXT NOT NULL,
-    blind_box_remaining_quantity INT NOT NULL,
     blind_box_food_category TEXT NOT NULL
 );
 

@@ -120,8 +120,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($stmt->execute()) {
 
-                $success = "Registration successful! You can now log in.";
-                $form = array_fill_keys(array_keys($form), '');
+                $_SESSION['registration_message'] =
+                    "Registration successful! You can now log in.";
+                $stmt->close();
+                $conn->close();
+                header("Location: login.php");
+                exit();
 
             } else {
 

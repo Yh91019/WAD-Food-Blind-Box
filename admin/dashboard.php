@@ -54,7 +54,7 @@ $conn->close();
 
         <div class="admin-header">
 
-            <h1>🍱BLIND BITE ADMIN</h1>
+            <h1>BLIND BITE ADMIN</h1>
 
         </div>
 

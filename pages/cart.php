@@ -27,6 +27,26 @@ if (
         ? 'Card'
         : 'Cash';
 
+    // Card orders require a payment method saved on the user's profile.
+    if ($payment_method === 'Card') {
+
+        $payment_check = $conn->prepare(
+            "SELECT payment_id FROM paymentmethod WHERE username = ? LIMIT 1"
+        );
+        $payment_check->bind_param("s", $username);
+        $payment_check->execute();
+        $has_saved_card = $payment_check->get_result()->num_rows === 1;
+        $payment_check->close();
+
+        if (!$has_saved_card) {
+            $_SESSION['profile_error'] =
+                "Please save a payment method before placing an order by card.";
+            $conn->close();
+            header("Location: ../authentication/profile.php");
+            exit();
+        }
+    }
+
     /* Get all cart items */
     $order_sql = "
         SELECT
@@ -179,7 +199,6 @@ if (isset($_SESSION['username'])) {
             cart.quantity,
             restaurants.blind_box_price,
             restaurants.blind_box_description,
-            restaurants.blind_box_remaining_quantity,
             restaurants.blind_box_food_category
         FROM cart
 
@@ -304,75 +323,25 @@ if (
 
         } else {
 
-            // ====================================================
-            // CHECK MAXIMUM AVAILABLE QUANTITY
-            // ====================================================
-
-            $stock_sql = "
-                SELECT
-                    restaurants.blind_box_remaining_quantity
-                FROM cart
-                INNER JOIN restaurants
-                    ON cart.restaurant_name =
-                       restaurants.restaurant_name
-                WHERE cart.cart_id = ?
-                AND cart.username = ?
+            $update_sql = "
+                UPDATE cart
+                SET quantity = ?
+                WHERE cart_id = ?
+                AND username = ?
             ";
 
-            $stock_stmt = $conn->prepare($stock_sql);
+            $update_stmt = $conn->prepare($update_sql);
 
-            $stock_stmt->bind_param(
-                "is",
+            $update_stmt->bind_param(
+                "iis",
+                $new_quantity,
                 $cart_id,
                 $username
             );
 
-            $stock_stmt->execute();
+            $update_stmt->execute();
 
-            $stock_result = $stock_stmt->get_result();
-
-            if ($stock_result->num_rows === 1) {
-
-                $stock_row = $stock_result->fetch_assoc();
-
-                $max_quantity =
-                    (int) $stock_row['blind_box_remaining_quantity'];
-
-                if ($new_quantity > $max_quantity) {
-
-                    $new_quantity = $max_quantity;
-
-                }
-
-
-                // ====================================================
-                // UPDATE QUANTITY
-                // ====================================================
-
-                $update_sql = "
-                    UPDATE cart
-                    SET quantity = ?
-                    WHERE cart_id = ?
-                    AND username = ?
-                ";
-
-                $update_stmt =
-                    $conn->prepare($update_sql);
-
-                $update_stmt->bind_param(
-                    "iis",
-                    $new_quantity,
-                    $cart_id,
-                    $username
-                );
-
-                $update_stmt->execute();
-
-                $update_stmt->close();
-
-            }
-
-            $stock_stmt->close();
+            $update_stmt->close();
 
         }
 
@@ -724,15 +693,6 @@ include '../includes/navigation.php';
         <button
             type="submit"
             class="cart-quantity-btn"
-            <?php
-            if (
-                $item['quantity']
-                >=
-                $item['blind_box_remaining_quantity']
-            ) {
-                echo 'disabled';
-            }
-            ?>
         >
             +
         </button>

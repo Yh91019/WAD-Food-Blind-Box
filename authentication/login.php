@@ -5,6 +5,12 @@ session_start();
 include '../config/db_connect.php';
 
 $error = "";
+$success = "";
+
+if (isset($_SESSION['registration_message'])) {
+    $success = $_SESSION['registration_message'];
+    unset($_SESSION['registration_message']);
+}
 
 
 /* ============================================================
@@ -333,6 +339,14 @@ if (isset($conn) && $conn instanceof mysqli) {
 
             <p class="error">
                 <?php echo htmlspecialchars($error); ?>
+            </p>
+
+        <?php endif; ?>
+
+        <?php if (!empty($success)) : ?>
+
+            <p class="success">
+                <?php echo htmlspecialchars($success); ?>
             </p>
 
         <?php endif; ?>

@@ -70,7 +70,7 @@ Administrators can manage the restaurant list.
 | `js/script.js` | Opens the customer menu and closes it after a click outside. |
 | `js/aboutus.js` | Opens or closes the menu on the About Us page. |
 | `js/menu-search.js` | Filters restaurant cards using the text entered in the menu search box. |
-| `js/quantity.js` | Keeps the item quantity between one and the available stock. |
+| `js/quantity.js` | Controls the plus and minus buttons on the item quantity selector. |
 | `js/payment.js` | Opens the payment window, records the chosen method, and submits the order. |
 | `js/profile.js` | Switches the profile page between view and edit mode. |
 | `js/status.js` | Updates restaurant open or closed labels using the current time. |

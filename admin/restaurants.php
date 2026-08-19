@@ -38,7 +38,7 @@ $result = $conn->query(
         <div class="admin-header">
 
 
-            <h1>🍱Manage Restaurants</h1>
+            <h1>Manage Restaurants</h1>
 
 
         </div>
@@ -178,9 +178,6 @@ $result = $conn->query(
                             <th>Box Price</th>
 
 
-                            <th>Qty</th>
-
-
                             <th>Category</th>
 
 
@@ -270,15 +267,6 @@ $result = $conn->query(
                                         ?>
                                     </td>
 
-
-                                    <td>
-                                        <?php
-                                        echo (int)
-                                            $row['blind_box_remaining_quantity'];
-                                        ?>
-                                    </td>
-
-
                                     <td>
                                         <?php
                                         echo htmlspecialchars(
@@ -353,7 +341,7 @@ $result = $conn->query(
 
 
                                 <td
-                                    colspan="9"
+                                    colspan="8"
                                     class="no-restaurants"
                                 >
                                     No restaurants available.

@@ -4,7 +4,7 @@
 <button type="button" class="menu-btn" id="adminMenuButton">☰</button>
 
 <!-- Logo -->
-<a href="../index.php" class="logo">
+<a href="../admin/dashboard.php" class="logo">
     <img src="../images/BBlogo.png" width="70" height="200">
 </a>
 

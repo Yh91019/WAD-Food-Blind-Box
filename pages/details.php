@@ -93,14 +93,6 @@ if (
             $quantity_to_add = 1;
         }
 
-        $max_quantity =
-            (int) $restaurant['blind_box_remaining_quantity'];
-
-        if ($max_quantity > 0 && $quantity_to_add > $max_quantity) {
-            $quantity_to_add = $max_quantity;
-        }
-
-
         // ====================================================
         // CHECK IF RESTAURANT ALREADY IN CART
         // ====================================================
@@ -413,26 +405,6 @@ include '../includes/navigation.php';
 
                 </p>
 
-
-                <p>
-
-                    <strong>
-                        Remaining Quantity:
-                    </strong>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $restaurant[
-                            'blind_box_remaining_quantity'
-                        ]
-                    );
-                    ?>
-
-                    Boxes
-
-                </p>
-
-
                 <p>
 
                     <strong>
@@ -553,7 +525,6 @@ include '../includes/navigation.php';
                                     class="qty-input"
                                     value="1"
                                     min="1"
-                                    max="<?php echo (int) $restaurant['blind_box_remaining_quantity']; ?>"
                                     readonly
                                 >
 

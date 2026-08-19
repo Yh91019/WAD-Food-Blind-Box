@@ -77,11 +77,6 @@ include '../includes/navigation.php';
                         </p>
 
                         <p>
-                            <strong>Remaining Quantity:</strong>
-                            <?php echo $row['blind_box_remaining_quantity']; ?> Boxes
-                        </p>
-
-                        <p>
                             <strong>Food Category:</strong>
                             <?php echo htmlspecialchars($row['blind_box_food_category']); ?>
                         </p>

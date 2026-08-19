@@ -15,7 +15,6 @@ $form = [
     'restaurant_phone_number' => '',
     'blind_box_price' => '',
     'blind_box_description' => '',
-    'blind_box_remaining_quantity' => '',
     'blind_box_food_category' => '',
 ];
 
@@ -28,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone_number         = trim($_POST['restaurant_phone_number'] ?? '');
     $blind_box_price      = $_POST['blind_box_price'];
     $blind_box_description = trim($_POST['blind_box_description']);
-    $blind_box_quantity   = $_POST['blind_box_remaining_quantity'];
     $blind_box_category   = trim($_POST['blind_box_food_category']);
 
     // Keep entered values so the form can be re-filled if something goes wrong
@@ -40,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'restaurant_phone_number' => $phone_number,
         'blind_box_price' => $blind_box_price,
         'blind_box_description' => $blind_box_description,
-        'blind_box_remaining_quantity' => $blind_box_quantity,
         'blind_box_food_category' => $blind_box_category,
     ];
 
@@ -48,8 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $restaurant_name === '' || $restaurant_address === '' ||
         $opening_hours === '' || $closing_hours === '' ||
         $phone_number === '' || $blind_box_price === '' ||
-        $blind_box_description === '' || $blind_box_quantity === '' ||
-        $blind_box_category === ''
+        $blind_box_description === '' || $blind_box_category === ''
     ) {
 
         $error = "Please fill in all fields.";
@@ -60,10 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     elseif (!is_numeric($blind_box_price) || $blind_box_price < 0) {
 
         $error = "Blind box price must be a valid, non-negative number.";
-
-    } elseif (!ctype_digit((string) $blind_box_quantity) || (int) $blind_box_quantity < 0) {
-
-        $error = "Remaining quantity must be a non-negative whole number.";
 
     } else {
 
@@ -84,8 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "INSERT INTO restaurants
                     (restaurant_name, restaurant_address, restaurant_opening_hours,
                      restaurant_closing_hours, restaurant_phone_number, blind_box_price,
-                     blind_box_description, blind_box_remaining_quantity, blind_box_food_category)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     blind_box_description, blind_box_food_category)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
             $stmt = $conn->prepare($sql);
 
@@ -94,10 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             $blind_box_price_f = (float) $blind_box_price;
-            $blind_box_quantity_i = (int) $blind_box_quantity;
 
             $stmt->bind_param(
-                "sssssdsis",
+                "sssssdss",
                 $restaurant_name,
                 $restaurant_address,
                 $opening_hours,
@@ -105,7 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $phone_number,
                 $blind_box_price_f,
                 $blind_box_description,
-                $blind_box_quantity_i,
                 $blind_box_category
             );
 
@@ -260,26 +250,6 @@ $conn->close();
                     >
 
                 </div>
-
-
-                <!-- Remaining Quantity -->
-
-                <div class="form-group">
-
-                    <label for="blind_box_remaining_quantity">
-                        Remaining Quantity
-                    </label>
-
-                    <input
-                        type="number"
-                        id="blind_box_remaining_quantity"
-                        name="blind_box_remaining_quantity"
-                        min="0"
-                        required
-                    >
-
-                </div>
-
 
                 <!-- Food Category -->
 
