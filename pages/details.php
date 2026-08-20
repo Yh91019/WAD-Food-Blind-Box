@@ -44,6 +44,33 @@ if ($result->num_rows === 1) {
 
 $stmt->close();
 
+$reviews = [];
+$average_rating = 0.0;
+
+if ($restaurant) {
+    $review_stmt = $conn->prepare(
+        "SELECT username, rating, review, created_at
+         FROM reviews
+         WHERE restaurant_name = ?
+         ORDER BY created_at DESC"
+    );
+    $review_stmt->bind_param('s', $restaurant['restaurant_name']);
+    $review_stmt->execute();
+    $review_result = $review_stmt->get_result();
+    $rating_total = 0;
+
+    while ($review_row = $review_result->fetch_assoc()) {
+        $rating_total += (int) $review_row['rating'];
+        $reviews[] = $review_row;
+    }
+
+    if (count($reviews) > 0) {
+        $average_rating = $rating_total / count($reviews);
+    }
+
+    $review_stmt->close();
+}
+
 
 // ============================================================
 // MESSAGES
@@ -614,6 +641,46 @@ include '../includes/navigation.php';
 
 
     </div>
+
+    <?php if ($restaurant) : ?>
+
+        <section class="restaurant-reviews">
+            <div class="reviews-heading">
+                <h2>Ratings &amp; Reviews</h2>
+                <p class="rating-summary">
+                    <span>★ <?php echo number_format($average_rating, 1); ?>/5.0</span>
+                    <small>
+                        <?php echo count($reviews); ?>
+                        <?php echo count($reviews) === 1 ? 'review' : 'reviews'; ?>
+                    </small>
+                </p>
+            </div>
+
+            <?php if (empty($reviews)) : ?>
+
+                <p class="no-reviews">No reviews yet. Complete an order to leave the first review.</p>
+
+            <?php else : ?>
+
+                <div class="review-list">
+                    <?php foreach ($reviews as $review_item) : ?>
+                        <article class="review-card">
+                            <div class="review-card-heading">
+                                <strong><?php echo htmlspecialchars($review_item['username']); ?></strong>
+                                <span>★ <?php echo (int) $review_item['rating']; ?>/5</span>
+                            </div>
+                            <p><?php echo nl2br(htmlspecialchars($review_item['review'])); ?></p>
+                            <small>
+                                <?php echo date('d F Y', strtotime($review_item['created_at'])); ?>
+                            </small>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+
+            <?php endif; ?>
+        </section>
+
+    <?php endif; ?>
 
 
     <script src="../js/script.js"></script>

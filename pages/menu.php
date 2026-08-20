@@ -1,8 +1,24 @@
 <?php
 include '../config/db_connect.php';
 
-// Get all restaurants
-$sql = "SELECT * FROM restaurants";
+// Get all restaurants with their average customer rating.
+$sql = "
+    SELECT
+        restaurants.*,
+        COALESCE(review_summary.average_rating, 0) AS average_rating,
+        COALESCE(review_summary.review_count, 0) AS review_count
+    FROM restaurants
+    LEFT JOIN (
+        SELECT
+            restaurant_name,
+            AVG(rating) AS average_rating,
+            COUNT(*) AS review_count
+        FROM reviews
+        GROUP BY restaurant_name
+    ) AS review_summary
+        ON restaurants.restaurant_name = review_summary.restaurant_name
+    ORDER BY restaurants.restaurant_name
+";
 $result = $conn->query($sql);
 
 include '../includes/header.php';
@@ -84,6 +100,17 @@ include '../includes/navigation.php';
                         <p>
                             <strong>Food Category:</strong>
                             <?php echo htmlspecialchars($row['blind_box_food_category']); ?>
+                        </p>
+
+                        <p class="restaurant-rating">
+                            <strong>Rating:</strong>
+                            <span aria-label="<?php echo number_format((float) $row['average_rating'], 1); ?> out of 5">
+                                ★ <?php echo number_format((float) $row['average_rating'], 1); ?>/5.0
+                            </span>
+                            <small>
+                                (<?php echo (int) $row['review_count']; ?>
+                                <?php echo (int) $row['review_count'] === 1 ? 'review' : 'reviews'; ?>)
+                            </small>
                         </p>
 
                         <a href="details.php?restaurant=<?php echo urlencode($row['restaurant_name']); ?>" class="details-btn">

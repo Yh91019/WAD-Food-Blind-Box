@@ -118,6 +118,17 @@ footer {
     margin:10px 0;
 }
 
+.restaurant-rating span,
+.rating-summary span,
+.review-card-heading span {
+    color: #d18b22;
+    font-weight: bold;
+}
+
+.restaurant-rating small {
+    color: #777;
+}
+
 /* Details Page */
 .details-page {
     width: 80%;
@@ -2006,4 +2017,72 @@ footer {
 .qty-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+/* =========================
+   Restaurant reviews
+   ========================= */
+
+.restaurant-reviews {
+    margin-top: 30px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.reviews-heading,
+.review-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.reviews-heading h2 {
+    margin: 0;
+    color: #333;
+}
+
+.rating-summary {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+}
+
+.rating-summary span {
+    font-size: 20px;
+}
+
+.rating-summary small,
+.review-card small,
+.no-reviews {
+    color: #777;
+}
+
+.review-list {
+    display: grid;
+    gap: 15px;
+    margin-top: 22px;
+}
+
+.review-card {
+    padding: 18px;
+    border: 1px solid #e9e1da;
+    border-radius: 10px;
+    background: #faf7f4;
+}
+
+.review-card p {
+    margin: 12px 0;
+    color: #444;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .reviews-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 }
