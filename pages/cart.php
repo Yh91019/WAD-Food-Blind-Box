@@ -900,7 +900,7 @@ function checkOrderType() {
                 type="button"
                 class="payment-method-btn"
                 data-method="TNG"
-                onclick="window.open('https://consumer.touchngo.com.my', '_blank');"
+                data-redirect="https://consumer.touchngo.com.my"
             >
                 📱 Pay with TNG
             </button>

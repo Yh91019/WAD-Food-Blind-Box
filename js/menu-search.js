@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var searchInput = document.getElementById("menuSearchInput");
     var noResults = document.getElementById("menuNoResults");
     var container = document.getElementById("restaurantContainer");
-    var ratingSort = document.getElementById("ratingSort");
-    var ratingSortDirection = document.getElementById("ratingSortDirection");
+    var ratingSortBtn = document.getElementById("ratingSortBtn");
+    var ratingSortIcon = document.getElementById("ratingSortIcon");
 
     if (!searchInput || !container) {
         return;
@@ -18,9 +18,41 @@ document.addEventListener("DOMContentLoaded", function () {
         card.dataset.originalIndex = index;
     });
 
-    function sortCards() {
+    // Sort state cycles: "none" (random order, the default) -> "desc"
+    // (highest to lowest, on the first click) -> "asc" (lowest to highest,
+    // on the second click) -> "desc" -> "asc" ... on every click after that.
+    var sortState = "none";
 
-        var direction = ratingSort && ratingSort.checked ? "asc" : "desc";
+    var sortLabels = {
+        none: {
+            icon: "↕",
+            aria: "Rating: not sorted. Click to sort highest to lowest."
+        },
+        desc: {
+            icon: "↓",
+            aria: "Rating: highest to lowest. Click to sort lowest to highest."
+        },
+        asc: {
+            icon: "↑",
+            aria: "Rating: lowest to highest. Click to sort highest to lowest."
+        }
+    };
+
+    function shuffleCards() {
+
+        for (var i = cards.length - 1; i > 0; i--) {
+
+            var j = Math.floor(Math.random() * (i + 1));
+
+            var temp = cards[i];
+            cards[i] = cards[j];
+            cards[j] = temp;
+
+        }
+
+    }
+
+    function sortCards() {
 
         cards.sort(function (firstCard, secondCard) {
 
@@ -30,17 +62,13 @@ document.addEventListener("DOMContentLoaded", function () {
             var secondReviewCount = Number(secondCard.dataset.reviewCount) || 0;
 
             if (secondRating !== firstRating) {
-                if (direction === "asc") {
-                    return firstRating - secondRating;
-                }
-
-                if (direction === "desc") {
-                    return secondRating - firstRating;
-                }
+                return sortState === "asc"
+                    ? firstRating - secondRating
+                    : secondRating - firstRating;
             }
 
             if (secondReviewCount !== firstReviewCount) {
-                return direction === "asc"
+                return sortState === "asc"
                     ? firstReviewCount - secondReviewCount
                     : secondReviewCount - firstReviewCount;
             }
@@ -48,11 +76,33 @@ document.addEventListener("DOMContentLoaded", function () {
             return (firstCard.dataset.name || "").localeCompare(
                 secondCard.dataset.name || ""
             );
+
         });
+
+    }
+
+    function renderCards() {
 
         cards.forEach(function (card) {
             container.appendChild(card);
         });
+
+    }
+
+    function updateSortButton() {
+
+        if (!ratingSortBtn) {
+            return;
+        }
+
+        ratingSortBtn.dataset.sort = sortState;
+
+        if (ratingSortIcon) {
+            ratingSortIcon.textContent = sortLabels[sortState].icon;
+        }
+
+        ratingSortBtn.setAttribute("aria-label", sortLabels[sortState].aria);
+
     }
 
     function filterCards() {
@@ -87,27 +137,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     searchInput.addEventListener("input", filterCards);
 
-    if (ratingSort) {
-        ratingSort.addEventListener("change", function () {
-            var isAscending = this.checked;
+    if (ratingSortBtn) {
+        ratingSortBtn.addEventListener("click", function () {
 
-            if (ratingSortDirection) {
-                ratingSortDirection.textContent = isAscending ? "↓" : "↑";
-            }
+            // First click: none -> desc. Second click: desc -> asc.
+            // Every click after that keeps toggling desc <-> asc.
+            sortState = sortState === "desc" ? "asc" : "desc";
 
-            this.setAttribute(
-                "aria-label",
-                isAscending
-                    ? "Rating: lowest to highest. Toggle for highest to lowest."
-                    : "Rating: highest to lowest. Toggle for lowest to highest."
-            );
-
+            updateSortButton();
             sortCards();
+            renderCards();
             filterCards();
+
         });
     }
 
-    sortCards();
+    // Default view: random order, unsorted, until the button is clicked.
+    updateSortButton();
+    shuffleCards();
+    renderCards();
     filterCards();
 
 });

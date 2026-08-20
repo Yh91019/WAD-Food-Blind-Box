@@ -38,8 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
             var redirectUrl = button.getAttribute("data-redirect");
 
             if (redirectUrl) {
-                window.location.href = redirectUrl;
-                return;
+                /* Open the payment portal in its own tab, and complete
+                   the order on this tab once it's opened. */
+                window.open(redirectUrl, "_blank");
             }
 
             form.submit();

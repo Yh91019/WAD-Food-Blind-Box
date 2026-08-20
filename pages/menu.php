@@ -42,18 +42,16 @@ include '../includes/navigation.php';
             placeholder="Search by restaurant name or food category..."
         >
 
-        <label class="rating-sort-toggle" for="ratingSort">
+        <button
+            type="button"
+            id="ratingSortBtn"
+            class="rating-sort-btn"
+            data-sort="none"
+            aria-label="Rating: not sorted. Click to sort highest to lowest."
+        >
             <span class="rating-sort-title">Rating</span>
-            <input
-                type="checkbox"
-                id="ratingSort"
-                aria-label="Rating: highest to lowest. Toggle for lowest to highest."
-            >
-            <span class="rating-toggle-track" aria-hidden="true">
-                <span class="rating-toggle-thumb"></span>
-            </span>
-            <span id="ratingSortDirection" class="rating-sort-direction">↑</span>
-        </label>
+            <span id="ratingSortIcon" class="rating-sort-icon" aria-hidden="true">↕</span>
+        </button>
 
     </div>
 

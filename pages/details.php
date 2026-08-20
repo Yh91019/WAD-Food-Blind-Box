@@ -73,6 +73,34 @@ if ($restaurant) {
 
 
 // ============================================================
+// REVIEW CARD (used twice per review so the carousel track can
+// loop seamlessly -- see the reviews section further down)
+// ============================================================
+
+function render_review_card(array $review_item, bool $hidden = false): void {
+    ?>
+    <article class="review-card"<?php echo $hidden ? ' aria-hidden="true" tabindex="-1"' : ''; ?>>
+        <div class="review-card-heading">
+            <div class="reviewer">
+                <span class="reviewer-avatar" aria-hidden="true">
+                    <?php echo htmlspecialchars(strtoupper(substr($review_item['username'], 0, 1))); ?>
+                </span>
+                <div>
+                    <strong><?php echo htmlspecialchars($review_item['username']); ?></strong>
+                    <small>
+                        <?php echo date('d F Y', strtotime($review_item['created_at'])); ?>
+                    </small>
+                </div>
+            </div>
+            <span class="review-rating">★ <?php echo (int) $review_item['rating']; ?>.0</span>
+        </div>
+        <p class="review-text"><?php echo nl2br(htmlspecialchars($review_item['review'])); ?></p>
+    </article>
+    <?php
+}
+
+
+// ============================================================
 // MESSAGES
 // ============================================================
 
@@ -347,6 +375,22 @@ include '../includes/navigation.php';
 
 <main class="details-page">
 
+    <?php if ($cart_message != "") : ?>
+
+        <p class="success-message">
+            <?php echo htmlspecialchars($cart_message); ?>
+        </p>
+
+    <?php endif; ?>
+
+    <?php if ($wishlist_message != "") : ?>
+
+        <p class="success-message">
+            <?php echo htmlspecialchars($wishlist_message); ?>
+        </p>
+
+    <?php endif; ?>
+
     <div class="details-card">
 
 
@@ -481,41 +525,6 @@ include '../includes/navigation.php';
                     ?>
 
                 </p>
-
-
-                <!-- ================================================= -->
-                <!-- MESSAGES -->
-                <!-- ================================================= -->
-
-
-                <?php if ($cart_message != "") : ?>
-
-                    <p class="success-message">
-
-                        <?php
-                        echo htmlspecialchars(
-                            $cart_message
-                        );
-                        ?>
-
-                    </p>
-
-                <?php endif; ?>
-
-
-                <?php if ($wishlist_message != "") : ?>
-
-                    <p class="success-message">
-
-                        <?php
-                        echo htmlspecialchars(
-                            $wishlist_message
-                        );
-                        ?>
-
-                    </p>
-
-                <?php endif; ?>
 
 
                 <!-- ================================================= -->
@@ -680,26 +689,20 @@ include '../includes/navigation.php';
 
             <?php else : ?>
 
-                <div class="review-list">
-                    <?php foreach ($reviews as $review_item) : ?>
-                        <article class="review-card">
-                            <div class="review-card-heading">
-                                <div class="reviewer">
-                                    <span class="reviewer-avatar" aria-hidden="true">
-                                        <?php echo htmlspecialchars(strtoupper(substr($review_item['username'], 0, 1))); ?>
-                                    </span>
-                                    <div>
-                                        <strong><?php echo htmlspecialchars($review_item['username']); ?></strong>
-                                        <small>
-                                            <?php echo date('d F Y', strtotime($review_item['created_at'])); ?>
-                                        </small>
-                                    </div>
-                                </div>
-                                <span class="review-rating">★ <?php echo (int) $review_item['rating']; ?>.0</span>
-                            </div>
-                            <p class="review-text"><?php echo nl2br(htmlspecialchars($review_item['review'])); ?></p>
-                        </article>
-                    <?php endforeach; ?>
+                <div
+                    class="review-carousel"
+                    id="reviewCarousel"
+                    role="region"
+                    aria-label="Customer reviews, automatically scrolling"
+                >
+                    <div class="review-list" id="reviewTrack">
+                        <?php foreach ($reviews as $review_item) : ?>
+                            <?php render_review_card($review_item); ?>
+                        <?php endforeach; ?>
+                        <?php foreach ($reviews as $review_item) : ?>
+                            <?php render_review_card($review_item, true); ?>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
 
             <?php endif; ?>
@@ -710,6 +713,7 @@ include '../includes/navigation.php';
 
     <script src="../js/script.js"></script>
     <script src="../js/quantity.js"></script>
+    <script src="../js/reviews-carousel.js"></script>
 
 </main>
 
