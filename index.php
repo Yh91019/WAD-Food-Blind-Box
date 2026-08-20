@@ -40,7 +40,27 @@ unset($_SESSION['logout_message']);
     <?php
     include 'config/db_connect.php';
 
-    $sql = "SELECT * FROM restaurants";
+    $sql = "
+        SELECT
+            restaurants.*,
+            COALESCE(review_summary.average_rating, 0) AS average_rating,
+            COALESCE(review_summary.review_count, 0) AS review_count
+        FROM restaurants
+        LEFT JOIN (
+            SELECT
+                restaurant_name,
+                AVG(rating) AS average_rating,
+                COUNT(*) AS review_count
+            FROM reviews
+            GROUP BY restaurant_name
+        ) AS review_summary
+            ON restaurants.restaurant_name = review_summary.restaurant_name
+        ORDER BY
+            average_rating DESC,
+            review_count DESC,
+            restaurants.restaurant_name ASC
+        LIMIT 5
+    ";
 
     $result = $conn->query($sql);
     ?>
@@ -48,10 +68,10 @@ unset($_SESSION['logout_message']);
     <section class="home-restaurants">
         <div class="restaurants-header">
 
-            <h1>Explore Our Blind Box Restaurants</h1>
+            <h1>Top 5 Highest-Rated Restaurants</h1>
 
             <p>
-                Discover surprise meals from restaurants near you
+                Discover the restaurants our customers rate most highly
             </p>
 
         </div>
@@ -102,6 +122,14 @@ unset($_SESSION['logout_message']);
                                     $row['blind_box_food_category']
                                 );
                                 ?>
+                            </p>
+
+                            <p class="home-restaurant-rating">
+                                <span>★ <?php echo number_format((float) $row['average_rating'], 1); ?>/5.0</span>
+                                <small>
+                                    <?php echo (int) $row['review_count']; ?>
+                                    <?php echo (int) $row['review_count'] === 1 ? 'review' : 'reviews'; ?>
+                                </small>
                             </p>
 
 
@@ -157,4 +185,7 @@ unset($_SESSION['logout_message']);
 
     </section>
 </main>
-<?php include('includes/footer.php'); ?>
+<?php
+$conn->close();
+include('includes/footer.php');
+?>

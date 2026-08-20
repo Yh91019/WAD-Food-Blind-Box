@@ -17,7 +17,10 @@ $sql = "
         GROUP BY restaurant_name
     ) AS review_summary
         ON restaurants.restaurant_name = review_summary.restaurant_name
-    ORDER BY restaurants.restaurant_name
+    ORDER BY
+        average_rating DESC,
+        review_count DESC,
+        restaurants.restaurant_name ASC
 ";
 $result = $conn->query($sql);
 
@@ -39,6 +42,19 @@ include '../includes/navigation.php';
             placeholder="Search by restaurant name or food category..."
         >
 
+        <label class="rating-sort-toggle" for="ratingSort">
+            <span class="rating-sort-title">Rating</span>
+            <input
+                type="checkbox"
+                id="ratingSort"
+                aria-label="Rating: highest to lowest. Toggle for lowest to highest."
+            >
+            <span class="rating-toggle-track" aria-hidden="true">
+                <span class="rating-toggle-thumb"></span>
+            </span>
+            <span id="ratingSortDirection" class="rating-sort-direction">↑</span>
+        </label>
+
     </div>
 
     <p id="menuNoResults" class="menu-no-results">
@@ -57,6 +73,8 @@ include '../includes/navigation.php';
                     class="restaurant-card"
                     data-name="<?php echo strtolower(htmlspecialchars($row['restaurant_name'])); ?>"
                     data-category="<?php echo strtolower(htmlspecialchars($row['blind_box_food_category'])); ?>"
+                    data-rating="<?php echo htmlspecialchars((string) $row['average_rating']); ?>"
+                    data-review-count="<?php echo (int) $row['review_count']; ?>"
                 >
 
                     <!-- Restaurant Image -->

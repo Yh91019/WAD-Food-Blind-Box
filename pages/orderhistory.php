@@ -170,22 +170,25 @@ include '../includes/navigation.php';
 
                             <h3><?php echo $order['review_id'] ? 'Update Your Review' : 'Rate This Restaurant'; ?></h3>
 
-                            <label for="rating-<?php echo (int) $order['history_id']; ?>">Rating</label>
-                            <select
-                                name="rating"
-                                id="rating-<?php echo (int) $order['history_id']; ?>"
-                                required
-                            >
-                                <option value="">Select a rating</option>
-                                <?php for ($score = 5; $score >= 1; $score--) : ?>
-                                    <option
-                                        value="<?php echo $score; ?>"
-                                        <?php echo (int) $order['rating'] === $score ? 'selected' : ''; ?>
-                                    >
-                                        <?php echo $score; ?>/5 <?php echo str_repeat('★', $score); ?>
-                                    </option>
-                                <?php endfor; ?>
-                            </select>
+                            <fieldset class="rating-fieldset">
+                                <legend>Rating</legend>
+                                <div class="rating-picker" aria-label="Choose a rating out of 5">
+                                    <?php for ($score = 5; $score >= 1; $score--) : ?>
+                                        <input
+                                            type="radio"
+                                            name="rating"
+                                            id="rating-<?php echo (int) $order['history_id']; ?>-<?php echo $score; ?>"
+                                            value="<?php echo $score; ?>"
+                                            <?php echo (int) $order['rating'] === $score ? 'checked' : ''; ?>
+                                            required
+                                        >
+                                        <label
+                                            for="rating-<?php echo (int) $order['history_id']; ?>-<?php echo $score; ?>"
+                                            title="<?php echo $score; ?> out of 5"
+                                        >★</label>
+                                    <?php endfor; ?>
+                                </div>
+                            </fieldset>
 
                             <label for="review-<?php echo (int) $order['history_id']; ?>">Review</label>
                             <textarea
@@ -195,6 +198,8 @@ include '../includes/navigation.php';
                                 placeholder="Share your experience..."
                                 required
                             ><?php echo htmlspecialchars($order['review'] ?? ''); ?></textarea>
+
+                            <small class="review-hint">Maximum 1,000 characters</small>
 
                             <button type="submit" name="submit_review">
                                 <?php echo $order['review_id'] ? 'Update Review' : 'Submit Review'; ?>

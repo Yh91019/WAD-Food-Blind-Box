@@ -646,19 +646,37 @@ include '../includes/navigation.php';
 
         <section class="restaurant-reviews">
             <div class="reviews-heading">
-                <h2>Ratings &amp; Reviews</h2>
-                <p class="rating-summary">
-                    <span>★ <?php echo number_format($average_rating, 1); ?>/5.0</span>
-                    <small>
-                        <?php echo count($reviews); ?>
-                        <?php echo count($reviews) === 1 ? 'review' : 'reviews'; ?>
-                    </small>
-                </p>
+                <div>
+                    <span class="reviews-eyebrow">Customer feedback</span>
+                    <h2>Ratings &amp; Reviews</h2>
+                </div>
+
+                <div class="rating-summary">
+                    <strong><?php echo number_format($average_rating, 1); ?></strong>
+                    <div>
+                        <span class="summary-stars" aria-hidden="true">
+                            <?php for ($star = 1; $star <= 5; $star++) : ?>
+                                <span class="<?php echo $star <= round($average_rating) ? 'is-filled' : ''; ?>">★</span>
+                            <?php endfor; ?>
+                        </span>
+                        <small>
+                            <?php echo count($reviews); ?>
+                            <?php echo count($reviews) === 1 ? 'verified review' : 'verified reviews'; ?>
+                        </small>
+                    </div>
+                    <span class="screen-reader-text">
+                        <?php echo number_format($average_rating, 1); ?> out of 5
+                    </span>
+                </div>
             </div>
 
             <?php if (empty($reviews)) : ?>
 
-                <p class="no-reviews">No reviews yet. Complete an order to leave the first review.</p>
+                <div class="no-reviews">
+                    <span aria-hidden="true">☆</span>
+                    <h3>No reviews yet</h3>
+                    <p>Complete an order to share the first review.</p>
+                </div>
 
             <?php else : ?>
 
@@ -666,13 +684,20 @@ include '../includes/navigation.php';
                     <?php foreach ($reviews as $review_item) : ?>
                         <article class="review-card">
                             <div class="review-card-heading">
-                                <strong><?php echo htmlspecialchars($review_item['username']); ?></strong>
-                                <span>★ <?php echo (int) $review_item['rating']; ?>/5</span>
+                                <div class="reviewer">
+                                    <span class="reviewer-avatar" aria-hidden="true">
+                                        <?php echo htmlspecialchars(strtoupper(substr($review_item['username'], 0, 1))); ?>
+                                    </span>
+                                    <div>
+                                        <strong><?php echo htmlspecialchars($review_item['username']); ?></strong>
+                                        <small>
+                                            <?php echo date('d F Y', strtotime($review_item['created_at'])); ?>
+                                        </small>
+                                    </div>
+                                </div>
+                                <span class="review-rating">★ <?php echo (int) $review_item['rating']; ?>.0</span>
                             </div>
-                            <p><?php echo nl2br(htmlspecialchars($review_item['review'])); ?></p>
-                            <small>
-                                <?php echo date('d F Y', strtotime($review_item['created_at'])); ?>
-                            </small>
+                            <p class="review-text"><?php echo nl2br(htmlspecialchars($review_item['review'])); ?></p>
                         </article>
                     <?php endforeach; ?>
                 </div>
