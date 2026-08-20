@@ -21,13 +21,13 @@
 
         <li>
             <a href="../admin/restaurants.php">
-                Manage Restaurants
+                Manage Restaurant
             </a>
         </li>
 
         <li>
             <a href="../authentication/logout.php">
-                Logout
+                Log Out
             </a>
         </li>
 

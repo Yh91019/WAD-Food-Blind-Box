@@ -35,6 +35,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             methodInput.value = button.getAttribute("data-method");
 
+            var redirectUrl = button.getAttribute("data-redirect");
+
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+                return;
+            }
+
             form.submit();
 
         };

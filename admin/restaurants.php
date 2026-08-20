@@ -7,6 +7,24 @@ require_admin_login();
 
 include '../config/db_connect.php';
 
+$restaurant_count = 0;
+$order_count = 0;
+
+$restaurant_count_result = $conn->query(
+    "SELECT COUNT(*) AS total FROM restaurants"
+);
+
+if ($restaurant_count_result) {
+    $restaurant_count = (int) $restaurant_count_result->fetch_assoc()['total'];
+}
+
+$order_count_result = $conn->query(
+    "SELECT COUNT(*) AS total FROM history"
+);
+
+if ($order_count_result) {
+    $order_count = (int) $order_count_result->fetch_assoc()['total'];
+}
 
 
 
@@ -38,7 +56,7 @@ $result = $conn->query(
         <div class="admin-header">
 
 
-            <h1>Manage Restaurants</h1>
+            <h1>Manage Restaurant</h1>
 
 
         </div>
@@ -46,6 +64,24 @@ $result = $conn->query(
 
 
         <div class="admin-body">
+
+            <div class="admin-stats restaurant-summary">
+
+                <div class="stat-card">
+                    <span class="stat-label">Total Restaurants</span>
+                    <span class="stat-number">
+                        <?php echo $restaurant_count; ?>
+                    </span>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Total Orders</span>
+                    <span class="stat-number">
+                        <?php echo $order_count; ?>
+                    </span>
+                </div>
+
+            </div>
 
 
 

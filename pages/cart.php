@@ -22,10 +22,12 @@ if (
     $username = $_SESSION['username'];
 
     /* Payment method chosen by the user in the modal (defaults to Cash) */
-    $payment_method =
-        (isset($_POST['payment_method']) && $_POST['payment_method'] === 'Card')
-        ? 'Card'
-        : 'Cash';
+    $allowed_payment_methods = ['Cash', 'Card', 'TNG'];
+    $payment_method = $_POST['payment_method'] ?? 'Cash';
+
+    if (!in_array($payment_method, $allowed_payment_methods, true)) {
+        $payment_method = 'Cash';
+    }
 
     // Card orders require a payment method saved on the user's profile.
     if ($payment_method === 'Card') {
@@ -892,6 +894,15 @@ function checkOrderType() {
 
             <button type="button" class="payment-method-btn" data-method="Card">
                 💳 Card
+            </button>
+
+            <button
+                type="button"
+                class="payment-method-btn"
+                data-method="TNG"
+                data-redirect="https://consumer.touchngo.com.my"
+            >
+                📱 Pay with TNG
             </button>
 
         </div>
