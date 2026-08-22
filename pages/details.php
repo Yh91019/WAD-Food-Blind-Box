@@ -396,10 +396,15 @@ include '../includes/navigation.php';
 <style>
 .cart-closed-message {
     display: none;
-    margin-top: 12px;
+    flex-basis: 100%;
+    margin: 0;
+    padding: 12px 15px;
+    border-radius: 7px;
+    background: #fdeaea;
     color: #d32f2f;
     font-weight: bold;
     font-size: 14px;
+    text-align: center;
 }
 </style>
 
@@ -623,10 +628,6 @@ include '../includes/navigation.php';
 
                         </button>
 
-                        <p id="cartClosedMessage" class="cart-closed-message">
-                            This restaurant is currently closed. You can still add it to your wishlist.
-                        </p>
-
                     </form>
 
 
@@ -645,6 +646,10 @@ include '../includes/navigation.php';
                         </button>
 
                     </form>
+
+                    <p id="cartClosedMessage" class="cart-closed-message">
+                        This restaurant is currently closed. You can still add it to your wishlist.
+                    </p>
 
 
                 </div>

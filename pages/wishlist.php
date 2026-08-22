@@ -3,6 +3,7 @@
 session_start();
 
 include '../config/db_connect.php';
+require_once '../includes/restaurant_image.php';
 
 
 // ============================================================
@@ -51,6 +52,8 @@ if (!isset($_SESSION['username'])) {
 
 $username =
     $_SESSION['username'];
+
+$wishlist_cart_message = "";
 
 
 // ============================================================
@@ -117,8 +120,12 @@ if (
 
     $get_sql = "
         SELECT
-            wishlist.restaurant_name
+            wishlist.restaurant_name,
+            restaurants.restaurant_opening_hours,
+            restaurants.restaurant_closing_hours
         FROM wishlist
+        INNER JOIN restaurants
+            ON wishlist.restaurant_name = restaurants.restaurant_name
         WHERE wishlist.wishlist_id = ?
         AND wishlist.username = ?
     ";
@@ -142,6 +149,8 @@ if (
         $get_stmt->get_result();
 
 
+    $store_is_open = false;
+
     if ($get_result->num_rows === 1) {
 
 
@@ -151,6 +160,23 @@ if (
 
         $restaurant_name =
             $item['restaurant_name'];
+
+
+        // ====================================================
+        // BLOCK IF RESTAURANT IS CLOSED
+        // ====================================================
+
+        $store_is_open = is_restaurant_open(
+            $item['restaurant_opening_hours'],
+            $item['restaurant_closing_hours']
+        );
+
+        if (!$store_is_open) {
+
+            $wishlist_cart_message =
+                "This restaurant is currently closed. You can't add it to your cart right now.";
+
+        } else {
 
 
         // ====================================================
@@ -257,15 +283,23 @@ if (
 
         $check_stmt->close();
 
+        }
+
+
     }
 
 
     $get_stmt->close();
 
 
-    header("Location: cart.php");
+    if ($store_is_open) {
 
-    exit;
+        header("Location: cart.php");
+
+        exit;
+
+    }
+
 }
 
 
@@ -356,6 +390,14 @@ include '../includes/navigation.php';
         <h1 class="wishlist-title">
             My Wishlist
         </h1>
+
+        <?php if ($wishlist_cart_message != "") : ?>
+
+            <p class="success-message">
+                <?php echo htmlspecialchars($wishlist_cart_message); ?>
+            </p>
+
+        <?php endif; ?>
 
 
         <!-- ================================================= -->

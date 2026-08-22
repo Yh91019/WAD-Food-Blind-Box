@@ -201,7 +201,8 @@ if (isset($_SESSION['username'])) {
             cart.quantity,
             restaurants.blind_box_price,
             restaurants.blind_box_description,
-            restaurants.blind_box_food_category
+            restaurants.blind_box_food_category,
+            restaurants.blind_box_image
         FROM cart
 
         INNER JOIN restaurants
@@ -400,9 +401,9 @@ include '../includes/header.php';
 .cart-quantity-controls {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 12px;
-    margin-top: 18px;
+    margin-top: 0;
 }
 
 .quantity-form {
@@ -578,6 +579,16 @@ include '../includes/navigation.php';
                 <div class="cart-item">
 
 
+                    <img
+                        class="cart-item-image"
+                        src="<?php echo htmlspecialchars(restaurant_image_url($item['blind_box_image'] ?? null)); ?>"
+                        alt="<?php echo htmlspecialchars($item['restaurant_name']); ?> blind box"
+                    >
+
+
+                    <div class="cart-item-body">
+
+
                     <h3>
 
                         <?php
@@ -632,23 +643,12 @@ include '../includes/navigation.php';
                         );
                         ?>
 
-                    </p>
-
-
-                    <p>
-
-                        <strong>
-                            Quantity:
-                        </strong>
-
-                        <?php
-                        echo $item['quantity'];
-                        ?>
+                        each
 
                     </p>
 
 
-                    <p>
+                    <p class="cart-item-subtotal">
 
                         <strong>
                             Subtotal:
@@ -668,7 +668,9 @@ include '../includes/navigation.php';
                     </p>
 
 
-                    <!-- QUANTITY CONTROLS -->
+                    <!-- QUANTITY + REMOVE -->
+
+<div class="cart-item-footer">
 
 <div class="cart-quantity-controls">
 
@@ -769,6 +771,11 @@ include '../includes/navigation.php';
                         </button>
 
                     </form>
+
+</div>
+
+
+                    </div>
 
 
                 </div>

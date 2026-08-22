@@ -67,7 +67,8 @@ include '../includes/navigation.php';
             while ($row = $result->fetch_assoc()) {
         ?>
 
-                <div
+                <a
+                    href="details.php?restaurant=<?php echo urlencode($row['restaurant_name']); ?>"
                     class="restaurant-card"
                     data-name="<?php echo strtolower(htmlspecialchars($row['restaurant_name'])); ?>"
                     data-category="<?php echo strtolower(htmlspecialchars($row['blind_box_food_category'])); ?>"
@@ -78,8 +79,6 @@ include '../includes/navigation.php';
                     <!-- Restaurant Image -->
                     <img
                         src="<?php echo htmlspecialchars(restaurant_image_url($row['blind_box_image'] ?? null)); ?>"
-                        width="200"
-                        height="150"
                         alt="<?php echo htmlspecialchars($row['restaurant_name']); ?> blind box"
                     >
 
@@ -93,21 +92,6 @@ include '../includes/navigation.php';
                                 data-closing="<?php echo htmlspecialchars($row['restaurant_closing_hours']); ?>"
                             >Checking...</span>
                         </h2>
-
-                        <p>
-                            <strong>Opening Hours:</strong>
-                            <?php echo htmlspecialchars($row['restaurant_opening_hours']); ?>
-                        </p>
-
-                        <p>
-                            <strong>Closing Hours:</strong>
-                            <?php echo htmlspecialchars($row['restaurant_closing_hours']); ?>
-                        </p>
-
-                        <p>
-                            <strong>Location:</strong>
-                            <?php echo htmlspecialchars($row['restaurant_address']); ?>
-                        </p>
 
                         <p>
                             <strong>Blind Box Price:</strong>
@@ -130,13 +114,9 @@ include '../includes/navigation.php';
                             </small>
                         </p>
 
-                        <a href="details.php?restaurant=<?php echo urlencode($row['restaurant_name']); ?>" class="details-btn">
-                            Details
-                        </a>
-
                     </div>
 
-                </div>
+                </a>
 
         <?php
             }

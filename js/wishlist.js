@@ -152,18 +152,11 @@ removeButtons.forEach(function(button){
 
 /* ===================== ADD TO CART ===================== */
 
-let cartButtons =
-    document.querySelectorAll(".wishlist-cart-btn");
-
-cartButtons.forEach(function(button){
-
-    button.addEventListener("click", function(){
-
-        alert("Item added to cart successfully!");
-
-    });
-
-});
+/* No click handler needed here — the button is a real form submit
+   button, and the server (pages/wishlist.php) decides the outcome:
+   it redirects to the cart on success, or reloads this page with a
+   message if the restaurant is closed. A JS alert here would have
+   claimed success before the server had actually checked. */
 
 /* ===================== CLICK OUTSIDE ===================== */
 

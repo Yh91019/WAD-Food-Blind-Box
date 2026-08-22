@@ -110,6 +110,8 @@ include '../includes/header.php';
 include '../includes/navigation.php';
 ?>
 
+<link rel="stylesheet" href="../css/orderhistory.css">
+
 <main class="orderhistory-page">
 
     <h1>Order History</h1>
@@ -128,12 +130,27 @@ include '../includes/navigation.php';
 
     <?php if (!isset($_SESSION['username'])) : ?>
 
-        <p>Please <a href="../authentication/login.php">log in</a> to view your order history.</p>
+        <div class="history-empty">
+
+            <h2>Please log in</h2>
+
+            <p>You need to log in before viewing your order history.</p>
+
+            <a href="../authentication/login.php" class="browse-menu-btn">Login</a>
+
+        </div>
 
     <?php elseif (empty($orders)) : ?>
 
-        <p>You haven't placed any orders yet.</p>
-        <a href="../pages/menu.php" class="browse-menu-btn">Browse Menu</a>
+        <div class="history-empty">
+
+            <h2>You haven't placed any orders yet</h2>
+
+            <p>Browse the menu and grab a blind box to get started.</p>
+
+            <a href="../pages/menu.php" class="browse-menu-btn">Browse Menu</a>
+
+        </div>
 
     <?php else : ?>
 
@@ -222,6 +239,5 @@ include '../includes/navigation.php';
 </main>
 
  <script src="../js/script.js"></script>
-                
-<link rel="stylesheet" href="../css/orderhistory.css">
+
 <?php include '../includes/footer.php'; ?>

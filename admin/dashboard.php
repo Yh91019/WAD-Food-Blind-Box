@@ -27,6 +27,14 @@ $result = $conn->query(
 
         <div class="admin-body">
 
+            <div class="restaurant-page-actions">
+
+                <a href="restaurants.php" class="admin-action-btn add-btn">
+                    Manage Restaurant
+                </a>
+
+            </div>
+
             <div class="restaurant-search">
                 <input
                     type="text"
@@ -64,6 +72,7 @@ $result = $conn->query(
                             <span
                                 class="status-badge"
                                 data-opening="<?php echo htmlspecialchars($row['restaurant_opening_hours']); ?>"
+                                data-closing="<?php echo htmlspecialchars($row['restaurant_closing_hours']); ?>"
                             >Checking...</span>
                         </h2>
 

@@ -21,11 +21,7 @@ include "../includes/navigation.php";
 
         <p>
             Thank you for ordering from Blind Bite.
-        </p>
-
-        <p>
-            Your order has been successfully placed.
-        </p>
+        </p>s
 
 
         <div class="order-complete-buttons">

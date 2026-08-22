@@ -8,6 +8,40 @@
     box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* Header Icons (Cart / Order / Login) */
+.header-icons{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    margin-left:auto;
+}
+
+.header-icon-link{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#3a2b1e;
+    text-decoration:none;
+
+    transition:color 0.2s ease;
+}
+
+.header-icon-link svg{
+    width:24px;
+    height:24px;
+}
+
+.header-icon-link:hover{
+    color:#5c3d20;
+}
+
+@media (max-width: 480px){
+    .header-icons{
+        gap:14px;
+    }
+}
+
 footer {
     width: 100%;
     box-sizing: border-box;
@@ -85,37 +119,51 @@ footer {
 }
 
 .restaurant-container{
-    display:flex;
-    flex-direction:column;
-    gap:30px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:25px;
 }
 
 .restaurant-card{
     display:flex;
+    flex-direction:column;
     border:1px solid #ddd;
     border-radius:10px;
     overflow:hidden;
     box-shadow:0 2px 8px rgba(0,0,0,0.15);
     background:#fff;
+
+    text-decoration:none;
+    color:inherit;
+    cursor:pointer;
+
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.restaurant-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.25);
 }
 
 .restaurant-card img{
-    width:300px;
+    width:100%;
     height:220px;
     object-fit:cover;
 }
 
 .restaurant-info{
-    padding:20px;
+    padding:14px 16px;
     flex:1;
 }
 
 .restaurant-info h2{
     margin-top:0;
+    font-size:19px;
 }
 
 .restaurant-info p{
-    margin:10px 0;
+    margin:6px 0;
+    font-size:14px;
 }
 
 .restaurant-rating span {
@@ -200,6 +248,7 @@ footer {
 
 .action-buttons {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-end;
     gap: 15px;
     margin-top: 25px;
@@ -405,12 +454,16 @@ footer {
 
     margin: 0 auto 25px;
 
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+
     background: #ffffff;
 
     border: 1px solid #e5e5e5;
     border-radius: 15px;
 
-    padding: 25px 30px;
+    padding: 22px 25px;
 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
 
@@ -430,21 +483,47 @@ footer {
 
 
 /* ============================================================
+   RESTAURANT IMAGE
+   ============================================================ */
+
+.cart-item-image {
+    width: 130px;
+    height: 130px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    flex-shrink: 0;
+}
+
+
+/* ============================================================
+   ITEM CONTENT
+   ============================================================ */
+
+.cart-item-body {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* ============================================================
    RESTAURANT NAME
    ============================================================ */
 
-.cart-item h3 {
+.cart-item-body h3 {
     color: #ab794b;
 
-    font-size: 27px;
+    font-size: 22px;
 
-    text-align: center;
+    text-align: left;
 
-    margin: 0 0 20px;
+    margin: 0 0 10px;
 
-    padding-bottom: 15px;
+    padding-bottom: 0;
 
-    border-bottom: 1px solid #eee;
+    border-bottom: none;
 }
 
 
@@ -453,15 +532,15 @@ footer {
    ============================================================ */
 
 .cart-food-name {
-    text-align: center;
+    text-align: left;
 
     color: #444;
 
-    font-size: 17px;
+    font-size: 15px;
 
     line-height: 1.5;
 
-    margin: 15px 0 20px;
+    margin: 0 0 12px;
 }
 
 
@@ -469,18 +548,18 @@ footer {
    CART INFORMATION
    ============================================================ */
 
-.cart-item p {
+.cart-item-body p {
     color: #555;
 
-    font-size: 15px;
+    font-size: 14px;
 
-    margin: 12px 0;
+    margin: 6px 0;
 
     line-height: 1.5;
 }
 
 
-.cart-item p strong {
+.cart-item-body p strong {
     color: #333;
 }
 
@@ -489,18 +568,33 @@ footer {
    SUBTOTAL
    ============================================================ */
 
-.cart-item p:last-of-type {
+.cart-item-subtotal {
     color: #ab794b;
 
-    font-size: 20px;
+    font-size: 18px;
 
     font-weight: bold;
 
-    margin-top: 20px;
+    margin-top: 12px !important;
 
-    padding-top: 15px;
+    padding-top: 12px;
 
     border-top: 1px solid #eee;
+}
+
+
+/* ============================================================
+   QUANTITY + REMOVE ROW
+   ============================================================ */
+
+.cart-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    margin-top: 16px;
 }
 
 
@@ -509,9 +603,9 @@ footer {
    ============================================================ */
 
 .remove-cart-btn {
-    display: block;
+    display: inline-block;
 
-    margin: 20px auto 0;
+    margin: 0;
 
     background: #dc3545;
 
@@ -519,11 +613,11 @@ footer {
 
     border: none;
 
-    padding: 11px 25px;
+    padding: 9px 20px;
 
     border-radius: 8px;
 
-    font-size: 15px;
+    font-size: 14px;
 
     font-weight: bold;
 
@@ -672,11 +766,28 @@ footer {
     }
 
     .cart-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
         padding: 20px;
     }
 
-    .cart-item h3 {
-        font-size: 23px;
+    .cart-item-image {
+        width: 100%;
+        height: 160px;
+    }
+
+    .cart-item-body h3,
+    .cart-food-name {
+        text-align: center;
+    }
+
+    .cart-quantity-controls {
+        justify-content: center;
+    }
+
+    .cart-item-footer {
+        justify-content: center;
     }
 
     .cart-food-name {
@@ -1968,13 +2079,18 @@ footer {
     }
 }
 
+@media (max-width: 1000px) {
+    .restaurant-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 700px) {
-    .restaurant-card {
-        flex-direction: column;
+    .restaurant-container {
+        grid-template-columns: 1fr;
     }
 
     .restaurant-card img {
-        width: 100%;
         height: 200px;
     }
 }
