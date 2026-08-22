@@ -1585,16 +1585,53 @@ footer {
 
 /* Restaurant cards */
 
+.home-restaurants-carousel {
+    position: relative;
+    overflow: hidden;
+    padding: 10px 0 25px;
+
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 40px,
+        #000 calc(100% - 40px),
+        transparent
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 40px,
+        #000 calc(100% - 40px),
+        transparent
+    );
+}
+
 .home-restaurant-container {
     display: flex;
+    width: max-content;
     gap: 25px;
 
-    overflow-x: auto;
-    overflow-y: hidden;
+    animation: home-restaurant-scroll 40s linear infinite;
+}
 
-    padding: 10px 5px 25px;
+.home-restaurants-carousel:hover .home-restaurant-container {
+    animation-play-state: paused;
+}
 
-    scroll-behavior: smooth;
+@keyframes home-restaurant-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-restaurant-container {
+        animation: none;
+    }
 }
 
 .home-restaurant-card {

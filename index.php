@@ -63,6 +63,96 @@ unset($_SESSION['logout_message']);
     ";
 
     $result = $conn->query($sql);
+
+    $top_restaurants = [];
+
+    if ($result->num_rows > 0) {
+
+        while ($row = $result->fetch_assoc()) {
+            $top_restaurants[] = $row;
+        }
+
+    }
+
+    // Renders a single "Top 5" restaurant card. Used twice for each
+    // restaurant (see the carousel track below) so the auto-scroll
+    // animation can loop seamlessly, the same technique used for the
+    // review carousel on the details page.
+    function render_home_restaurant_card(array $row, bool $hidden = false): void {
+    ?>
+
+        <a href="pages/details.php?restaurant=<?php
+            echo urlencode($row['restaurant_name']);
+        ?>" class="home-restaurant-card"<?php echo $hidden ? ' aria-hidden="true" tabindex="-1"' : ''; ?>>
+
+
+            <!-- Restaurant Image -->
+
+            <div class="home-restaurant-image">
+
+                <img
+                    src="<?php echo htmlspecialchars(restaurant_image_url($row['blind_box_image'] ?? null)); ?>"
+                    alt="<?php echo htmlspecialchars($row['restaurant_name']); ?> blind box"
+                >
+
+            </div>
+
+
+            <!-- Restaurant Information -->
+
+            <div class="home-restaurant-info">
+
+                <h2>
+                    <?php
+                    echo htmlspecialchars(
+                        $row['restaurant_name']
+                    );
+                    ?>
+                </h2>
+
+
+                <p class="restaurant-category">
+                    <?php
+                    echo htmlspecialchars(
+                        $row['blind_box_food_category']
+                    );
+                    ?>
+                </p>
+
+                <p class="home-restaurant-rating">
+                    <span>★ <?php echo number_format((float) $row['average_rating'], 1); ?>/5.0</span>
+                    <small>
+                        <?php echo (int) $row['review_count']; ?>
+                        <?php echo (int) $row['review_count'] === 1 ? 'review' : 'reviews'; ?>
+                    </small>
+                </p>
+
+
+                <p class="restaurant-price">
+                    RM
+                    <?php
+                    echo number_format(
+                        $row['blind_box_price'],
+                        2
+                    );
+                    ?>
+                </p>
+
+
+                <p class="restaurant-location">
+                    <?php
+                    echo htmlspecialchars(
+                        $row['restaurant_address']
+                    );
+                    ?>
+                </p>
+
+            </div>
+
+        </a>
+
+    <?php
+    }
     ?>
 
     <section class="home-restaurants">
@@ -76,101 +166,38 @@ unset($_SESSION['logout_message']);
 
         </div>
 
-        <div class="home-restaurant-container">
+        <?php if (empty($top_restaurants)) : ?>
 
-            <?php
+            <p class="no-restaurants">
+                No restaurants available.
+            </p>
 
-            if ($result->num_rows > 0) {
+        <?php else : ?>
 
-                while ($row = $result->fetch_assoc()) {
+            <!-- Auto-scrolling carousel, same technique as the review
+                 carousel on the details page: the mask fades the edges,
+                 and the card list is rendered twice so the animation
+                 can loop seamlessly from the duplicate back to the start. -->
+            <div
+                class="home-restaurants-carousel"
+                id="homeRestaurantCarousel"
+                role="region"
+                aria-label="Top 5 highest-rated restaurants, automatically scrolling"
+            >
+                <div class="home-restaurant-container" id="homeRestaurantTrack">
 
-            ?>
+                    <?php foreach ($top_restaurants as $row) : ?>
+                        <?php render_home_restaurant_card($row); ?>
+                    <?php endforeach; ?>
 
-                    <a href="pages/details.php?restaurant=<?php
-                        echo urlencode($row['restaurant_name']);
-                    ?>" class="home-restaurant-card">
+                    <?php foreach ($top_restaurants as $row) : ?>
+                        <?php render_home_restaurant_card($row, true); ?>
+                    <?php endforeach; ?>
 
+                </div>
+            </div>
 
-                        <!-- Restaurant Image -->
-
-                        <div class="home-restaurant-image">
-
-                            <img
-                                src="<?php echo htmlspecialchars(restaurant_image_url($row['blind_box_image'] ?? null)); ?>"
-                                alt="<?php echo htmlspecialchars($row['restaurant_name']); ?> blind box"
-                            >
-
-                        </div>
-
-
-                        <!-- Restaurant Information -->
-
-                        <div class="home-restaurant-info">
-
-                            <h2>
-                                <?php
-                                echo htmlspecialchars(
-                                    $row['restaurant_name']
-                                );
-                                ?>
-                            </h2>
-
-
-                            <p class="restaurant-category">
-                                <?php
-                                echo htmlspecialchars(
-                                    $row['blind_box_food_category']
-                                );
-                                ?>
-                            </p>
-
-                            <p class="home-restaurant-rating">
-                                <span>★ <?php echo number_format((float) $row['average_rating'], 1); ?>/5.0</span>
-                                <small>
-                                    <?php echo (int) $row['review_count']; ?>
-                                    <?php echo (int) $row['review_count'] === 1 ? 'review' : 'reviews'; ?>
-                                </small>
-                            </p>
-
-
-                            <p class="restaurant-price">
-                                RM
-                                <?php
-                                echo number_format(
-                                    $row['blind_box_price'],
-                                    2
-                                );
-                                ?>
-                            </p>
-
-
-                            <p class="restaurant-location">
-                                <?php
-                                echo htmlspecialchars(
-                                    $row['restaurant_address']
-                                );
-                                ?>
-                            </p>
-
-                        </div>
-
-                    </a>
-
-            <?php
-
-                }
-
-            } else {
-
-                echo '<p class="no-restaurants">
-                        No restaurants available.
-                      </p>';
-
-            }
-
-            ?>
-
-        </div>
+        <?php endif; ?>
 
 
         <!-- View All Button -->
@@ -185,6 +212,7 @@ unset($_SESSION['logout_message']);
 
     </section>
 </main>
+<script src="<?php echo BASE_URL; ?>/js/home-restaurants-carousel.js"></script>
 <?php
 $conn->close();
 include('includes/footer.php');
