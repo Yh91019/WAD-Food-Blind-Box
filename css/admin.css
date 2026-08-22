@@ -545,6 +545,8 @@
 .restaurant-search input {
     width: 350px;
 
+    max-width: 350px;
+
     padding: 12px 15px;
 
     box-sizing: border-box;
