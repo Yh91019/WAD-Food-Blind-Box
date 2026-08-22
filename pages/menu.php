@@ -90,6 +90,7 @@ include '../includes/navigation.php';
                             <span
                                 class="status-badge"
                                 data-opening="<?php echo htmlspecialchars($row['restaurant_opening_hours']); ?>"
+                                data-closing="<?php echo htmlspecialchars($row['restaurant_closing_hours']); ?>"
                             >Checking...</span>
                         </h2>
 

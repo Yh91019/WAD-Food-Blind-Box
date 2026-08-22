@@ -17,6 +17,19 @@ function restaurant_image_url(?string $filename): string
     return BASE_URL . '/images/restaurants/' . rawurlencode($filename);
 }
 
+function is_restaurant_open(string $opening, string $closing): bool
+{
+    $now = date('H:i:s');
+
+    if ($closing > $opening) {
+        // Normal same-day hours (e.g. 09:00 - 22:00)
+        return $now >= $opening && $now < $closing;
+    }
+
+    // Closing time is on/after midnight (e.g. 18:00 - 02:00)
+    return $now >= $opening || $now < $closing;
+}
+
 function store_restaurant_image(array $file, string &$error)
 {
     $upload_error = $file['error'] ?? UPLOAD_ERR_NO_FILE;

@@ -3,6 +3,7 @@
 session_start();
 
 include '../config/db_connect.php';
+require_once '../includes/restaurant_image.php';
 
 
 // ============================================================
@@ -43,6 +44,17 @@ if ($result->num_rows === 1) {
 
 
 $stmt->close();
+
+// ============================================================
+// STORE OPEN/CLOSED STATUS
+// ============================================================
+
+$store_is_open = $restaurant
+    ? is_restaurant_open(
+        $restaurant['restaurant_opening_hours'],
+        $restaurant['restaurant_closing_hours']
+    )
+    : false;
 
 $reviews = [];
 $average_rating = 0.0;
@@ -123,6 +135,13 @@ if (
 
         $cart_message =
             "Please log in before adding items to cart.";
+
+    }
+
+    elseif (!$store_is_open) {
+
+        $cart_message =
+            "This restaurant is currently closed. You can't add it to your cart right now, but you can still add it to your wishlist.";
 
     }
 
@@ -372,6 +391,17 @@ include '../includes/navigation.php';
 
 ?>
 
+<link rel="stylesheet" href="../css/status.css">
+
+<style>
+.cart-closed-message {
+    display: none;
+    margin-top: 12px;
+    color: #d32f2f;
+    font-weight: bold;
+    font-size: 14px;
+}
+</style>
 
 <main class="details-page">
 
@@ -419,6 +449,13 @@ include '../includes/navigation.php';
                         $restaurant['restaurant_name']
                     );
                     ?>
+
+                    <span
+                        id="restaurantStatusBadge"
+                        class="status-badge"
+                        data-opening="<?php echo htmlspecialchars($restaurant['restaurant_opening_hours']); ?>"
+                        data-closing="<?php echo htmlspecialchars($restaurant['restaurant_closing_hours']); ?>"
+                    >Checking...</span>
 
                 </h1>
 
@@ -586,6 +623,10 @@ include '../includes/navigation.php';
 
                         </button>
 
+                        <p id="cartClosedMessage" class="cart-closed-message">
+                            This restaurant is currently closed. You can still add it to your wishlist.
+                        </p>
+
                     </form>
 
 
@@ -713,6 +754,7 @@ include '../includes/navigation.php';
 
     <script src="../js/script.js"></script>
     <script src="../js/quantity.js"></script>
+    <script src="../js/status.js"></script>
     <script src="../js/reviews-carousel.js"></script>
 
 </main>

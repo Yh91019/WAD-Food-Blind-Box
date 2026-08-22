@@ -355,6 +355,43 @@ if (
     exit();
 }
 
+// ============================================================
+// REMOVE ITEM FROM CART
+// ============================================================
+
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST"
+    && isset($_POST['remove_item'])
+    && isset($_SESSION['username'])
+) {
+
+    $cart_id = (int) $_POST['cart_id'];
+    $username = $_SESSION['username'];
+
+    // Remove the entire order line, regardless of its quantity.
+
+    $delete_sql = "
+        DELETE FROM cart
+        WHERE cart_id = ?
+        AND username = ?
+    ";
+
+    $delete_stmt = $conn->prepare($delete_sql);
+
+    $delete_stmt->bind_param(
+        "is",
+        $cart_id,
+        $username
+    );
+
+    $delete_stmt->execute();
+
+    $delete_stmt->close();
+
+    header("Location: cart.php");
+    exit();
+}
+
 include '../includes/header.php';
 ?>
 
@@ -369,6 +406,10 @@ include '../includes/header.php';
 }
 
 .quantity-form {
+    margin: 0;
+}
+
+.remove-item-form {
     margin: 0;
 }
 
@@ -702,6 +743,32 @@ include '../includes/navigation.php';
     </form>
 
 </div>
+
+
+                    <!-- REMOVE ITEM -->
+
+                    <form method="POST" class="remove-item-form">
+
+                        <input
+                            type="hidden"
+                            name="cart_id"
+                            value="<?php echo $item['cart_id']; ?>"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="remove_item"
+                            value="1"
+                        >
+
+                        <button
+                            type="submit"
+                            class="remove-cart-btn"
+                        >
+                            🗑 Remove
+                        </button>
+
+                    </form>
 
 
                 </div>
