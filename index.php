@@ -1,5 +1,67 @@
 <?php
 session_start();
+include 'config/db_connect.php';
+require_once 'includes/vouchers.php';
+
+if (empty($_SESSION['promotion_csrf'])) {
+    $_SESSION['promotion_csrf'] = bin2hex(random_bytes(32));
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['claim_promotion'])) {
+    $token = $_POST['csrf_token'] ?? '';
+    $promotion_id = (int) ($_POST['promotion_id'] ?? 0);
+
+    if (!hash_equals($_SESSION['promotion_csrf'], $token)) {
+        $_SESSION['promotion_message'] = 'Your session expired. Please try again.';
+    } elseif (empty($_SESSION['username'])) {
+        $_SESSION['promotion_message'] = 'Please log in before claiming a voucher.';
+    } else {
+        $promotion_stmt = $conn->prepare(
+            "SELECT promotion_id FROM promotions
+             WHERE promotion_id = ? AND is_active = 1
+               AND NOW() BETWEEN starts_at AND ends_at"
+        );
+        $promotion_stmt->bind_param('i', $promotion_id);
+        $promotion_stmt->execute();
+        $valid_promotion = $promotion_stmt->get_result()->num_rows === 1;
+        $promotion_stmt->close();
+
+        $_SESSION['promotion_message'] = $valid_promotion
+            && claim_promotion($conn, $_SESSION['username'], $promotion_id)
+            ? 'Voucher claimed! You can apply it in your cart.'
+            : 'This promotion is no longer available.';
+    }
+
+    header('Location: index.php#promotions');
+    exit();
+}
+
+$promotion_message = $_SESSION['promotion_message'] ?? '';
+unset($_SESSION['promotion_message']);
+
+$promotions = [];
+$promotion_result = $conn->query(
+    "SELECT * FROM promotions
+     WHERE is_active = 1 AND NOW() BETWEEN starts_at AND ends_at
+     ORDER BY discount_value DESC, promotion_id ASC"
+);
+while ($promotion_result && $promotion = $promotion_result->fetch_assoc()) {
+    $promotions[] = $promotion;
+}
+
+$claimed_promotions = [];
+if (!empty($_SESSION['username'])) {
+    $claimed_stmt = $conn->prepare(
+        "SELECT promotion_id, used_at FROM user_vouchers WHERE username = ?"
+    );
+    $claimed_stmt->bind_param('s', $_SESSION['username']);
+    $claimed_stmt->execute();
+    $claimed_result = $claimed_stmt->get_result();
+    while ($claimed = $claimed_result->fetch_assoc()) {
+        $claimed_promotions[(int) $claimed['promotion_id']] = $claimed['used_at'];
+    }
+    $claimed_stmt->close();
+}
 ?>
 
 <?php include 'includes/header.php'; ?>
@@ -38,7 +100,7 @@ unset($_SESSION['logout_message']);
         <img src="images/bg.jpg" alt="Blind Bite">
     </section>
 
-    <section class="home-promotions" aria-labelledby="promotionsTitle">
+    <section class="home-promotions" id="promotions" aria-labelledby="promotionsTitle">
         <div class="promotion-heading">
             <div>
                 <span class="home-section-kicker">Available now</span>
@@ -47,46 +109,47 @@ unset($_SESSION['logout_message']);
             <p>More surprise, less spend. Pick an offer for your next Blind Bite.</p>
         </div>
 
+        <?php if ($promotion_message !== '') : ?>
+            <p class="promotion-message"><?php echo htmlspecialchars($promotion_message); ?></p>
+        <?php endif; ?>
+
         <div class="promotion-grid">
-            <article class="promotion-card promotion-card-featured">
-                <span class="promotion-icon" aria-hidden="true">🎁</span>
-                <div class="promotion-copy">
-                    <span class="promotion-tag">New foodies</span>
-                    <h3>20% Off Your First Bite</h3>
-                    <p>Start your food-saving journey with a delicious surprise.</p>
-                    <span class="promotion-code">Use code <strong>FIRSTBITE20</strong></span>
-                </div>
-                <a href="pages/menu.php" class="promotion-link">Claim offer →</a>
-            </article>
+            <?php foreach ($promotions as $index => $promotion) : ?>
+                <?php
+                $promotion_id = (int) $promotion['promotion_id'];
+                $is_claimed = array_key_exists($promotion_id, $claimed_promotions);
+                $is_used = $is_claimed && $claimed_promotions[$promotion_id] !== null;
+                ?>
+                <article class="promotion-card <?php echo $index === 0 ? 'promotion-card-featured' : ''; ?>">
+                    <span class="promotion-icon" aria-hidden="true">🎁</span>
+                    <div class="promotion-copy">
+                        <span class="promotion-tag">Available voucher</span>
+                        <h3><?php echo htmlspecialchars($promotion['title']); ?></h3>
+                        <p><?php echo htmlspecialchars($promotion['description']); ?></p>
+                        <span class="promotion-code">
+                            Code <strong><?php echo htmlspecialchars($promotion['code']); ?></strong>
+                            · Min. RM<?php echo number_format((float) $promotion['minimum_spend'], 2); ?>
+                        </span>
+                    </div>
 
-            <article class="promotion-card">
-                <span class="promotion-icon" aria-hidden="true">🛵</span>
-                <div class="promotion-copy">
-                    <span class="promotion-tag">Delivery deal</span>
-                    <h3>Free Delivery</h3>
-                    <p>Enjoy delivery on orders of RM40 or more.</p>
-                    <span class="promotion-code">Applied at checkout</span>
-                </div>
-                <a href="pages/menu.php" class="promotion-link">Browse boxes →</a>
-            </article>
-
-            <article class="promotion-card">
-                <span class="promotion-icon" aria-hidden="true">⏰</span>
-                <div class="promotion-copy">
-                    <span class="promotion-tag">Happy hour</span>
-                    <h3>RM5 Evening Treat</h3>
-                    <p>Save RM5 on a Blind Box ordered from 8–10 PM.</p>
-                    <span class="promotion-code">Use code <strong>NIGHTBITE5</strong></span>
-                </div>
-                <a href="pages/menu.php" class="promotion-link">Explore now →</a>
-            </article>
+                    <?php if ($is_used) : ?>
+                        <span class="promotion-link promotion-claimed">Used</span>
+                    <?php elseif ($is_claimed) : ?>
+                        <a href="pages/cart.php" class="promotion-link">Use in cart →</a>
+                    <?php else : ?>
+                        <form method="POST" action="index.php#promotions" class="promotion-claim-form">
+                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['promotion_csrf']); ?>">
+                            <input type="hidden" name="promotion_id" value="<?php echo $promotion_id; ?>">
+                            <button type="submit" name="claim_promotion" class="promotion-link">Claim voucher →</button>
+                        </form>
+                    <?php endif; ?>
+                </article>
+            <?php endforeach; ?>
         </div>
     </section>
 
 
     <?php
-    include 'config/db_connect.php';
-
     $sql = "
         SELECT
             restaurants.*,

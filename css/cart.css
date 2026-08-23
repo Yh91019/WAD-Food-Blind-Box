@@ -1055,3 +1055,122 @@
     cursor: not-allowed;
     opacity: 0.65;
 }
+
+/* Voucher and delivery totals */
+.cart-price-breakdown {
+    margin: 0 0 20px;
+    padding: 12px 0;
+    border-top: 1px solid #eee1d5;
+    border-bottom: 1px solid #eee1d5;
+}
+
+.cart-price-breakdown p {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 7px 0;
+    color: #6d625a;
+    font-size: 14px;
+}
+
+.cart-price-breakdown strong {
+    color: #44372d;
+}
+
+.cart-price-breakdown .cart-discount {
+    color: #2e7d32;
+}
+
+.voucher-section {
+    margin: 18px 0 22px;
+    text-align: left;
+}
+
+.voucher-section h3 {
+    margin: 0 0 10px;
+    color: #8f623c;
+    text-align: center;
+}
+
+.voucher-form select,
+.voucher-code-row input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #dcc9b7;
+    border-radius: 8px;
+    background: #fff;
+    font: inherit;
+}
+
+.voucher-form select {
+    margin-bottom: 9px;
+}
+
+.voucher-code-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+}
+
+.voucher-code-row button,
+.remove-voucher-btn {
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #ab794b;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.voucher-code-row button:hover,
+.remove-voucher-btn:hover {
+    background: #8f623c;
+}
+
+.applied-voucher {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 12px;
+    border: 1px dashed #88b98a;
+    border-radius: 9px;
+    background: #eff8ef;
+    color: #2e7d32;
+    font-size: 13px;
+}
+
+.voucher-section form {
+    margin: 8px 0 0;
+}
+
+.remove-voucher-btn {
+    width: 100%;
+    background: #777;
+}
+
+/* Keep both cart actions readable inside the narrow summary card. */
+.cart-summary-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 10px;
+}
+
+.cart-summary-buttons form,
+.cart-summary-buttons .browse-menu-btn,
+.cart-summary-buttons .place-order-btn {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.cart-summary-buttons .browse-menu-btn,
+.cart-summary-buttons .place-order-btn {
+    min-height: 48px;
+    height: auto;
+    padding: 12px 16px;
+    white-space: nowrap;
+    line-height: 1.2;
+}

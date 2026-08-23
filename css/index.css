@@ -424,6 +424,37 @@
     text-decoration: underline;
 }
 
+.promotion-claim-form {
+    margin: 20px 0 0;
+}
+
+.promotion-claim-form .promotion-link {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.promotion-claimed {
+    cursor: default;
+    opacity: 0.8;
+}
+
+.promotion-message {
+    max-width: 1200px;
+    margin: 0 auto 22px;
+    padding: 12px 16px;
+    border: 1px solid #c8e6c9;
+    border-radius: 10px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    text-align: center;
+    font-weight: bold;
+}
+
 @media (max-width: 900px) {
     .promotion-grid {
         grid-template-columns: 1fr;

@@ -724,6 +724,9 @@ include '../includes/navigation.php';
                         <?php foreach ($reviews as $review_item) : ?>
                             <?php render_review_card($review_item); ?>
                         <?php endforeach; ?>
+                        <?php foreach ($reviews as $review_item) : ?>
+                            <?php render_review_card($review_item, true); ?>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
@@ -738,6 +741,7 @@ include '../includes/navigation.php';
     <script src="../js/script.js"></script>
     <script src="../js/quantity.js"></script>
     <script src="../js/status.js"></script>
+    <script src="../js/reviews-carousel.js"></script>
 
 </main>
 

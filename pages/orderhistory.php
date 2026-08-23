@@ -157,6 +157,10 @@ if (isset($_SESSION['username'])) {
                 history.quantity,
                 history.payment_method,
                 history.order_type,
+                history.voucher_code,
+                history.discount_amount,
+                history.delivery_fee,
+                history.final_total,
                 history.status,
                 history.order_date,
                 reviews.review_id,
@@ -173,7 +177,9 @@ if (isset($_SESSION['username'])) {
     $result = $stmt->get_result();
 
     while ($row = $result->fetch_assoc()) {
-        $row['total'] = $row['blind_box_price'] * $row['quantity'];
+        $row['total'] = $row['final_total'] !== null
+            ? (float) $row['final_total']
+            : $row['blind_box_price'] * $row['quantity'];
         $orders[] = $row;
     }
 
@@ -277,6 +283,12 @@ include '../includes/navigation.php';
                         <p><strong>Order Type</strong><span><?php echo htmlspecialchars($order['order_type']); ?></span></p>
                         <p><strong>Order Date</strong><span><?php echo date('d F Y, g:i A', strtotime($order['order_date'])); ?></span></p>
                         <p><strong>Payment Method</strong><span><?php echo htmlspecialchars($order['payment_method']); ?></span></p>
+                        <?php if ((float) $order['delivery_fee'] > 0) : ?>
+                            <p><strong>Delivery Fee</strong><span>RM <?php echo number_format((float) $order['delivery_fee'], 2); ?></span></p>
+                        <?php endif; ?>
+                        <?php if ($order['voucher_code']) : ?>
+                            <p><strong>Voucher</strong><span><?php echo htmlspecialchars($order['voucher_code']); ?> (−RM <?php echo number_format((float) $order['discount_amount'], 2); ?>)</span></p>
+                        <?php endif; ?>
                     </div>
 
                     <div class="total-row">

@@ -2,6 +2,9 @@
 
 session_start();
 
+$order_total = $_SESSION['order_total'] ?? null;
+unset($_SESSION['order_total']);
+
 include "../includes/header.php";
 include "../includes/navigation.php";
 
@@ -24,6 +27,10 @@ include "../includes/navigation.php";
         <p>
             Thank you for ordering from Blind Bite.
         </p>
+
+        <?php if ($order_total !== null) : ?>
+            <p><strong>Total paid: RM <?php echo number_format((float) $order_total, 2); ?></strong></p>
+        <?php endif; ?>
 
         <div class="order-complete-buttons">
 
