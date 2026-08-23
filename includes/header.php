@@ -40,7 +40,6 @@ require_once __DIR__ . '/restaurant_image.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blind Bite</title>
 
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/admin.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/style.css">
 </head>
 <body>

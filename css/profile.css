@@ -1,0 +1,122 @@
+/*Profile Page*/
+.profile-page{
+    width:100%;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:60px 20px;
+}
+
+.profile-page h1{
+    margin-bottom:20px;
+    color:#333;
+}
+
+.profile-card{
+    width:480px;
+    max-width:100%;
+    background:#fff;
+    padding:30px 35px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.profile-card h2{
+    text-align:center;
+    margin-bottom:15px;
+    color:#333;
+}
+
+.profile-card h3{
+    margin-top:20px;
+    margin-bottom:8px;
+    color:#ab794b;
+    border-bottom:1px solid #eee;
+    padding-bottom:4px;
+}
+
+.profile-card p{
+    margin:6px 0;
+}
+
+.profile-card label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+.profile-card input,
+.profile-card textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-sizing:border-box;
+    font-size:15px;
+    font-family:inherit;
+}
+
+.profile-card input:focus,
+.profile-card textarea:focus{
+    outline:none;
+    border-color:#ff9800;
+    box-shadow:0 0 5px rgba(255,152,0,0.4);
+}
+
+.field-hint{
+    font-size:13px;
+    color:#777;
+    margin-top:5px;
+}
+
+.profile-card button[type="submit"]{
+    margin-top:25px;
+    padding:12px 20px;
+    background:#ab794b;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.profile-card button[type="submit"]:hover{
+    background:#8f653e;
+}
+
+.edit-profile-btn,
+.cancel-btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:12px 20px;
+    border-radius:6px;
+    font-size:15px;
+    text-decoration:none;
+    text-align:center;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.edit-profile-btn{
+    background:#ab794b;
+    color:#fff;
+    width:100%;
+    box-sizing:border-box;
+}
+
+.edit-profile-btn:hover{
+    background:#8f653e;
+}
+
+.cancel-btn{
+    background:#eee;
+    color:#333;
+    margin-left:10px;
+}
+
+.cancel-btn:hover{
+    background:#ddd;
+}

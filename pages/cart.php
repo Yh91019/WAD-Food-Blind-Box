@@ -3,6 +3,9 @@
 session_start();
 
 include '../config/db_connect.php';
+
+$cart_notice = $_SESSION['cart_notice'] ?? '';
+unset($_SESSION['cart_notice']);
 /* ============================================================
    PLACE ORDER
    ============================================================ */
@@ -397,116 +400,6 @@ include '../includes/header.php';
 ?>
 
 <link rel="stylesheet" href="../css/cart.css">
-<style>
-.cart-quantity-controls {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    margin-top: 0;
-}
-
-.quantity-form {
-    margin: 0;
-}
-
-.remove-item-form {
-    margin: 0;
-}
-
-.cart-quantity-btn {
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 50%;
-    background: #ab794b;
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 38px;
-    padding: 0;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.cart-quantity-btn:hover:not(:disabled) {
-    background: #8f623c;
-    transform: scale(1.08);
-}
-
-.cart-quantity-btn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.cart-quantity-number {
-    min-width: 35px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-}
-
-.order-type-section {
-    text-align: center;
-    margin: 25px 0;
-}
-
-.order-type-section h3 {
-    color: #ab794b;
-    margin-bottom: 15px;
-}
-
-.order-type-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-}
-
-.order-type-btn {
-    min-width: 120px;
-    padding: 10px 18px;
-    border: 1.5px solid #ab794b;
-    border-radius: 8px;
-    background: #fff;
-    color: #ab794b;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.order-type-btn:hover {
-    background: #f3e7dc;
-}
-
-.order-type-btn.selected {
-    background: #ab794b;
-    color: #fff;
-}
-
-.order-type-message {
-    margin-top: 10px;
-    color: #777;
-    font-size: 14px;
-}
-
-.order-type-message.selected-message {
-    color: #2e7d32;
-    font-weight: bold;
-}
-
-.order-type-message.error-message {
-    color: #d32f2f;
-    font-weight: bold;
-}
-
-.place-order-btn:disabled {
-    background: #aaa;
-    cursor: not-allowed;
-    opacity: 0.65;
-}
-</style>
 
 <?php
 
@@ -520,11 +413,17 @@ include '../includes/navigation.php';
         My Cart
     </h1>
 
+    <?php if ($cart_notice !== '') : ?>
+        <p class="cart-notice"><?php echo htmlspecialchars($cart_notice); ?></p>
+    <?php endif; ?>
+
 
     <?php if (!isset($_SESSION['username'])) : ?>
 
 
         <div class="cart-message">
+
+            <div class="cart-message-icon">🔒</div>
 
             <h2>
                 Please log in
@@ -549,6 +448,8 @@ include '../includes/navigation.php';
 
         <div class="cart-message">
 
+            <div class="cart-message-icon">🛒</div>
+
             <h2>
                 Your cart is empty
             </h2>
@@ -570,13 +471,15 @@ include '../includes/navigation.php';
     <?php else : ?>
 
 
+        <div class="cart-layout">
+
         <div class="cart-container">
 
 
-            <?php foreach ($cart_items as $item) : ?>
+            <?php $item_index = 0; foreach ($cart_items as $item) : $item_index++; ?>
 
 
-                <div class="cart-item">
+                <div class="cart-item" style="--i: <?php echo $item_index; ?>">
 
 
                     <img
@@ -611,12 +514,8 @@ include '../includes/navigation.php';
                     </p>
 
 
-                    <p>
-
-                        <strong>
-                            Food Category:
-                        </strong>
-
+                    <span class="cart-category-badge">
+                        🍱
                         <?php
                         echo htmlspecialchars(
                             $item[
@@ -624,8 +523,7 @@ include '../includes/navigation.php';
                             ]
                         );
                         ?>
-
-                    </p>
+                    </span>
 
 
                     <p>
@@ -793,8 +691,9 @@ include '../includes/navigation.php';
 
 <div class="cart-summary">
 
-    <h2>
-        Total: RM <?php echo number_format($total, 2); ?>
+    <h2 class="cart-summary-total">
+        <span class="cart-summary-total-label">Total</span>
+        <span class="cart-summary-total-amount">RM <?php echo number_format($total, 2); ?></span>
     </h2>
 
 
@@ -892,6 +791,8 @@ include '../includes/navigation.php';
         </form>
 
     </div>
+
+</div>
 
 </div>
 

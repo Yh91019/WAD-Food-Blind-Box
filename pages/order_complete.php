@@ -7,6 +7,8 @@ include "../includes/navigation.php";
 
 ?>
 
+<link rel="stylesheet" href="../css/order_complete.css">
+
 <div class="order-complete-page">
 
     <div class="order-complete-box">
@@ -21,8 +23,7 @@ include "../includes/navigation.php";
 
         <p>
             Thank you for ordering from Blind Bite.
-        </p>s
-
+        </p>
 
         <div class="order-complete-buttons">
 

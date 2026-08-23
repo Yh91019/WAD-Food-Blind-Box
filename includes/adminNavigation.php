@@ -26,6 +26,12 @@
         </li>
 
         <li>
+            <a href="../admin/enquiries.php">
+                Enquiries
+            </a>
+        </li>
+
+        <li>
             <a href="../authentication/logout.php">
                 Log Out
             </a>

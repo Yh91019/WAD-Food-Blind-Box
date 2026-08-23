@@ -115,6 +115,22 @@ CREATE TABLE admin (
     admin_password VARCHAR(50) NOT NULL
 );
 
+-- Create Customer Enquiries Table
+CREATE TABLE enquiries (
+    enquiry_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) DEFAULT NULL,
+    customer_name VARCHAR(100) NOT NULL,
+    customer_email VARCHAR(150) NOT NULL,
+    subject VARCHAR(150) NOT NULL,
+    message TEXT NOT NULL,
+    status ENUM('New', 'In Progress', 'Resolved') NOT NULL DEFAULT 'New',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (username) REFERENCES users(username)
+        ON DELETE SET NULL
+);
+
+--  Crate Reviews 
 CREATE TABLE IF NOT EXISTS reviews (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     history_id INT NOT NULL UNIQUE,
@@ -136,4 +152,19 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (restaurant_name) REFERENCES restaurants(restaurant_name)
         ON DELETE CASCADE
         ON UPDATE CASCADE
+);
+
+-- Create Enquiries 
+CREATE TABLE IF NOT EXISTS enquiries (
+    enquiry_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) DEFAULT NULL,
+    customer_name VARCHAR(100) NOT NULL,
+    customer_email VARCHAR(150) NOT NULL,
+    subject VARCHAR(150) NOT NULL,
+    message TEXT NOT NULL,
+    status ENUM('New', 'In Progress', 'Resolved') NOT NULL DEFAULT 'New',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (username) REFERENCES users(username)
+        ON DELETE SET NULL
 );

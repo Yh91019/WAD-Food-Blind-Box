@@ -85,8 +85,7 @@ if ($restaurant) {
 
 
 // ============================================================
-// REVIEW CARD (used twice per review so the carousel track can
-// loop seamlessly -- see the reviews section further down)
+// REVIEW CARD
 // ============================================================
 
 function render_review_card(array $review_item, bool $hidden = false): void {
@@ -392,21 +391,8 @@ include '../includes/navigation.php';
 ?>
 
 <link rel="stylesheet" href="../css/status.css">
+<link rel="stylesheet" href="../css/details.css">
 
-<style>
-.cart-closed-message {
-    display: none;
-    flex-basis: 100%;
-    margin: 0;
-    padding: 12px 15px;
-    border-radius: 7px;
-    background: #fdeaea;
-    color: #d32f2f;
-    font-weight: bold;
-    font-size: 14px;
-    text-align: center;
-}
-</style>
 
 <main class="details-page">
 
@@ -426,7 +412,7 @@ include '../includes/navigation.php';
 
     <?php endif; ?>
 
-    <div class="details-card">
+    <div class="details-overview-grid">
 
 
         <?php if ($restaurant) : ?>
@@ -434,12 +420,22 @@ include '../includes/navigation.php';
 
             <!-- IMAGE -->
 
-            <img
-                src="<?php echo htmlspecialchars(restaurant_image_url($restaurant['blind_box_image'] ?? null)); ?>"
-                width="200"
-                height="150"
-                alt="<?php echo htmlspecialchars($restaurant['restaurant_name']); ?> blind box"
-            >
+            <div class="details-image-wrap">
+                <img
+                    src="<?php echo htmlspecialchars(restaurant_image_url($restaurant['blind_box_image'] ?? null)); ?>"
+                    width="200"
+                    height="150"
+                    alt="<?php echo htmlspecialchars($restaurant['restaurant_name']); ?> blind box"
+                >
+
+                <div class="details-image-overlay">
+                    <span class="details-surprise-label">Today’s surprise</span>
+                    <span class="details-rating-chip">
+                        ★ <?php echo number_format($average_rating, 1); ?>
+                        <small>(<?php echo count($reviews); ?>)</small>
+                    </span>
+                </div>
+            </div>
 
 
             <!-- DETAILS -->
@@ -449,44 +445,34 @@ include '../includes/navigation.php';
 
                 <h1>
 
-                    <?php
-                    echo htmlspecialchars(
-                        $restaurant['restaurant_name']
-                    );
-                    ?>
+                    <span class="details-title">
+                        <?php
+                        echo htmlspecialchars(
+                            $restaurant['restaurant_name']
+                        );
+                        ?>
+                    </span>
 
                     <span
                         id="restaurantStatusBadge"
                         class="status-badge"
                         data-opening="<?php echo htmlspecialchars($restaurant['restaurant_opening_hours']); ?>"
                         data-closing="<?php echo htmlspecialchars($restaurant['restaurant_closing_hours']); ?>"
-                    >Checking...</span>
+                    ><span class="status-dot"></span>Checking...</span>
 
                 </h1>
 
-
-                <p>
-
-                    <strong>
-                        Opening Hours:
-                    </strong>
-
+                <p class="details-category-badge">
+                    🍽
                     <?php
                     echo htmlspecialchars(
-                        $restaurant[
-                            'restaurant_opening_hours'
-                        ]
+                        $restaurant['blind_box_food_category']
                     );
                     ?>
-
                 </p>
 
 
-                <p>
-
-                    <strong>
-                        Blind Box Description:
-                    </strong>
+                <p class="details-description">
 
                     <?php
                     echo htmlspecialchars(
@@ -499,74 +485,69 @@ include '../includes/navigation.php';
                 </p>
 
 
-                <p>
+                <div class="details-meta">
 
-                    <strong>
-                        Blind Box Price:
-                    </strong>
+                    <div class="meta-row">
+                        <span class="meta-icon">🕐</span>
+                        <div class="meta-text">
+                            <span class="meta-label">Operating Hrs</span>
+                            <span class="meta-value">
+                                <?php
+                                echo htmlspecialchars(
+                                    strtolower(date('ga', strtotime($restaurant['restaurant_opening_hours'])))
+                                    . ' - ' .
+                                    strtolower(date('ga', strtotime($restaurant['restaurant_closing_hours'])))
+                                );
+                                ?>
+                            </span>
+                        </div>
+                    </div>
 
-                    RM
+                    <div class="meta-row">
+                        <span class="meta-icon">💰</span>
+                        <div class="meta-text">
+                            <span class="meta-label">Blind Box Price</span>
+                            <span class="meta-value meta-price">
+                                RM
+                                <?php
+                                echo number_format(
+                                    $restaurant['blind_box_price'],
+                                    2
+                                );
+                                ?>
+                            </span>
+                        </div>
+                    </div>
 
-                    <?php
-                    echo number_format(
-                        $restaurant[
-                            'blind_box_price'
-                        ],
-                        2
-                    );
-                    ?>
+                    <div class="meta-row">
+                        <span class="meta-icon">📞</span>
+                        <div class="meta-text">
+                            <span class="meta-label">Contact Number</span>
+                            <span class="meta-value">
+                                <?php
+                                echo htmlspecialchars(
+                                    $restaurant['restaurant_phone_number']
+                                );
+                                ?>
+                            </span>
+                        </div>
+                    </div>
 
-                </p>
+                    <div class="meta-row">
+                        <span class="meta-icon">📍</span>
+                        <div class="meta-text">
+                            <span class="meta-label">Address</span>
+                            <span class="meta-value">
+                                <?php
+                                echo htmlspecialchars(
+                                    $restaurant['restaurant_address']
+                                );
+                                ?>
+                            </span>
+                        </div>
+                    </div>
 
-                <p>
-
-                    <strong>
-                        Food Category:
-                    </strong>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $restaurant[
-                            'blind_box_food_category'
-                        ]
-                    );
-                    ?>
-
-                </p>
-
-
-                <p>
-
-                    <strong>
-                        Contact Number:
-                    </strong>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $restaurant[
-                            'restaurant_phone_number'
-                        ]
-                    );
-                    ?>
-
-                </p>
-
-
-                <p>
-
-                    <strong>
-                        Address:
-                    </strong>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $restaurant[
-                            'restaurant_address'
-                        ]
-                    );
-                    ?>
-
-                </p>
+                </div>
 
 
                 <!-- ================================================= -->
@@ -695,8 +676,6 @@ include '../includes/navigation.php';
         <?php endif; ?>
 
 
-    </div>
-
     <?php if ($restaurant) : ?>
 
         <section class="restaurant-reviews">
@@ -739,14 +718,11 @@ include '../includes/navigation.php';
                     class="review-carousel"
                     id="reviewCarousel"
                     role="region"
-                    aria-label="Customer reviews, automatically scrolling"
+                    aria-label="Customer reviews"
                 >
                     <div class="review-list" id="reviewTrack">
                         <?php foreach ($reviews as $review_item) : ?>
                             <?php render_review_card($review_item); ?>
-                        <?php endforeach; ?>
-                        <?php foreach ($reviews as $review_item) : ?>
-                            <?php render_review_card($review_item, true); ?>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -756,11 +732,12 @@ include '../includes/navigation.php';
 
     <?php endif; ?>
 
+    </div>
+
 
     <script src="../js/script.js"></script>
     <script src="../js/quantity.js"></script>
     <script src="../js/status.js"></script>
-    <script src="../js/reviews-carousel.js"></script>
 
 </main>
 

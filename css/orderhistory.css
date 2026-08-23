@@ -1,11 +1,15 @@
 /* ============================================================
-   ORDER HISTORY PAGE
+   ORDER HISTORY PAGE — REFINED
+   Pure CSS only (no JS / external libraries).
    ============================================================ */
 
 .orderhistory-page {
     min-height: 100vh;
-    background: #f8f5f2;
     padding: 40px 20px 60px;
+    background:
+        radial-gradient(circle at 10% 0%, rgba(171, 121, 75, 0.10), transparent 45%),
+        radial-gradient(circle at 90% 10%, rgba(46, 125, 50, 0.08), transparent 40%),
+        #f8f5f2;
 }
 
 
@@ -17,14 +21,31 @@
     text-align: center;
     color: #ab794b;
     font-size: 40px;
-    margin: 20px 0 8px;
     font-weight: bold;
+    margin: 20px 0 8px;
+    animation: historyTitlePop 0.5s ease;
+}
+
+.orderhistory-page > h1::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 4px;
+    margin: 10px auto 0;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #ab794b, #e0b98a);
+}
+
+@keyframes historyTitlePop {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .history-count {
     text-align: center;
-    color: #888;
+    color: #a68a6d;
     font-size: 15px;
+    font-weight: 600;
     margin-bottom: 30px;
 }
 
@@ -34,39 +55,63 @@
    ============================================================ */
 
 .history-container {
-    width: 90%;
-    max-width: 1100px;
+    width: 94%;
+    max-width: 1280px;
     margin: 0 auto;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
 }
 
 
 /* ============================================================
-   CARD
+   CARD — staggered entrance + status-colored accent edge
    ============================================================ */
 
 .history-card {
+    position: relative;
+    overflow: hidden;
+
     background: white;
 
-    border-radius: 16px;
+    border-radius: 14px;
     border: 1px solid #f0e9e2;
 
-    padding: 24px;
+    padding: 16px;
 
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     display: flex;
     flex-direction: column;
+
+    animation: historyCardIn 0.45s ease both;
+    animation-delay: calc(var(--i, 1) * 0.06s);
+}
+
+@keyframes historyCardIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .history-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.1);
+}
+
+/* Highlight the order that was just reviewed (jumped to via #order-ID) */
+.history-card:target {
+    animation: historyCardTarget 1s ease;
+    box-shadow: 0 0 0 3px #ab794b, 0 14px 30px rgba(171, 121, 75, 0.25);
+}
+
+@keyframes historyCardTarget {
+    0%   { box-shadow: 0 0 0 3px rgba(171, 121, 75, 0); }
+    30%  { box-shadow: 0 0 0 3px #ab794b, 0 14px 30px rgba(171, 121, 75, 0.35); }
+    100% { box-shadow: 0 0 0 3px #ab794b, 0 14px 30px rgba(171, 121, 75, 0.25); }
 }
 
 
@@ -78,40 +123,51 @@
     align-items: flex-start;
     gap: 12px;
 
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .top h2 {
     color: #ab794b;
-    font-size: 21px;
+    font-size: 17px;
+    margin: 0;
 }
 
 .order-id {
     color: #aaa;
     font-size: 13px;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
 }
 
 .history-card hr {
     border: none;
     border-top: 1px solid #f0e9e2;
-    margin-bottom: 16px;
+    margin: 8px 0 12px;
 }
 
 
-/* Status badge */
+/* Status badge — icon + subtle pulse for "preparing" */
 
 .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
     flex-shrink: 0;
 
     color: white;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bold;
 
-    padding: 6px 14px;
+    padding: 5px 10px;
     border-radius: 20px;
 
     white-space: nowrap;
+
+    transition: transform 0.2s ease;
+}
+
+.history-card:hover .status {
+    transform: scale(1.05);
 }
 
 .completed {
@@ -120,32 +176,47 @@
 
 .preparing {
     background: #d8a06b;
+    animation: statusPulse 1.8s ease-in-out infinite;
 }
 
 .cancelled {
     background: #c0392b;
 }
 
+@keyframes statusPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(216, 160, 107, 0.5); }
+    50%      { box-shadow: 0 0 0 6px rgba(216, 160, 107, 0); }
+}
 
-/* Detail rows */
+
+/* Detail rows: light hover feedback per cell */
 
 .history-details {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px 20px;
+    gap: 8px 12px;
 
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 .history-details p {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
+    margin: 0;
+
+    padding: 4px 6px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.history-details p:hover {
+    background: #faf5ef;
 }
 
 .history-details p strong {
     color: #999;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.4px;
@@ -153,7 +224,7 @@
 
 .history-details p span {
     color: #333;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
 }
 
@@ -166,7 +237,7 @@
     align-items: center;
 
     margin-top: auto;
-    padding-top: 16px;
+    padding-top: 12px;
     border-top: 1px dashed #e5ddd3;
 
     font-weight: bold;
@@ -175,7 +246,14 @@
 
 .total-amount {
     color: #2e7d32;
-    font-size: 19px;
+    font-size: 17px;
+    display: inline-block;
+    animation: totalGlow 2.4s ease-in-out infinite;
+}
+
+@keyframes totalGlow {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
 }
 
 
@@ -188,7 +266,8 @@
 
     margin: 60px auto 0;
 
-    background: white;
+    background: linear-gradient(180deg, #ffffff 0%, #fdf8f2 100%);
+    border-top: 4px solid #ab794b;
 
     padding: 50px 30px;
 
@@ -197,6 +276,20 @@
     border-radius: 15px;
 
     box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+
+    animation: historyTitlePop 0.4s ease;
+}
+
+.history-empty-icon {
+    font-size: 56px;
+    margin-bottom: 10px;
+    display: inline-block;
+    animation: historyFloatIcon 2.6s ease-in-out infinite;
+}
+
+@keyframes historyFloatIcon {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%      { transform: translateY(-8px) rotate(-4deg); }
 }
 
 .history-empty h2 {
@@ -215,6 +308,12 @@
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+@media (max-width: 1000px) {
+    .history-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
 
 @media (max-width: 600px) {
 
@@ -238,13 +337,18 @@
 
 }
 
-/* Rating and review form */
+
+/* ============================================================
+   RATING AND REVIEW FORM
+   ============================================================ */
 
 .review-form {
+    position: relative;
+
     display: grid;
     gap: 10px;
-    margin-top: 20px;
-    padding: 18px;
+    margin-top: 12px;
+    padding: 14px;
     border: 1px solid #e9e1da;
     border-radius: 12px;
     background: #faf7f4;
@@ -272,9 +376,7 @@
     background: #fff;
     color: #333;
     font: inherit;
-}
 
-.review-form textarea {
     min-height: 100px;
     resize: vertical;
 }
@@ -339,6 +441,9 @@
 }
 
 .review-form button {
+    position: relative;
+    overflow: hidden;
+
     justify-self: start;
     padding: 11px 18px;
     border: 0;
@@ -348,12 +453,13 @@
     font: inherit;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .review-form button:hover {
     background: #8f623c;
     transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(171, 121, 75, 0.35);
 }
 
 .review-message {
@@ -374,4 +480,83 @@
 .review-error {
     background: #ffebee;
     color: #c62828;
+}
+
+/* ============================================================
+   COMPACT CARD ACTIONS
+   ============================================================ */
+
+.history-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    margin-top: 14px;
+}
+
+.history-actions > :only-child {
+    grid-column: 1 / -1;
+}
+
+.order-again-form {
+    margin: 0;
+}
+
+.order-again-btn,
+.review-panel > summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 39px;
+    box-sizing: border-box;
+    padding: 9px 11px;
+    border-radius: 9px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.order-again-btn {
+    border: 0;
+    background: #ab794b;
+    color: #fff;
+}
+
+.order-again-btn:hover {
+    background: #8f623c;
+    transform: translateY(-1px);
+}
+
+.review-panel {
+    min-width: 0;
+}
+
+.review-panel > summary {
+    border: 1px solid #d8cec4;
+    background: #fff;
+    color: #6c5542;
+    list-style: none;
+}
+
+.review-panel > summary::-webkit-details-marker {
+    display: none;
+}
+
+.review-panel > summary:hover,
+.review-panel[open] > summary {
+    border-color: #ab794b;
+    background: #faf4ee;
+    color: #8f623c;
+}
+
+.review-panel[open] {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 420px) {
+    .history-actions {
+        grid-template-columns: 1fr;
+    }
 }

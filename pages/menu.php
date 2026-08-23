@@ -29,6 +29,7 @@ include '../includes/navigation.php';
 ?>
 
 <link rel="stylesheet" href="../css/status.css">
+<link rel="stylesheet" href="../css/menu.css">
 
 <main class="menu-page">
 

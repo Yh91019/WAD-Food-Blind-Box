@@ -6,7 +6,18 @@ require_admin_login();
 include '../config/db_connect.php';
 
 $result = $conn->query(
-    "SELECT * FROM restaurants ORDER BY restaurant_name"
+    "SELECT
+        restaurants.*,
+        COALESCE(review_summary.average_rating, 0) AS average_rating,
+        COALESCE(review_summary.review_count, 0) AS review_count
+     FROM restaurants
+     LEFT JOIN (
+        SELECT restaurant_name, AVG(rating) AS average_rating, COUNT(*) AS review_count
+        FROM reviews
+        GROUP BY restaurant_name
+     ) AS review_summary
+        ON restaurants.restaurant_name = review_summary.restaurant_name
+     ORDER BY average_rating DESC, review_count DESC, restaurants.restaurant_name ASC"
 );
 ?>
 
@@ -15,9 +26,10 @@ $result = $conn->query(
 
 <?php include '../includes/adminNavigation.php'; ?>
 
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/admin.css">
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/status.css">
 
-<section class="admin-page">
+<section class="admin-page admin-dashboard-page">
 
     <div class="admin-card">
 
@@ -31,6 +43,10 @@ $result = $conn->query(
 
                 <a href="restaurants.php" class="admin-action-btn add-btn">
                     Manage Restaurant
+                </a>
+
+                <a href="enquiries.php" class="admin-action-btn enquiry-btn">
+                    View Enquiries
                 </a>
 
             </div>
@@ -93,6 +109,13 @@ $result = $conn->query(
                         </p>
                         <p><strong>Food Category:</strong>
                             <?php echo htmlspecialchars($row['blind_box_food_category']); ?>
+                        </p>
+                        <p class="restaurant-rating"><strong>Rating:</strong>
+                            <span>★ <?php echo number_format((float) $row['average_rating'], 1); ?>/5.0</span>
+                            <small>
+                                (<?php echo (int) $row['review_count']; ?>
+                                <?php echo (int) $row['review_count'] === 1 ? 'review' : 'reviews'; ?>)
+                            </small>
                         </p>
                         
                     </div>

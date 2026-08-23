@@ -1,165 +1,59 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-
-    background:#eef6f6;
-
+/*Login*/
+.login-page{
+    width:100%;
+    flex:1;
     display:flex;
     justify-content:center;
-    align-items:center;
-
-    height:100vh;
+    align-items: center;
+    background:#f5f5f5;
 }
 
-.container{
-
-    width:950px;
-    height:600px;
-
+.login-box{
+    width:400px;
+    margin: 0 auto;
     background:white;
-
-    display:flex;
-
-    border-radius:25px;
-
-    overflow:hidden;
-
-    box-shadow:0 15px 35px rgba(0,0,0,.15);
-}
-
-/* LEFT */
-
-.left{
-
-    width:45%;
-
-    background:#0b7d77;
-
-    color:white;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:40px;
-}
-
-.left img{
-
-    width:150px;
-
-    margin-bottom:30px;
-}
-
-.left h1{
-
-    margin-bottom:20px;
-}
-
-.left p{
-
-    text-align:center;
-
-    line-height:1.7;
-}
-
-/* RIGHT */
-
-.right{
-
-    width:55%;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:40px;
-}
-
-#loginForm,
-#registerForm{
-
-    width:100%;
-}
-
-h2{
-
-    text-align:center;
-
-    margin-bottom:30px;
-
-    color:#0b7d77;
-}
-
-input{
-
-    width:100%;
-
-    padding:15px;
-
-    margin-bottom:20px;
-
-    border:1px solid #ccc;
-
+    padding:30px;
     border-radius:10px;
-
-    font-size:16px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
 }
 
-button{
+.login-box h1{
+    text-align:center;
+    margin-bottom:20px;
+}
 
+.login-box input{
     width:100%;
+    padding:10px;
+    margin-top:5px;
+}
 
-    padding:15px;
-
+.login-box button{
+    width:100%;
+    padding:12px;
+    background:#ab794b;
+    color:white;
     border:none;
-
-    border-radius:10px;
-
-    background:#0b7d77;
-
-    color:white;
-
-    font-size:18px;
-
+    border-radius:5px;
     cursor:pointer;
-
-    transition:.3s;
 }
 
-button:hover{
-
-    background:#095f5a;
+.login-box button:hover{
+    background:#8f653e;
 }
 
-p{
-
-    text-align:center;
-
-    margin-top:20px;
+.signup-link{
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
 }
 
-a{
-
-    color:#0b7d77;
-
+.signup-link a{
+    color: #cb8d52;
+    text-decoration: none;
     font-weight:bold;
-
-    text-decoration:none;
 }
 
-a:hover{
-
-    text-decoration:underline;
+.signup-link a:hover{
+    text-decoration: underline;
 }

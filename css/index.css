@@ -1,0 +1,447 @@
+#logout-popup{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: #155724;
+    padding: 25px 45px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 9999;
+    animation: logoutFade 3s forwards;
+}
+
+@keyframes logoutFade{
+    0%{
+        opacity:1;
+    }
+
+    80%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+        visibility:hidden;
+    }
+}
+
+#login-popup{
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    background:white;
+    color:#155724;
+    padding:25px 45px;
+    border-radius:10px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
+    font-size:20px;
+    font-weight:bold;
+    z-index:9999;
+    animation:loginFade 3s forwards;
+}
+
+
+@keyframes loginFade{
+    0%{
+        opacity:1;
+    }
+
+    80%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+        visibility:hidden;
+    }
+}
+
+.home-hero {
+    width: 100%;
+    overflow: hidden;
+}
+
+.home-hero img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* =========================================
+   RESTAURANT SECTION
+   ========================================= */
+
+.home-restaurants {
+    background-color: #d8a06b;
+    padding: 60px 7%;
+}
+
+.restaurants-header {
+    max-width: 1200px;
+    margin: 0 auto 35px;
+    text-align: center;
+}
+
+.restaurants-header h1 {
+    margin: 0 0 12px;
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.restaurants-header p {
+    margin: 0;
+    font-size: 20px;
+    color: #f5f5f5;
+}
+
+
+/* Restaurant cards */
+
+.home-restaurants-carousel {
+    position: relative;
+    overflow: hidden;
+    padding: 10px 0 25px;
+
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 40px,
+        #000 calc(100% - 40px),
+        transparent
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 40px,
+        #000 calc(100% - 40px),
+        transparent
+    );
+}
+
+.home-restaurant-container {
+    display: flex;
+    width: max-content;
+    gap: 25px;
+
+    animation: home-restaurant-scroll 40s linear infinite;
+}
+
+.home-restaurants-carousel:hover .home-restaurant-container {
+    animation-play-state: paused;
+}
+
+@keyframes home-restaurant-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-restaurant-container {
+        animation: none;
+    }
+}
+
+.home-restaurant-card {
+    flex: 0 0 280px;
+
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    text-decoration: none;
+    color: inherit;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-restaurant-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Image */
+
+.home-restaurant-image {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.home-restaurant-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* Information */
+
+.home-restaurant-info {
+    padding: 18px;
+}
+
+.home-restaurant-info h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    color: #222;
+}
+
+.home-restaurant-rating {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 8px 0;
+}
+
+.home-restaurant-rating span {
+    color: #d18b22;
+    font-weight: bold;
+}
+
+.home-restaurant-rating small {
+    color: #777;
+}
+
+.restaurant-category {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.restaurant-price {
+    margin: 10px 0 5px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #cf8010;
+}
+
+.restaurant-location {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #777;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* View All */
+
+.view-all-container {
+    text-align: center;
+    margin-top: 35px;
+}
+
+.view-all-btn {
+    display: inline-block;
+
+    padding: 13px 30px;
+
+    background-color: #ffffff;
+    color: #d8a06b;
+
+    text-decoration: none;
+
+    border-radius: 6px;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.view-all-btn:hover {
+    background-color: #f2f2f2;
+}
+
+.home-promotions {
+    padding: 54px 7% 64px;
+    background: #fff;
+    border-bottom: 1px solid #eee6de;
+}
+
+.promotion-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 28px;
+}
+
+.home-section-kicker {
+    display: block;
+    margin-bottom: 5px;
+    color: #ab794b;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.promotion-heading h2 {
+    margin: 0;
+    color: #2d241d;
+    font-size: clamp(30px, 4vw, 42px);
+}
+
+.promotion-heading p {
+    max-width: 470px;
+    margin: 0 0 4px;
+    color: #74685f;
+    font-size: 16px;
+    line-height: 1.55;
+}
+
+.promotion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.promotion-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 250px;
+    padding: 24px;
+    overflow: hidden;
+    border: 1px solid #eadfd5;
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(216, 160, 107, 0.22), transparent 42%),
+        #faf7f4;
+    box-shadow: 0 8px 24px rgba(76, 54, 36, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.promotion-card-featured {
+    border-color: #ab794b;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.2), transparent 42%),
+        linear-gradient(145deg, #ab794b, #8f623c);
+    color: #fff;
+}
+
+.promotion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(76, 54, 36, 0.14);
+}
+
+.promotion-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 5px 14px rgba(76, 54, 36, 0.1);
+    font-size: 23px;
+}
+
+.promotion-copy {
+    flex: 1;
+}
+
+.promotion-tag {
+    color: #ab794b;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.promotion-card-featured .promotion-tag,
+.promotion-card-featured .promotion-copy p {
+    color: #f8e9dc;
+}
+
+.promotion-copy h3 {
+    margin: 6px 0 9px;
+    color: #35281f;
+    font-size: 21px;
+}
+
+.promotion-card-featured .promotion-copy h3 {
+    color: #fff;
+}
+
+.promotion-copy p {
+    margin: 0 0 15px;
+    color: #6c6057;
+    line-height: 1.5;
+}
+
+.promotion-code {
+    display: inline-block;
+    padding: 7px 10px;
+    border: 1px dashed currentColor;
+    border-radius: 8px;
+    color: #8f623c;
+    font-size: 12px;
+}
+
+.promotion-card-featured .promotion-code {
+    color: #fff;
+}
+
+.promotion-link {
+    align-self: flex-start;
+    margin-top: 20px;
+    color: #8f623c;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.promotion-card-featured .promotion-link {
+    color: #fff;
+}
+
+.promotion-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .promotion-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .promotion-card {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 650px) {
+    .home-promotions {
+        padding: 40px 5% 46px;
+    }
+
+    .promotion-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+}

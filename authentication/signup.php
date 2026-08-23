@@ -142,6 +142,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php include '../includes/header.php'; ?>
 <?php include '../includes/navigation.php'; ?>
 
+<link rel="stylesheet" href="../css/signup.css">
+
 <main class="signup-page">
 
     <div class="signup-box">

@@ -321,6 +321,7 @@ if (isset($conn) && $conn instanceof mysqli) {
 
 <?php include '../includes/navigation.php'; ?>
 
+<link rel="stylesheet" href="../css/login.css">
 
 <main class="login-page">
 

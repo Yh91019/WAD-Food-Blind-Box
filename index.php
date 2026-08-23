@@ -5,6 +5,8 @@ session_start();
 <?php include 'includes/header.php'; ?>
 <?php include 'includes/navigation.php'; ?>
 
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/index.css">
+
 <?php
 if(isset($_SESSION['login_message'])){
 ?>
@@ -34,6 +36,51 @@ unset($_SESSION['logout_message']);
 <main>
     <section class="home-hero">
         <img src="images/bg.jpg" alt="Blind Bite">
+    </section>
+
+    <section class="home-promotions" aria-labelledby="promotionsTitle">
+        <div class="promotion-heading">
+            <div>
+                <span class="home-section-kicker">Available now</span>
+                <h2 id="promotionsTitle">Promotions</h2>
+            </div>
+            <p>More surprise, less spend. Pick an offer for your next Blind Bite.</p>
+        </div>
+
+        <div class="promotion-grid">
+            <article class="promotion-card promotion-card-featured">
+                <span class="promotion-icon" aria-hidden="true">🎁</span>
+                <div class="promotion-copy">
+                    <span class="promotion-tag">New foodies</span>
+                    <h3>20% Off Your First Bite</h3>
+                    <p>Start your food-saving journey with a delicious surprise.</p>
+                    <span class="promotion-code">Use code <strong>FIRSTBITE20</strong></span>
+                </div>
+                <a href="pages/menu.php" class="promotion-link">Claim offer →</a>
+            </article>
+
+            <article class="promotion-card">
+                <span class="promotion-icon" aria-hidden="true">🛵</span>
+                <div class="promotion-copy">
+                    <span class="promotion-tag">Delivery deal</span>
+                    <h3>Free Delivery</h3>
+                    <p>Enjoy delivery on orders of RM40 or more.</p>
+                    <span class="promotion-code">Applied at checkout</span>
+                </div>
+                <a href="pages/menu.php" class="promotion-link">Browse boxes →</a>
+            </article>
+
+            <article class="promotion-card">
+                <span class="promotion-icon" aria-hidden="true">⏰</span>
+                <div class="promotion-copy">
+                    <span class="promotion-tag">Happy hour</span>
+                    <h3>RM5 Evening Treat</h3>
+                    <p>Save RM5 on a Blind Box ordered from 8–10 PM.</p>
+                    <span class="promotion-code">Use code <strong>NIGHTBITE5</strong></span>
+                </div>
+                <a href="pages/menu.php" class="promotion-link">Explore now →</a>
+            </article>
+        </div>
     </section>
 
 

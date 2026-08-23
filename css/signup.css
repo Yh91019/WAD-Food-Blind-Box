@@ -1,0 +1,106 @@
+/* Signup Page */
+.signup-page{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:100px 20px;
+}
+
+.signup-box{
+    width:420px;
+    background:#fff;
+    padding:35px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.signup-box h1{
+    text-align:center;
+    margin-bottom:25px;
+    color:#333;
+}
+
+.signup-box label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+.signup-box input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-sizing:border-box;
+    font-size:15px;
+}
+
+.signup-box input:focus{
+    outline:none;
+    border-color:#ff9800;
+    box-shadow:0 0 5px rgba(255,152,0,0.4);
+}
+
+.signup-box button{
+    width:100%;
+    margin-top:25px;
+    padding:12px;
+    background:#ab794b;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.signup-box button:hover{
+    background:#8f653e;
+}
+
+.login-link{
+    margin-top:20px;
+    text-align:center;
+}
+
+.login-link a{
+    color:#cb8d52;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.login-link a:hover{
+    text-decoration:underline;
+}
+
+.success-box{
+    text-align:center;
+    padding:20px;
+}
+
+.success-box h2{
+    color:#2e7d32;
+    margin-bottom:15px;
+}
+
+.success-box p{
+    margin:10px 0;
+    color:#555;
+}
+
+.success-btn{
+    margin-top:20px;
+    padding:12px 25px;
+    background:#ab794b;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.success-btn:hover{
+    background:#8f653e;
+}

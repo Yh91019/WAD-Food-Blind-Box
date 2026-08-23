@@ -1,0 +1,222 @@
+.contact-page {
+    min-height: 80vh;
+    padding: 64px 7% 80px;
+    background:
+        radial-gradient(circle at 90% 0%, rgba(216, 160, 107, 0.18), transparent 34%),
+        #f8f5f2;
+}
+
+.contact-intro {
+    max-width: 760px;
+    margin: 0 auto 38px;
+    text-align: center;
+}
+
+.contact-kicker,
+.enquiry-heading > span {
+    color: #ab794b;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.contact-intro h1 {
+    margin: 7px 0 13px;
+    color: #2d241d;
+    font-size: clamp(38px, 6vw, 58px);
+}
+
+.contact-intro p {
+    margin: 0;
+    color: #6d6259;
+    font-size: 17px;
+    line-height: 1.65;
+}
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid #eadfd5;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 16px 42px rgba(76, 54, 36, 0.12);
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 45px;
+    padding: 38px;
+    background: linear-gradient(150deg, #ab794b, #805532);
+    color: #fff;
+}
+
+.contact-detail-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.17);
+    font-size: 24px;
+}
+
+.contact-details h2 {
+    margin: 0 0 10px;
+    font-size: 28px;
+}
+
+.contact-details p {
+    margin: 0;
+    color: #f7e9dc;
+    line-height: 1.55;
+}
+
+.contact-detail-list {
+    display: grid;
+    gap: 18px;
+}
+
+.contact-detail-list p {
+    display: grid;
+    gap: 3px;
+}
+
+.contact-detail-list strong {
+    color: #f1cfae;
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.contact-detail-list a,
+.contact-detail-list span {
+    color: #fff;
+    text-decoration: none;
+}
+
+.enquiry-card {
+    padding: 38px;
+}
+
+.enquiry-heading h2 {
+    margin: 5px 0 24px;
+    color: #2d241d;
+    font-size: 28px;
+}
+
+.enquiry-form,
+.enquiry-form label {
+    display: grid;
+    gap: 8px;
+}
+
+.enquiry-form {
+    gap: 18px;
+}
+
+.enquiry-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.enquiry-form label > span {
+    color: #51463e;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.enquiry-form input,
+.enquiry-form select,
+.enquiry-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #ded5cd;
+    border-radius: 10px;
+    background: #fdfcfb;
+    color: #332b25;
+    font: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.enquiry-form textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.enquiry-form input:focus,
+.enquiry-form select:focus,
+.enquiry-form textarea:focus {
+    border-color: #ab794b;
+    box-shadow: 0 0 0 3px rgba(171, 121, 75, 0.14);
+}
+
+.enquiry-form small {
+    color: #93867b;
+    font-size: 11px;
+}
+
+.enquiry-form button {
+    justify-self: start;
+    padding: 13px 22px;
+    border: 0;
+    border-radius: 10px;
+    background: #ab794b;
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.enquiry-form button:hover {
+    background: #8f623c;
+    transform: translateY(-2px);
+}
+
+.enquiry-message {
+    margin: 0 0 18px;
+    padding: 11px 13px;
+    border-radius: 9px;
+}
+
+.enquiry-success {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.enquiry-error {
+    background: #ffebee;
+    color: #c62828;
+}
+
+@media (max-width: 800px) {
+    .contact-page {
+        padding: 45px 5% 60px;
+    }
+
+    .contact-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-details,
+    .enquiry-card {
+        padding: 28px;
+    }
+}
+
+@media (max-width: 540px) {
+    .enquiry-row {
+        grid-template-columns: 1fr;
+    }
+}

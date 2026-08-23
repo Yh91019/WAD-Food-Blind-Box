@@ -169,6 +169,7 @@ $conn->close();
 
 <?php include '../includes/adminNavigation.php'; ?>
 
+<link rel="stylesheet" href="<?php echo BASE_URL; ?>/css/admin.css">
 
 <section class="admin-page">
 

@@ -171,6 +171,8 @@ include '../includes/header.php';
 include '../includes/navigation.php';
 ?>
 
+<link rel="stylesheet" href="../css/profile.css">
+
 <main class="profile-page" data-show-edit="<?php echo $showEditOnLoad ? '1' : '0'; ?>">
 
     <h1>My Profile</h1>
