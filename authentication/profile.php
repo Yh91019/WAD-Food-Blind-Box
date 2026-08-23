@@ -446,7 +446,6 @@ include '../includes/navigation.php';
             </form>
         </div>
 
-    <script src="../js/script.js"></script>
     <script src="../js/profile.js"></script>
 
 </main>

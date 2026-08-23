@@ -740,7 +740,7 @@ include '../includes/navigation.php';
      TOTAL + ORDER TYPE
      ============================================================ -->
 
-<div class="cart-summary">
+<div class="cart-summary" data-discounted-subtotal="<?php echo htmlspecialchars((string) $cart_total_after_discount); ?>">
 
     <h2 class="cart-summary-total">
         <span class="cart-summary-total-label">Total</span>
@@ -798,7 +798,6 @@ include '../includes/navigation.php';
                 type="button"
                 class="order-type-btn"
                 id="pickupBtn"
-                onclick="selectOrderType('Pickup')"
             >
                 🛍️ Pickup
             </button>
@@ -808,7 +807,6 @@ include '../includes/navigation.php';
                 type="button"
                 class="order-type-btn"
                 id="deliveryBtn"
-                onclick="selectOrderType('Delivery')"
             >
                 🚚 Delivery
             </button>
@@ -875,7 +873,6 @@ include '../includes/navigation.php';
     type="button"
     id="openPaymentModalBtn"
     class="place-order-btn"
-    onclick="checkOrderType()"
     disabled
 >
     🛒 Place Order
@@ -889,78 +886,6 @@ include '../includes/navigation.php';
 
 </div>
 
-
-<script>
-
-function selectOrderType(type) {
-
-    const pickupBtn = document.getElementById("pickupBtn");
-    const deliveryBtn = document.getElementById("deliveryBtn");
-    const orderTypeInput = document.getElementById("orderTypeInput");
-    const message = document.getElementById("orderTypeMessage");
-    const placeOrderBtn = document.getElementById("openPaymentModalBtn");
-    const deliveryFeeAmount = document.getElementById("deliveryFeeAmount");
-    const grandTotal = document.getElementById("cartGrandTotal");
-    const discountedSubtotal = <?php echo json_encode((float) $cart_total_after_discount); ?>;
-
-    // Remove selected style from both buttons
-    pickupBtn.classList.remove("selected");
-    deliveryBtn.classList.remove("selected");
-
-    // Select the chosen order type
-    if (type === "Pickup") {
-        pickupBtn.classList.add("selected");
-        deliveryFeeAmount.textContent = "RM 0.00";
-        grandTotal.textContent = "RM " + discountedSubtotal.toFixed(2);
-    } else {
-        deliveryBtn.classList.add("selected");
-        deliveryFeeAmount.textContent = "RM 5.00";
-        grandTotal.textContent = "RM " + (discountedSubtotal + 5).toFixed(2);
-    }
-
-    // Save the selected order type
-    orderTypeInput.value = type;
-
-    // Update message
-    message.textContent = "Selected: " + type;
-    message.classList.remove("error-message");
-    message.classList.add("selected-message");
-
-    // Enable Place Order only after an order type is selected
-    placeOrderBtn.disabled = false;
-}
-
-
-function checkOrderType() {
-
-    const orderTypeInput = document.getElementById("orderTypeInput");
-    const message = document.getElementById("orderTypeMessage");
-
-    // Do not allow checkout without Pickup or Delivery
-    if (orderTypeInput.value === "") {
-
-        message.textContent = "Please select Pickup or Delivery before placing your order.";
-        message.classList.remove("selected-message");
-        message.classList.add("error-message");
-
-        return false;
-    }
-
-    // Let payment.js open the payment modal
-    return true;
-}
-
-</script>
-
-<script>
-const claimedVoucherSelect = document.getElementById('claimedVoucherSelect');
-const voucherCodeInput = document.getElementById('voucherCodeInput');
-if (claimedVoucherSelect && voucherCodeInput) {
-    claimedVoucherSelect.addEventListener('change', function () {
-        voucherCodeInput.value = this.value;
-    });
-}
-</script>
 
 <!-- PAYMENT METHOD MODAL -->
 <div id="paymentModalOverlay" class="payment-modal-overlay">
@@ -1000,6 +925,7 @@ if (claimedVoucherSelect && voucherCodeInput) {
 
 </div>
 
+<script src="../js/cart-order.js?v=<?php echo filemtime(__DIR__ . '/../js/cart-order.js'); ?>"></script>
 <script src="../js/payment.js"></script>
 
     <?php endif; ?>

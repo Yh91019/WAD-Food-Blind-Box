@@ -432,7 +432,6 @@ if (isset($conn) && $conn instanceof mysqli) {
     </div>
 
 
-    <script src="../js/script.js"></script>
 
 
 </main>

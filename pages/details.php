@@ -738,7 +738,6 @@ include '../includes/navigation.php';
     </div>
 
 
-    <script src="../js/script.js"></script>
     <script src="../js/quantity.js"></script>
     <script src="../js/status.js"></script>
     <script src="../js/reviews-carousel.js"></script>

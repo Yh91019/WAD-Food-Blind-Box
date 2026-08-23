@@ -1,7 +1,7 @@
 <header class="top-header">
 
     <!-- Hamburger -->
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <button type="button" class="menu-btn" id="userMenuButton">☰</button>
 
     <!-- Logo -->
     <a href="<?php echo BASE_URL; ?>/index.php" class="logo">
@@ -70,20 +70,11 @@
         </ul>
     </nav>
 
-    <script>
-function toggleMenu() {
-
-    const sidebar = document.getElementById("sidebar");
-
-    sidebar.classList.toggle("active");
-
-}
-</script>
 </header>
 
 <!-- Return Bar: quick way back to the previous page -->
 <div class="back-nav">
-    <button type="button" class="back-btn" onclick="goToPreviousPage()" aria-label="Go back" title="Go back">
+    <button type="button" class="back-btn" id="userBackButton" aria-label="Go back" title="Go back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5"></path>
             <path d="M12 19l-7-7 7-7"></path>
@@ -92,8 +83,4 @@ function toggleMenu() {
     </button>
 </div>
 
-<script>
-function goToPreviousPage() {
-    history.back();
-}
-</script>
+<script src="<?php echo BASE_URL; ?>/js/script.js?v=<?php echo filemtime(__DIR__ . '/../js/script.js'); ?>"></script>

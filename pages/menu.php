@@ -130,7 +130,6 @@ include '../includes/navigation.php';
 
 </main>
 
-<script src="../js/script.js"></script>
 <script src="../js/status.js"></script>
 <script src="../js/menu-search.js"></script>
 

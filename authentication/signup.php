@@ -265,7 +265,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     </div>
 
-    <script src="../js/script.js"></script>
 
 </main>
 

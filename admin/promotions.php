@@ -431,7 +431,7 @@ include '../includes/adminNavigation.php';
                                                         <input type="hidden" name="promotion_id" value="<?php echo (int) $promotion['promotion_id']; ?>">
                                                         <button type="submit" class="promotion-toggle-btn"><?php echo (int) $promotion['is_active'] === 1 ? 'Deactivate' : 'Activate'; ?></button>
                                                     </form>
-                                                    <form method="POST" action="promotions.php" class="delete-form" onsubmit="return confirm('Delete this promotion? Claimed copies of this voucher will also be removed.');">
+                                                    <form method="POST" action="promotions.php" class="delete-form promotion-delete-form">
                                                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['admin_promotion_csrf']); ?>">
                                                         <input type="hidden" name="action" value="delete">
                                                         <input type="hidden" name="promotion_id" value="<?php echo (int) $promotion['promotion_id']; ?>">

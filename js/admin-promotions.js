@@ -26,4 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
     pastTab.addEventListener("click", function () {
         showPromotionGroup("past");
     });
+
+    document.querySelectorAll(".promotion-delete-form").forEach(function (form) {
+        form.addEventListener("submit", function (event) {
+            if (!window.confirm("Delete this promotion? Claimed copies of this voucher will also be removed.")) {
+                event.preventDefault();
+            }
+        });
+    });
 });

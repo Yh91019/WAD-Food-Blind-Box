@@ -1,8 +1,11 @@
-function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("active");
-}
+const userMenuButton = document.getElementById("userMenuButton");
+const userSidebar = document.getElementById("sidebar");
+const userBackButton = document.getElementById("userBackButton");
 
-// Close menu when clicking outside
+userMenuButton.addEventListener("click", function () {
+    userSidebar.classList.toggle("active");
+});
+
 document.addEventListener("click", function (event) {
     const sidebar = document.getElementById("sidebar");
     const menuBtn = document.querySelector(".menu-btn");
@@ -13,4 +16,8 @@ document.addEventListener("click", function (event) {
     if (!isClickInsideMenu && !isClickOnButton) {
         sidebar.classList.remove("active");
     }
+});
+
+userBackButton.addEventListener("click", function () {
+    history.back();
 });
