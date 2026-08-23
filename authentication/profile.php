@@ -25,6 +25,45 @@ $pmStmt->execute();
 $paymentMethod = $pmStmt->get_result()->fetch_assoc();
 $pmStmt->close();
 
+$activeVouchers = [];
+$pastVouchers = [];
+$voucherStmt = $conn->prepare(
+    "SELECT
+        promotions.code,
+        promotions.title,
+        promotions.description,
+        promotions.discount_type,
+        promotions.discount_value,
+        promotions.minimum_spend,
+        promotions.starts_at,
+        promotions.ends_at,
+        promotions.is_active,
+        user_vouchers.claimed_at,
+        user_vouchers.used_at,
+        CASE
+            WHEN user_vouchers.used_at IS NOT NULL THEN 'Used'
+            WHEN promotions.is_active = 0 OR NOW() > promotions.ends_at THEN 'Expired'
+            WHEN NOW() < promotions.starts_at THEN 'Upcoming'
+            ELSE 'Active'
+        END AS voucher_status
+     FROM user_vouchers
+     INNER JOIN promotions
+        ON promotions.promotion_id = user_vouchers.promotion_id
+     WHERE user_vouchers.username = ?
+     ORDER BY user_vouchers.claimed_at DESC"
+);
+$voucherStmt->bind_param('s', $username);
+$voucherStmt->execute();
+$voucherResult = $voucherStmt->get_result();
+while ($voucher = $voucherResult->fetch_assoc()) {
+    if ($voucher['voucher_status'] === 'Active') {
+        $activeVouchers[] = $voucher;
+    } else {
+        $pastVouchers[] = $voucher;
+    }
+}
+$voucherStmt->close();
+
 // Show a one-time success message after a redirect (Post/Redirect/Get)
 if (isset($_SESSION['profile_message'])) {
     $success = $_SESSION['profile_message'];
@@ -185,6 +224,7 @@ include '../includes/navigation.php';
         <p class="success"><?php echo htmlspecialchars($success); ?></p>
     <?php endif; ?>
 
+    <div class="profile-overview">
         <div id="profile-view" class="profile-card">
             <h2>Personal Details</h2>
 
@@ -205,6 +245,111 @@ include '../includes/navigation.php';
 
             <button type="button" id="edit-profile-btn" class="edit-profile-btn">Edit Profile</button>
         </div>
+
+        <section id="profile-vouchers" class="voucher-wallet-card" aria-labelledby="voucherWalletTitle">
+            <div class="voucher-wallet-header">
+                <div>
+                    <span class="voucher-wallet-kicker">My rewards</span>
+                    <h2 id="voucherWalletTitle">Voucher Wallet</h2>
+                </div>
+                <span class="voucher-count">
+                    <?php echo count($activeVouchers); ?> remaining
+                </span>
+            </div>
+
+            <div class="voucher-tabs" role="tablist" aria-label="Voucher categories">
+                <button
+                    type="button"
+                    class="voucher-tab-btn is-active"
+                    id="activeVoucherTab"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="activeVoucherPanel">
+                    Active Vouchers
+                    <span><?php echo count($activeVouchers); ?></span>
+                </button>
+                <button
+                    type="button"
+                    class="voucher-tab-btn"
+                    id="pastVoucherTab"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="pastVoucherPanel">
+                    Past Vouchers
+                    <span><?php echo count($pastVouchers); ?></span>
+                </button>
+            </div>
+
+            <div class="voucher-tab-panels">
+                <div
+                    class="voucher-column voucher-tab-panel active-voucher-column"
+                    id="activeVoucherPanel"
+                    role="tabpanel"
+                    aria-labelledby="activeVoucherTab">
+
+                    <?php if (empty($activeVouchers)) : ?>
+                        <div class="voucher-empty">
+                            <span aria-hidden="true">🎟️</span>
+                            <p>No active vouchers.</p>
+                            <a href="../index.php#promotions">View promotions</a>
+                        </div>
+                    <?php else : ?>
+                        <div class="profile-voucher-list">
+                            <?php foreach ($activeVouchers as $voucher) : ?>
+                                <article class="profile-voucher-item voucher-active">
+                                    <div class="profile-voucher-topline">
+                                        <strong><?php echo htmlspecialchars($voucher['code']); ?></strong>
+                                        <span>Active</span>
+                                    </div>
+                                    <h4><?php echo htmlspecialchars($voucher['title']); ?></h4>
+                                    <p><?php echo htmlspecialchars($voucher['description']); ?></p>
+                                    <small>
+                                        Min. spend RM<?php echo number_format((float) $voucher['minimum_spend'], 2); ?>
+                                        · Expires <?php echo date('d M Y', strtotime($voucher['ends_at'])); ?>
+                                    </small>
+                                    <a href="../pages/cart.php">Use voucher →</a>
+                                </article>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div
+                    class="voucher-column voucher-tab-panel past-voucher-column"
+                    id="pastVoucherPanel"
+                    role="tabpanel"
+                    aria-labelledby="pastVoucherTab"
+                    hidden>
+                    <?php if (empty($pastVouchers)) : ?>
+                        <div class="voucher-empty">
+                            <span aria-hidden="true">🕘</span>
+                            <p>No used or expired vouchers yet.</p>
+                        </div>
+                    <?php else : ?>
+                        <div class="profile-voucher-list">
+                            <?php foreach ($pastVouchers as $voucher) : ?>
+                                <article class="profile-voucher-item voucher-past">
+                                    <div class="profile-voucher-topline">
+                                        <strong><?php echo htmlspecialchars($voucher['code']); ?></strong>
+                                        <span><?php echo htmlspecialchars($voucher['voucher_status']); ?></span>
+                                    </div>
+                                    <h4><?php echo htmlspecialchars($voucher['title']); ?></h4>
+                                    <p><?php echo htmlspecialchars($voucher['description']); ?></p>
+                                    <small>
+                                        <?php if ($voucher['used_at']) : ?>
+                                            Used <?php echo date('d M Y', strtotime($voucher['used_at'])); ?>
+                                        <?php else : ?>
+                                            Ended <?php echo date('d M Y', strtotime($voucher['ends_at'])); ?>
+                                        <?php endif; ?>
+                                    </small>
+                                </article>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </section>
+    </div>
 
         <div id="profile-edit" class="profile-card" hidden>
             <h2>Edit Profile</h2>

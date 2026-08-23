@@ -116,9 +116,12 @@ footer {
     top:112px;
     left:-250px;          /* Hidden */
     width:250px;
-    height:100%;
+    height:calc(100vh - 112px);
     background:#333;
     transition:left 0.3s ease;
+    z-index:10000;
+    overflow-y:auto;
+    box-shadow:8px 0 22px rgba(0,0,0,0.18);
 }
 
 /* Show sidebar */

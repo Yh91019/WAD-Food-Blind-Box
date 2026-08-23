@@ -97,7 +97,7 @@ unset($_SESSION['logout_message']);
 
 <main>
     <section class="home-hero">
-        <img src="images/bg.jpg" alt="Blind Bite">
+        <img src="images/bg.png" alt="Blind Bite" style="width: 1500px;">
     </section>
 
     <section class="home-promotions" id="promotions" aria-labelledby="promotionsTitle">

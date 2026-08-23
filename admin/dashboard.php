@@ -49,6 +49,10 @@ $result = $conn->query(
                     View Enquiries
                 </a>
 
+                <a href="promotions.php" class="admin-action-btn add-btn">
+                    Manage Promotions
+                </a>
+
             </div>
 
             <div class="restaurant-search">

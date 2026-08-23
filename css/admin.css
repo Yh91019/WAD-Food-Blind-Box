@@ -585,6 +585,308 @@
 }
 
 /* ============================================================
+   PROMOTION MANAGEMENT
+   ============================================================ */
+
+.promotion-admin-page .admin-card {
+    max-width: 1450px;
+}
+
+.promotion-summary {
+    margin-top: 0;
+}
+
+.promotion-page-actions {
+    justify-content: flex-start;
+}
+
+.promotion-admin-layout {
+    display: grid;
+    grid-template-columns: minmax(420px, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+    gap: 30px;
+}
+
+.promotion-editor,
+.promotion-list-section {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #eadfd5;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(71, 48, 30, 0.08);
+}
+
+.promotion-section-heading {
+    margin-bottom: 20px;
+}
+
+.promotion-section-heading > span {
+    color: #ab794b;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.promotion-section-heading h2 {
+    margin: 4px 0 0;
+    color: #3f3025;
+}
+
+.promotion-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.promotion-form .form-group input,
+.promotion-form .form-group textarea,
+.promotion-form .form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #d5cec8;
+    border-radius: 7px;
+    background: #fff;
+    color: #3f3025;
+    font: inherit;
+}
+
+.promotion-form .form-group textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.promotion-form .form-group input:focus,
+.promotion-form .form-group textarea:focus,
+.promotion-form .form-group select:focus {
+    border-color: #ab794b;
+    outline: 3px solid rgba(171, 121, 75, 0.14);
+}
+
+.promotion-active-check {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #5d4938;
+    font-weight: 700;
+}
+
+.promotion-active-check input {
+    width: 18px;
+    height: 18px;
+    accent-color: #ab794b;
+}
+
+.admin-promotion-list {
+    display: grid;
+    gap: 15px;
+    max-height: 690px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.admin-promotion-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 18px;
+    padding: 5px;
+    border-radius: 11px;
+    background: #f5eee7;
+}
+
+.admin-promotion-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #75665a;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-promotion-tab span {
+    min-width: 21px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #e6d6c7;
+    color: #765237;
+    font-size: 11px;
+    line-height: 18px;
+}
+
+.admin-promotion-tab.is-active {
+    background: #ab794b;
+    color: #fff;
+    box-shadow: 0 3px 9px rgba(111, 75, 43, 0.2);
+}
+
+.admin-promotion-tab.is-active span {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.admin-promotion-tab:focus-visible {
+    outline: 3px solid rgba(171, 121, 75, 0.25);
+    outline-offset: 2px;
+}
+
+.admin-promotion-panel[hidden] {
+    display: none;
+}
+
+.promotion-list-empty {
+    padding: 34px 15px;
+    border: 1px dashed #d8cec4;
+    border-radius: 10px;
+    background: #faf7f4;
+    color: #777;
+    text-align: center;
+}
+
+.promotion-list-empty span {
+    font-size: 29px;
+}
+
+.promotion-list-empty p {
+    margin: 8px 0 0;
+}
+
+.admin-promotion-item {
+    padding: 18px;
+    border: 1px solid #e3dad2;
+    border-left: 4px solid #aaa09a;
+    border-radius: 10px;
+    background: #faf8f6;
+}
+
+.admin-promotion-item.is-live {
+    border-left-color: #388e3c;
+    background: #f6fbf6;
+}
+
+.admin-promotion-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.admin-promotion-topline strong {
+    color: #8f623c;
+    letter-spacing: 0.5px;
+}
+
+.admin-promotion-topline span {
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #e9e4df;
+    color: #6c625a;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.admin-promotion-item.is-live .admin-promotion-topline span {
+    background: #e4f4e5;
+    color: #2e7d32;
+}
+
+.admin-promotion-item h3 {
+    margin: 12px 0 7px;
+    color: #3f3025;
+}
+
+.admin-promotion-item > p {
+    margin: 0 0 14px;
+    color: #665e57;
+    line-height: 1.45;
+}
+
+.promotion-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.promotion-details div {
+    padding: 9px;
+    border-radius: 7px;
+    background: #fff;
+}
+
+.promotion-details dt {
+    color: #8b8179;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.promotion-details dd {
+    margin: 4px 0 0;
+    color: #4a3b30;
+    font-weight: 700;
+}
+
+.admin-promotion-item > small {
+    color: #7b7169;
+}
+
+.promotion-item-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 15px;
+}
+
+.promotion-toggle-btn {
+    padding: 7px 13px;
+    border: 0;
+    border-radius: 5px;
+    background: #6f655e;
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.promotion-toggle-btn:hover {
+    background: #514943;
+}
+
+@media (max-width: 1050px) {
+    .promotion-admin-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .promotion-form {
+        grid-template-columns: 1fr;
+    }
+
+    .promotion-form .form-full,
+    .promotion-active-check {
+        grid-column: 1;
+    }
+
+    .promotion-details {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
    MENU-STYLE ADMIN DASHBOARD
    ============================================================ */
 
