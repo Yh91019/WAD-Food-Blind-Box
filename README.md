@@ -1,117 +1,198 @@
-# Blind Bite Food Blind Box
+# Blind Bite
 
-Blind Bite is a PHP and MySQL website where customers can discover surprise
-food boxes from local restaurants. Customers can create an account, save
-restaurants, manage a cart, place an order, and view their order history.
-Administrators can manage the restaurant list.
+Blind Bite is a PHP and MySQL food blind-box ordering website. Customers can browse restaurants, claim vouchers, add blind boxes to their cart, place pickup or delivery orders, save favourites, and submit ratings and reviews. Administrators can manage restaurants, promotions, vouchers, and customer enquiries.
 
-## Shared behaviour
+## Main features
 
-- Pages use `config/db_connect.php` when they need data from MySQL.
-- `includes/header.php`, `includes/navigation.php`, and `includes/footer.php`
-  provide the common page layout.
-- Admin pages call `require_admin_login()` to prevent customer access.
-- Forms are checked on the server and use prepared SQL statements for user
-  input. JavaScript is used only for browser interactions such as menus,
-  searches, quantity buttons, and pop-up windows.
+### Customer
 
-## Main file
+- Register, log in, log out, and update profile details
+- Browse and search restaurants
+- Sort restaurants by rating
+- View restaurant details, ratings, and reviews
+- Add blind boxes to the cart or wishlist
+- Claim and apply promotional vouchers
+- Choose pickup or delivery (delivery adds RM5.00)
+- Pay using Cash, Card, or Touch 'n Go (TNG)
+- View order history, order again, and leave a review
+- Send an enquiry through the Contact Us form
 
-| File | Purpose |
-| --- | --- |
-| `index.php` | Displays the home page and a list of available restaurants. |
+### Administrator
 
-## Admin files
+- View restaurant and order totals on the dashboard
+- Add, edit, search, and delete restaurants
+- Create, edit, activate, deactivate, and delete promotions
+- View active and past promotions
+- View customer enquiries and open Gmail to reply
 
-| File | Purpose |
-| --- | --- |
-| `admin/admin_auth.php` | Provides the login check used by admin-only pages. |
-| `admin/dashboard.php` | Shows the admin home page with restaurant and order totals. |
-| `admin/restaurants.php` | Lists restaurants and provides search, edit, delete, and add controls. |
-| `admin/add_restaurant.php` | Checks the form and adds a new restaurant to the database. |
-| `admin/edit_restaurant.php` | Loads a restaurant and saves changes made by the admin. |
-| `admin/delete_restaurant.php` | Deletes the restaurant selected by the admin. |
+## Requirements
 
-## Authentication files
+- Windows with [WampServer](https://www.wampserver.com/en/) or another PHP/MySQL environment such as XAMPP
+- PHP 8.0 or newer with the `mysqli` extension enabled
+- MySQL 5.7+ or MariaDB 10.4+
+- A modern web browser
+- Internet access for the Touch 'n Go redirect and Gmail reply link
 
-| File | Purpose |
-| --- | --- |
-| `authentication/login.php` | Logs in a customer or administrator and starts their session. |
-| `authentication/signup.php` | Creates a customer account after checking the entered details. |
-| `authentication/profile.php` | Displays and updates customer details and saved card details. |
-| `authentication/logout.php` | Ends the current session and returns to the login page. |
+No Composer or Node.js installation is required.
 
-## Customer page files
+## Installation
 
-| File | Purpose |
-| --- | --- |
-| `pages/menu.php` | Displays all restaurants and the menu search box. |
-| `pages/details.php` | Shows one restaurant and lets a customer add it to the cart or wishlist. |
-| `pages/cart.php` | Manages quantities, order type, payment choice, and order placement. |
-| `pages/wishlist.php` | Lists saved restaurants and lets customers remove or move an item to the cart. |
-| `pages/orderhistory.php` | Displays the signed-in customer's previous orders and their status. |
-| `pages/order_complete.php` | Confirms that an order was placed successfully. |
-| `pages/aboutus.php` | Explains the Blind Bite idea, story, and mission. |
+### 1. Copy the project
 
-## Shared include and configuration files
+Place the project folder inside the web server's document root.
 
-| File | Purpose |
-| --- | --- |
-| `config/db_connect.php` | Opens the shared connection to the `blindbite` MySQL database. |
-| `includes/header.php` | Starts the session, works out the project URL, and creates the page header. |
-| `includes/navigation.php` | Displays the customer side menu and its open/close behaviour. |
-| `includes/adminNavigation.php` | Displays the admin side menu and its open/close behaviour. |
-| `includes/footer.php` | Closes the page and displays the site footer. |
-| `includes/restaurant_image.php` | Validates restaurant image uploads and provides the default image when needed. |
+For WampServer, the recommended location is:
 
-## JavaScript files
+```text
+C:\wamp64\www\WAD-Food-Blind-Box
+```
 
-| File | Purpose |
-| --- | --- |
-| `js/script.js` | Opens the customer menu and closes it after a click outside. |
-| `js/aboutus.js` | Opens or closes the menu on the About Us page. |
-| `js/menu-search.js` | Filters restaurant cards using the text entered in the menu search box. |
-| `js/quantity.js` | Controls the plus and minus buttons on the item quantity selector. |
-| `js/payment.js` | Opens the payment window, records the chosen method, and submits the order. |
-| `js/profile.js` | Switches the profile page between view and edit mode. |
-| `js/status.js` | Updates restaurant open or closed labels using the current time. |
-| `js/wishlist.js` | Provides wishlist suggestions, filtering, and action messages. |
-| `js/cart.js` | Calculates cart totals and supports quantity, removal, and delivery controls. |
+For XAMPP, place it inside `C:\xampp\htdocs\` instead.
 
-## Style files
+### 2. Start the services
 
-| File | Purpose |
-| --- | --- |
-| `css/style.css` | Contains the main shared styles for the header, menu, home, details, cart, and profile pages. |
-| `css/admin.css` | Styles the admin dashboard, restaurant table, and admin forms. |
-| `css/aboutus.css` | Styles the About Us sections and responsive layout. |
-| `css/login.css` | Styles the login and sign-up forms. |
-| `css/orderhistory.css` | Styles order cards and their status labels. |
-| `css/wishlist.css` | Styles the wishlist grid, cards, and buttons. |
-| `css/status.css` | Sets the colours of restaurant open and closed labels. |
-| `css/body{.css` | Contains an older basic cart and table layout. |
+Open WampServer and start:
 
-## Database files
+- Apache
+- MySQL
 
-| File | Purpose |
-| --- | --- |
-| `database/create_table.sql` | Creates the database and its restaurant, user, payment, cart, wishlist, history, and admin tables. |
-| `database/insert_data.sql` | Adds sample restaurants and the starting admin account. |
+Wait until the WampServer icon is green before continuing.
 
-## Image files
+### 3. Create and populate the database
 
-| File | Purpose |
-| --- | --- |
-| `images/BBlogo.png` | Blind Bite logo used in the page header. |
-| `images/BBbox.png` | Blind box picture used on restaurant cards. |
-| `images/restaurants/` | Stores blind box pictures uploaded by administrators. |
-| `images/bg.jpg` | Large banner image used on the home page. |
-| `images/image1.png` | Illustration used on the About Us page. |
-| `images/whatsappimage.jpg` | Additional project image asset. |
+Using phpMyAdmin:
 
-## Editor files
+1. Open `http://localhost/phpmyadmin/`.
+2. Select the **Import** tab.
+3. Import `database/create_table.sql` first. This creates the `blindbite` database and all required tables.
+4. Import `database/insert_data.sql` second. This adds sample restaurants, promotions, and the default administrator account.
 
-| File | Purpose |
-| --- | --- |
-| `.vscode/launch.json` | Stores the local Chrome launch setup for Visual Studio Code. |
-| `.vscode/settings.json` | Stores local SQLTools database connection settings. |
+The required import order is:
+
+```text
+1. database/create_table.sql
+2. database/insert_data.sql
+```
+
+`database/promotions and vouchers.sql` is an optional migration for an older copy of the database. Do not import it during a normal fresh installation.
+
+You can also import the files from Windows Command Prompt while it is open in the project folder:
+
+```bat
+mysql -u root -P 3308 < database/create_table.sql
+mysql -u root -P 3308 blindbite < database/insert_data.sql
+```
+
+If the MySQL root account has a password, add `-p` and enter the password when prompted.
+
+## Database configuration
+
+The connection settings are stored in `config/db_connect.php`:
+
+```php
+$dbhost = "localhost";
+$dbUser = "root";
+$dbPass = "";
+$dbName = "blindbite";
+$port = 3308;
+```
+
+Update these values to match the local MySQL installation:
+
+| Setting | Purpose | Project default |
+| --- | --- | --- |
+| `$dbhost` | MySQL server address | `localhost` |
+| `$dbUser` | MySQL username | `root` |
+| `$dbPass` | MySQL password | Empty |
+| `$dbName` | Database name | `blindbite` |
+| `$port` | MySQL port | `3308` |
+
+Many WampServer installations use port `3308`, while XAMPP and standard MySQL installations commonly use `3306`. If the page displays a database connection error, confirm the MySQL port and credentials first.
+
+## Run the project
+
+### WampServer
+
+After Apache and MySQL are running, open:
+
+```text
+http://localhost/WAD-Food-Blind-Box/
+```
+
+The application automatically calculates its base URL, so pages, styles, scripts, and images work from the project subfolder.
+
+### PHP built-in server (optional)
+
+If PHP is available on the command line, open a terminal in the project root and run:
+
+```powershell
+php -S localhost:3000
+```
+
+Then visit:
+
+```text
+http://localhost:3000/
+```
+
+MySQL must still be running, and `config/db_connect.php` must contain the correct connection settings.
+
+## Default administrator login
+
+The sample data creates this administrator account:
+
+```text
+Username: admin
+Password: admin123
+```
+
+Sign in through `authentication/login.php`. A customer account can be created from the Sign Up page.
+
+> The default administrator password is intended for local demonstration only. Change it before placing the project on a public server.
+
+## Project structure
+
+```text
+WAD-Food-Blind-Box/
+├── admin/             Admin dashboard, restaurant, promotion, and enquiry pages
+├── authentication/    Login, sign-up, logout, and profile pages
+├── config/            Database connection settings
+├── css/               Shared and page-specific stylesheets
+├── database/          Database schema, sample data, and migration scripts
+├── images/            Logos, backgrounds, and restaurant images
+├── includes/          Shared headers, footers, navigation, and voucher helpers
+├── js/                Shared and page-specific JavaScript files
+├── pages/             Customer menu, cart, orders, wishlist, and information pages
+├── index.php          Homepage
+└── README.md          Project setup guide
+```
+
+## Troubleshooting
+
+### Database connection failed
+
+- Ensure MySQL is running.
+- Check whether MySQL uses port `3308` or `3306`.
+- Confirm the username and password in `config/db_connect.php`.
+- Confirm that the `blindbite` database was created.
+
+### Table not found
+
+Import `database/create_table.sql`, followed by `database/insert_data.sql`, in that order.
+
+### Page not found or styles are missing
+
+- Confirm the project folder is inside the correct document root.
+- Use `http://localhost/WAD-Food-Blind-Box/` for the recommended WampServer folder name.
+- Avoid opening PHP files directly from File Explorer; access them through Apache or the PHP development server.
+
+### Uploaded restaurant images are not displayed
+
+Ensure the web server can write to `images/restaurants/` and that the uploaded file is a supported image type.
+
+## Notes
+
+- Application times use the `Asia/Kuala_Lumpur` timezone.
+- TNG is a demonstration payment option; no real payment is processed.
+- Delivery orders add a fixed RM5.00 delivery fee.
+- Restaurant image uploads are stored in `images/restaurants/`.
