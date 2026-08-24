@@ -319,7 +319,8 @@ $sql = "
         restaurants.blind_box_image,
         restaurants.blind_box_food_category,
         restaurants.restaurant_address,
-        restaurants.restaurant_opening_hours
+        restaurants.restaurant_opening_hours,
+        restaurants.restaurant_closing_hours
     FROM wishlist
 
     INNER JOIN restaurants
@@ -372,6 +373,7 @@ $conn->close();
 include '../includes/header.php';
 ?>
 
+<link rel="stylesheet" href="../css/status.css">
 <link rel="stylesheet" href="../css/wishlist.css">
 
 <?php
@@ -462,6 +464,19 @@ include '../includes/navigation.php';
                                 ]
                             );
                             ?>
+
+                            <?php
+                            $restaurant_is_open = is_restaurant_open(
+                                $item['restaurant_opening_hours'],
+                                $item['restaurant_closing_hours']
+                            );
+                            ?>
+
+                            <span
+                                class="status-badge <?php echo $restaurant_is_open ? 'status-open' : 'status-closed'; ?>"
+                                data-opening="<?php echo htmlspecialchars($item['restaurant_opening_hours']); ?>"
+                                data-closing="<?php echo htmlspecialchars($item['restaurant_closing_hours']); ?>"
+                            ><?php echo $restaurant_is_open ? 'Open' : 'Closed'; ?></span>
 
                         </h2>
 
@@ -610,6 +625,7 @@ include '../includes/navigation.php';
 
 </main>
 
+<script src="../js/status.js"></script>
 
 <?php
 
