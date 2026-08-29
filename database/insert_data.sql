@@ -72,3 +72,26 @@ VALUES
     ('SAVE5', 'RM5 Blind Bite Voucher', 'Save RM5 when your cart reaches RM20.', 'Fixed', 5.00, 20.00, '2026-01-01 00:00:00', '2027-12-31 23:59:59', 1),
     ('NIGHTBITE5', 'RM5 Evening Treat', 'Save RM5 on orders of RM15 or more.', 'Fixed', 5.00, 15.00, '2026-01-01 00:00:00', '2027-12-31 23:59:59', 1)
 ON DUPLICATE KEY UPDATE title = VALUES(title);
+
+-- Insert 2 normal users
+INSERT INTO users
+    (username, password, email, gender, date_of_birth, address, phone_number)
+VALUES
+    (
+        'john',
+        'john123',
+        'john@gmail.com',
+        'MALE',
+        '2002-05-15',
+        'Kuala Lumpur, Malaysia',
+        '0123456789'
+    ),
+    (
+        'jane',
+        'jane123',
+        'jane@gmail.com',
+        'FEMALE',
+        '2003-08-20',
+        'Petaling Jaya, Malaysia',
+        '0134567890'
+    );

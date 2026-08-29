@@ -8,7 +8,9 @@ $error = "";
 $success = "";
 
 if (isset($_SESSION['registration_message'])) {
+
     $success = $_SESSION['registration_message'];
+
     unset($_SESSION['registration_message']);
 }
 
@@ -29,19 +31,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($login_id === "" && $password === "") {
 
-        $error = "Please enter your username/email and password.";
+        $error =
+            "Please enter your username/email and password.";
 
     } elseif ($login_id === "") {
 
-        $error = "Please enter your username or email.";
+        $error =
+            "Please enter your username or email.";
 
     } elseif ($password === "") {
 
-        $error = "Please enter your password.";
+        $error =
+            "Please enter your password.";
 
     } elseif (strlen($login_id) > 100) {
 
-        $error = "Username or email is too long.";
+        $error =
+            "Username or email is too long.";
 
     } else {
 
@@ -56,21 +62,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             WHERE admin_username = ?
         ";
 
-        $admin_stmt = $conn->prepare($admin_sql);
+        $admin_stmt =
+            $conn->prepare($admin_sql);
 
 
         if (!$admin_stmt) {
 
-            die("Database error: " . $conn->error);
+            die(
+                "Database error: " .
+                $conn->error
+            );
 
         }
 
 
-        $admin_stmt->bind_param("s", $login_id);
+        $admin_stmt->bind_param(
+            "s",
+            $login_id
+        );
 
         $admin_stmt->execute();
 
-        $admin_result = $admin_stmt->get_result();
+        $admin_result =
+            $admin_stmt->get_result();
 
 
         /* ====================================================
@@ -79,17 +93,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($admin_result->num_rows == 1) {
 
-            $admin = $admin_result->fetch_assoc();
+            $admin =
+                $admin_result->fetch_assoc();
 
             $stored_admin_password =
                 $admin['admin_password'];
 
 
-            /*
-             * Supports both:
-             * 1. Plain-text password
-             * 2. password_hash() password
-             */
+            /* =================================================
+               SUPPORT BOTH PASSWORD TYPES
+               ================================================= */
 
             if (
                 password_get_info(
@@ -125,6 +138,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $_SESSION['is_admin'] = true;
 
+                /*
+                 * Admin is not a reviewer.
+                 */
+                $_SESSION['user_type'] = 'ADMIN';
+
 
                 $admin_stmt->close();
 
@@ -146,7 +164,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             else {
 
-                $error = "Incorrect password.";
+                $error =
+                    "Incorrect password.";
 
             }
 
@@ -157,13 +176,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         /* ====================================================
-           2. CHECK NORMAL USERS TABLE
+           2. CHECK USERS TABLE
            ==================================================== */
 
         else {
 
             $admin_stmt->close();
 
+
+            /*
+             * IMPORTANT:
+             *
+             * user_type is selected here so we can determine
+             * whether the user is a normal CUSTOMER or
+             * REVIEWER.
+             */
 
             $sql = "
                 SELECT *
@@ -173,12 +200,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ";
 
 
-            $stmt = $conn->prepare($sql);
+            $stmt =
+                $conn->prepare($sql);
 
 
             if (!$stmt) {
 
-                die("Database error: " . $conn->error);
+                die(
+                    "Database error: " .
+                    $conn->error
+                );
 
             }
 
@@ -192,7 +223,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt->execute();
 
-            $result = $stmt->get_result();
+            $result =
+                $stmt->get_result();
 
 
             /* ================================================
@@ -201,18 +233,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($result->num_rows == 1) {
 
-                $user = $result->fetch_assoc();
+                $user =
+                    $result->fetch_assoc();
 
 
                 $stored_password =
                     $user['password'];
 
 
-                /*
-                 * Supports both:
-                 * 1. password_hash()
-                 * 2. Plain-text password
-                 */
+                /* ============================================
+                   SUPPORT BOTH PASSWORD TYPES
+                   ============================================ */
 
                 if (
                     password_get_info(
@@ -243,11 +274,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if ($password_ok) {
 
+
+                    /* ========================================
+                       CREATE USER SESSION
+                       ======================================== */
+
                     $_SESSION['username'] =
                         $user['username'];
 
                     $_SESSION['email'] =
                         $user['email'];
+
+
+                    /*
+                     * If user_type does not exist for an
+                     * existing customer, treat them as
+                     * CUSTOMER.
+                     */
+
+                    $_SESSION['user_type'] =
+                        $user['user_type'] ?? 'CUSTOMER';
 
 
                     $_SESSION['login_message'] =
@@ -260,6 +306,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $conn->close();
 
+
+                    /* ========================================
+                       REVIEWER USER
+                       ======================================== */
+
+                    if (
+                        $_SESSION['user_type']
+                        === 'REVIEWER'
+                    ) {
+
+                        header(
+                            "Location: ../pages/reviews.php"
+                        );
+
+                        exit();
+
+                    }
+
+
+                    /* ========================================
+                       NORMAL CUSTOMER
+                       ======================================== */
 
                     header(
                         "Location: ../index.php"
@@ -276,7 +344,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 else {
 
-                    $error = "Incorrect password.";
+                    $error =
+                        "Incorrect password.";
 
                 }
 
@@ -308,7 +377,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    CLOSE DATABASE CONNECTION
    ============================================================ */
 
-if (isset($conn) && $conn instanceof mysqli) {
+if (
+    isset($conn)
+    && $conn instanceof mysqli
+) {
 
     $conn->close();
 
@@ -321,7 +393,12 @@ if (isset($conn) && $conn instanceof mysqli) {
 
 <?php include '../includes/navigation.php'; ?>
 
-<link rel="stylesheet" href="../css/login.css?v=<?php echo filemtime(__DIR__ . '/../css/login.css'); ?>">
+
+<link
+    rel="stylesheet"
+    href="../css/login.css?v=<?php echo filemtime(__DIR__ . '/../css/login.css'); ?>"
+>
+
 
 <main class="login-page">
 
@@ -339,15 +416,28 @@ if (isset($conn) && $conn instanceof mysqli) {
         <?php if (!empty($error)) : ?>
 
             <p class="error">
-                <?php echo htmlspecialchars($error); ?>
+
+                <?php
+                echo htmlspecialchars($error);
+                ?>
+
             </p>
 
         <?php endif; ?>
 
+
+        <!-- ================================================
+             SUCCESS MESSAGE
+             ================================================ -->
+
         <?php if (!empty($success)) : ?>
 
             <p class="success">
-                <?php echo htmlspecialchars($success); ?>
+
+                <?php
+                echo htmlspecialchars($success);
+                ?>
+
             </p>
 
         <?php endif; ?>
@@ -357,13 +447,20 @@ if (isset($conn) && $conn instanceof mysqli) {
              LOGIN FORM
              ================================================ -->
 
-        <form method="POST" action="">
+        <form
+            method="POST"
+            action=""
+        >
 
 
-            <!-- Username / Email -->
+            <!-- ============================================
+                 USERNAME / EMAIL
+                 ============================================ -->
 
             <label for="email">
+
                 Username or Email
+
             </label>
 
             <br>
@@ -374,9 +471,13 @@ if (isset($conn) && $conn instanceof mysqli) {
                 id="email"
                 name="email"
                 value="<?php
+
                     echo isset($_POST['email'])
-                        ? htmlspecialchars($_POST['email'])
+                        ? htmlspecialchars(
+                            $_POST['email']
+                        )
                         : '';
+
                 ?>"
                 maxlength="100"
                 required
@@ -386,10 +487,14 @@ if (isset($conn) && $conn instanceof mysqli) {
             <br><br>
 
 
-            <!-- Password -->
+            <!-- ============================================
+                 PASSWORD
+                 ============================================ -->
 
             <label for="password">
+
                 Password
+
             </label>
 
             <br>
@@ -406,21 +511,29 @@ if (isset($conn) && $conn instanceof mysqli) {
             <br><br>
 
 
-            <!-- Login Button -->
+            <!-- ============================================
+                 LOGIN BUTTON
+                 ============================================ -->
 
             <button type="submit">
+
                 Login
+
             </button>
 
 
-            <!-- Sign Up -->
+            <!-- ============================================
+                 SIGN UP
+                 ============================================ -->
 
             <p class="signup-link">
 
                 Don't have an account?
 
                 <a href="signup.php">
+
                     Sign Up Now
+
                 </a>
 
             </p>
@@ -430,8 +543,6 @@ if (isset($conn) && $conn instanceof mysqli) {
 
 
     </div>
-
-
 
 
 </main>

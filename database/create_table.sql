@@ -1,8 +1,6 @@
-Create Database blindbite CHARACTER SET utf8 COLLATE utf8_general_ci;
-
 USE blindbite;
 
--- Create Restaurants Table
+
 CREATE TABLE restaurants (
     restaurant_name VARCHAR(100) PRIMARY KEY,
     restaurant_address VARCHAR(100) NOT NULL UNIQUE,
@@ -15,7 +13,8 @@ CREATE TABLE restaurants (
     blind_box_food_category TEXT NOT NULL
 );
 
--- Create Users Table
+
+
 CREATE TABLE users (
     username VARCHAR(50) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
@@ -26,6 +25,8 @@ CREATE TABLE users (
     phone_number VARCHAR(20) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
 
 CREATE TABLE promotions (
     promotion_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,18 +42,32 @@ CREATE TABLE promotions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+
 CREATE TABLE user_vouchers (
     user_voucher_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     promotion_id INT NOT NULL,
     claimed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     used_at TIMESTAMP NULL DEFAULT NULL,
-    UNIQUE KEY unique_user_promotion (username, promotion_id),
-    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
-    FOREIGN KEY (promotion_id) REFERENCES promotions(promotion_id) ON DELETE CASCADE
+
+    UNIQUE KEY unique_user_promotion
+    (
+        username,
+        promotion_id
+    ),
+
+    FOREIGN KEY (username)
+        REFERENCES users(username)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (promotion_id)
+        REFERENCES promotions(promotion_id)
+        ON DELETE CASCADE
 );
 
--- Create Payment Method Table
+
+
 CREATE TABLE paymentmethod (
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
@@ -61,11 +76,13 @@ CREATE TABLE paymentmethod (
     expiry_date VARCHAR(10) NOT NULL,
     cvv VARCHAR(4) NOT NULL,
 
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (username)
+        REFERENCES users(username)
         ON DELETE CASCADE
 );
 
--- Create Cart Table
+
+
 CREATE TABLE cart (
     cart_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
@@ -73,28 +90,32 @@ CREATE TABLE cart (
     quantity INT NOT NULL DEFAULT 1,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (username)
+        REFERENCES users(username)
         ON DELETE CASCADE,
 
-    FOREIGN KEY (restaurant_name) REFERENCES restaurants(restaurant_name)
+    FOREIGN KEY (restaurant_name)
+        REFERENCES restaurants(restaurant_name)
         ON DELETE CASCADE
 );
 
--- Create Wishlist Table
 CREATE TABLE wishlist (
     wishlist_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     restaurant_name VARCHAR(100) NOT NULL,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (username)
+        REFERENCES users(username)
         ON DELETE CASCADE,
 
-    FOREIGN KEY (restaurant_name) REFERENCES restaurants(restaurant_name)
+    FOREIGN KEY (restaurant_name)
+        REFERENCES restaurants(restaurant_name)
         ON DELETE CASCADE
 );
 
--- Create Order History Table
+
+
 CREATE TABLE history (
     history_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
@@ -102,12 +123,20 @@ CREATE TABLE history (
     blind_box_price DECIMAL(10,2) NOT NULL,
     quantity INT NOT NULL,
     payment_method VARCHAR(50),
-    order_type ENUM('Pickup', 'Delivery') NOT NULL DEFAULT 'Pickup',
+    order_type ENUM('Pickup', 'Delivery')
+        NOT NULL DEFAULT 'Pickup',
     voucher_code VARCHAR(40) DEFAULT NULL,
-    discount_amount DECIMAL(10,2) NOT NULL DEFAULT 0,
-    delivery_fee DECIMAL(10,2) NOT NULL DEFAULT 0,
+    discount_amount DECIMAL(10,2)
+        NOT NULL DEFAULT 0,
+    delivery_fee DECIMAL(10,2)
+        NOT NULL DEFAULT 0,
     final_total DECIMAL(10,2) DEFAULT NULL,
-    status ENUM('Preparing', 'Completed', 'Cancelled') NOT NULL DEFAULT 'Preparing',
+    status ENUM(
+        'Preparing',
+        'Completed',
+        'Cancelled'
+    )
+        NOT NULL DEFAULT 'Preparing',
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (username)
@@ -115,85 +144,76 @@ CREATE TABLE history (
         ON DELETE CASCADE
 );
 
--- Create Restaurant Reviews Table
+
 CREATE TABLE reviews (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
+
     history_id INT NOT NULL UNIQUE,
+
     username VARCHAR(50) NOT NULL,
+
     restaurant_name VARCHAR(100) NOT NULL,
+
     rating TINYINT UNSIGNED NOT NULL,
+
     review TEXT NOT NULL,
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT chk_review_rating CHECK (rating BETWEEN 1 AND 5),
+    updated_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (history_id) REFERENCES history(history_id)
+    CONSTRAINT chk_review_rating
+        CHECK (rating BETWEEN 1 AND 5),
+
+    FOREIGN KEY (history_id)
+        REFERENCES history(history_id)
         ON DELETE CASCADE,
 
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (username)
+        REFERENCES users(username)
         ON DELETE CASCADE,
 
-    FOREIGN KEY (restaurant_name) REFERENCES restaurants(restaurant_name)
+    FOREIGN KEY (restaurant_name)
+        REFERENCES restaurants(restaurant_name)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+
 
 CREATE TABLE admin (
     admin_username VARCHAR(50) NOT NULL PRIMARY KEY,
     admin_password VARCHAR(50) NOT NULL
 );
 
--- Create Customer Enquiries Table
+
+
 CREATE TABLE enquiries (
     enquiry_id INT AUTO_INCREMENT PRIMARY KEY,
+
     username VARCHAR(50) DEFAULT NULL,
+
     customer_name VARCHAR(100) NOT NULL,
+
     customer_email VARCHAR(150) NOT NULL,
+
     subject VARCHAR(150) NOT NULL,
+
     message TEXT NOT NULL,
-    status ENUM('New', 'In Progress', 'Resolved') NOT NULL DEFAULT 'New',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (username) REFERENCES users(username)
-        ON DELETE SET NULL
-);
+    status ENUM(
+        'New',
+        'In Progress',
+        'Resolved'
+    )
+        NOT NULL DEFAULT 'New',
 
---  Crate Reviews 
-CREATE TABLE IF NOT EXISTS reviews (
-    review_id INT AUTO_INCREMENT PRIMARY KEY,
-    history_id INT NOT NULL UNIQUE,
-    username VARCHAR(50) NOT NULL,
-    restaurant_name VARCHAR(100) NOT NULL,
-    rating TINYINT UNSIGNED NOT NULL,
-    review TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT chk_review_rating CHECK (rating BETWEEN 1 AND 5),
-
-    FOREIGN KEY (history_id) REFERENCES history(history_id)
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (username) REFERENCES users(username)
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (restaurant_name) REFERENCES restaurants(restaurant_name)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
--- Create Enquiries 
-CREATE TABLE IF NOT EXISTS enquiries (
-    enquiry_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) DEFAULT NULL,
-    customer_name VARCHAR(100) NOT NULL,
-    customer_email VARCHAR(150) NOT NULL,
-    subject VARCHAR(150) NOT NULL,
-    message TEXT NOT NULL,
-    status ENUM('New', 'In Progress', 'Resolved') NOT NULL DEFAULT 'New',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (username) REFERENCES users(username)
+    FOREIGN KEY (username)
+        REFERENCES users(username)
         ON DELETE SET NULL
 );
