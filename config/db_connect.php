@@ -12,7 +12,7 @@ $dbUser = "root";
 $dbPass = "";
 $dbName = "blindbite";
 // port: 3306 / 3308
-$port = 3308;
+$port = 3306;
 
 // Create connection
 $conn = mysqli_connect($dbhost, $dbUser, $dbPass, $dbName, $port);
