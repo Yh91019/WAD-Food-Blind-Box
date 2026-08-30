@@ -15,9 +15,6 @@ if (isset($_SESSION['registration_message'])) {
 }
 
 
-/* ============================================================
-   LOGIN PROCESS
-   ============================================================ */
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -25,9 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'] ?? '';
 
 
-    /* ========================================================
-       FORM VALIDATION
-       ======================================================== */
 
     if ($login_id === "" && $password === "") {
 
@@ -52,10 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
 
 
-        /* ====================================================
-           1. CHECK ADMIN TABLE
-           ==================================================== */
-
+ 
         $admin_sql = "
             SELECT *
             FROM admin
@@ -87,9 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $admin_stmt->get_result();
 
 
-        /* ====================================================
-           ADMIN FOUND
-           ==================================================== */
 
         if ($admin_result->num_rows == 1) {
 
@@ -100,9 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $admin['admin_password'];
 
 
-            /* =================================================
-               SUPPORT BOTH PASSWORD TYPES
-               ================================================= */
 
             if (
                 password_get_info(
@@ -127,10 +112,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
 
-            /* ================================================
-               ADMIN PASSWORD CORRECT
-               ================================================ */
-
             if ($admin_password_ok) {
 
                 $_SESSION['username'] =
@@ -138,9 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $_SESSION['is_admin'] = true;
 
-                /*
-                 * Admin is not a reviewer.
-                 */
+
                 $_SESSION['user_type'] = 'ADMIN';
 
 
@@ -158,9 +137,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
 
-            /* ================================================
-               ADMIN PASSWORD WRONG
-               ================================================ */
 
             else {
 
@@ -175,22 +151,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
 
-        /* ====================================================
-           2. CHECK USERS TABLE
-           ==================================================== */
 
         else {
 
             $admin_stmt->close();
 
 
-            /*
-             * IMPORTANT:
-             *
-             * user_type is selected here so we can determine
-             * whether the user is a normal CUSTOMER or
-             * REVIEWER.
-             */
 
             $sql = "
                 SELECT *
@@ -227,9 +193,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->get_result();
 
 
-            /* ================================================
-               USER FOUND
-               ================================================ */
 
             if ($result->num_rows == 1) {
 
@@ -240,10 +203,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stored_password =
                     $user['password'];
 
-
-                /* ============================================
-                   SUPPORT BOTH PASSWORD TYPES
-                   ============================================ */
 
                 if (
                     password_get_info(
@@ -268,16 +227,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
 
-                /* ============================================
-                   USER PASSWORD CORRECT
-                   ============================================ */
-
                 if ($password_ok) {
 
-
-                    /* ========================================
-                       CREATE USER SESSION
-                       ======================================== */
 
                     $_SESSION['username'] =
                         $user['username'];
@@ -286,12 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $user['email'];
 
 
-                    /*
-                     * If user_type does not exist for an
-                     * existing customer, treat them as
-                     * CUSTOMER.
-                     */
-
+  
                     $_SESSION['user_type'] =
                         $user['user_type'] ?? 'CUSTOMER';
 
@@ -307,9 +253,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $conn->close();
 
 
-                    /* ========================================
-                       REVIEWER USER
-                       ======================================== */
 
                     if (
                         $_SESSION['user_type']
@@ -322,13 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         exit();
 
-                    }
-
-
-                    /* ========================================
-                       NORMAL CUSTOMER
-                       ======================================== */
-
+} 
                     header(
                         "Location: ../index.php"
                     );
@@ -338,10 +275,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
 
-                /* ============================================
-                   USER PASSWORD WRONG
-                   ============================================ */
-
                 else {
 
                     $error =
@@ -350,11 +283,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
             }
-
-
-            /* ================================================
-               USER NOT FOUND
-               ================================================ */
 
             else {
 
@@ -373,9 +301,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
-/* ============================================================
-   CLOSE DATABASE CONNECTION
-   ============================================================ */
 
 if (
     isset($conn)
@@ -409,9 +334,6 @@ if (
         <h1>Login</h1>
 
 
-        <!-- ================================================
-             ERROR MESSAGE
-             ================================================ -->
 
         <?php if (!empty($error)) : ?>
 
@@ -426,9 +348,6 @@ if (
         <?php endif; ?>
 
 
-        <!-- ================================================
-             SUCCESS MESSAGE
-             ================================================ -->
 
         <?php if (!empty($success)) : ?>
 
@@ -443,19 +362,10 @@ if (
         <?php endif; ?>
 
 
-        <!-- ================================================
-             LOGIN FORM
-             ================================================ -->
-
         <form
             method="POST"
             action=""
         >
-
-
-            <!-- ============================================
-                 USERNAME / EMAIL
-                 ============================================ -->
 
             <label for="email">
 
@@ -487,10 +397,6 @@ if (
             <br><br>
 
 
-            <!-- ============================================
-                 PASSWORD
-                 ============================================ -->
-
             <label for="password">
 
                 Password
@@ -511,20 +417,12 @@ if (
             <br><br>
 
 
-            <!-- ============================================
-                 LOGIN BUTTON
-                 ============================================ -->
-
             <button type="submit">
 
                 Login
 
             </button>
 
-
-            <!-- ============================================
-                 SIGN UP
-                 ============================================ -->
 
             <p class="signup-link">
 
