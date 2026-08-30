@@ -537,13 +537,22 @@ include '../includes/navigation.php';
                         <span class="meta-icon">📍</span>
                         <div class="meta-text">
                             <span class="meta-label">Address</span>
-                            <span class="meta-value">
-                                <?php
-                                echo htmlspecialchars(
-                                    $restaurant['restaurant_address']
-                                );
-                                ?>
-                            </span>
+                            <a
+                                class="meta-value restaurant-map-link"
+                                href="https://www.google.com/maps/search/?api=1&amp;query=<?php echo rawurlencode($restaurant['restaurant_address']); ?>"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="View <?php echo htmlspecialchars($restaurant['restaurant_name']); ?> on Google Maps"
+                            >
+                                <span>
+                                    <?php
+                                    echo htmlspecialchars(
+                                        $restaurant['restaurant_address']
+                                    );
+                                    ?>
+                                </span>
+                                <span class="map-link-label">View on Google Maps ↗</span>
+                            </a>
                         </div>
                     </div>
 

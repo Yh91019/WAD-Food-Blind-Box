@@ -237,7 +237,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $user['email'];
 
 
-  
+                    /*
+                     * If user_type does not exist for an
+                     * existing customer, treat them as
+                     * CUSTOMER.
+                     */
+
                     $_SESSION['user_type'] =
                         $user['user_type'] ?? 'CUSTOMER';
 
@@ -253,6 +258,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $conn->close();
 
 
+                    /* ========================================
+                       REVIEWER USER
+                       ======================================== */
 
                     if (
                         $_SESSION['user_type']
@@ -265,7 +273,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         exit();
 
-} 
+                    }
+
+
+                    /* ========================================
+                       NORMAL CUSTOMER
+                       ======================================== */
+
                     header(
                         "Location: ../index.php"
                     );
