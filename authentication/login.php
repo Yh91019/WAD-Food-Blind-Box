@@ -286,16 +286,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $user['email'];
 
 
-                    /*
-                     * If user_type does not exist for an
-                     * existing customer, treat them as
-                     * CUSTOMER.
-                     */
-
-                    $_SESSION['user_type'] =
-                        $user['user_type'] ?? 'CUSTOMER';
-
-
                     $_SESSION['login_message'] =
                         "Welcome back, " .
                         $user['username'] .
@@ -305,24 +295,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt->close();
 
                     $conn->close();
-
-
-                    /* ========================================
-                       REVIEWER USER
-                       ======================================== */
-
-                    if (
-                        $_SESSION['user_type']
-                        === 'REVIEWER'
-                    ) {
-
-                        header(
-                            "Location: ../pages/reviews.php"
-                        );
-
-                        exit();
-
-                    }
 
 
                     /* ========================================
