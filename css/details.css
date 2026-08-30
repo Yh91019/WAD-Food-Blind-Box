@@ -756,6 +756,37 @@
     overflow-wrap: anywhere;
 }
 
+.restaurant-map-link {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    color: #4f3a29;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.restaurant-map-link:hover,
+.restaurant-map-link:focus-visible {
+    color: #a9682f;
+}
+
+.restaurant-map-link:focus-visible {
+    border-radius: 4px;
+    outline: 2px solid #d8a76f;
+    outline-offset: 3px;
+}
+
+.map-link-label {
+    color: #b06f34;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.restaurant-map-link:hover .map-link-label {
+    text-decoration: underline;
+}
+
 .meta-price {
     color: #2e7d32;
     font-weight: 800;
