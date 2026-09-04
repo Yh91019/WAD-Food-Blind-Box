@@ -6,7 +6,7 @@ UPDATE restaurants
 SET blind_box_image = CASE restaurant_name
    
     WHEN 'Amitie Cafe' THEN 'Amitie Cafe.jpg'
-    WHEN "Domino's Pizza (Sungai Long)" THEN "Domino''s Pizza (Sungai Long).jpg"
+    WHEN "Domino's Pizza (Sungai Long)" THEN "Domino's Pizza (Sungai Long).jpg"
     WHEN 'K Cafe' THEN 'K Cafe.webp'
     WHEN 'KFC Bandar Sungai Long' THEN 'KFC Bandar Sungai Long.jpg'
     WHEN 'Myosotis Cafe' THEN 'Myosotis Cafe.webp'
