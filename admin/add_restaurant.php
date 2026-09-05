@@ -68,10 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $error = "Opening and closing hours cannot be the same.";
 
-    } elseif (!preg_match('/^01[0-9]{8,9}$/', $phone_number)) {
-
-        $error = "Enter a valid Malaysian phone number, for example 0123456789.";
-
     } elseif (!is_numeric($blind_box_price) ||
               (float) $blind_box_price <= 0 ||
               (float) $blind_box_price > 99999999.99) {

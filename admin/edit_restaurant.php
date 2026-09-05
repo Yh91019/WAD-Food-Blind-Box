@@ -88,9 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $error = "Opening and closing hours cannot be the same.";
 
-    } elseif (!preg_match('/^01[0-9]{8,9}$/', $phone_number)) {
-
-        $error = "Enter a valid Malaysian phone number, for example 0123456789.";
 
     } elseif (!is_numeric($blind_box_price) ||
               (float) $blind_box_price <= 0 ||
@@ -386,10 +383,10 @@ $conn->close();
                         type="text"
                         id="restaurant_phone_number"
                         name="restaurant_phone_number"
-                        pattern="01[0-9]{8,9}"
-                        maxlength="11"
+                        pattern="0[3-9]-[0-9]{7,8}"
+                        maxlength="12"
                         inputmode="numeric"
-                        title="Enter 10 or 11 digits starting with 01"
+                        title="Enter a valid Malaysian landline number, e.g. 03-90111452"
                         value="<?php echo htmlspecialchars(
                             $form['restaurant_phone_number']
                         ); ?>"
