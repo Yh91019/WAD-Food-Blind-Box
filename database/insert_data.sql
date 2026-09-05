@@ -96,7 +96,7 @@ INSERT INTO restaurants (
     'Amitie Cafe',
     '56-1, Jalan SL 1/3, Bandar Sungai Long, 43200 Kajang',
     '10:00',
-    '22:00',
+    '17:00',
     '03-90111452',
     15.90,
     'A cosy brunch spot loved for its all-day breakfast and pasta dishes. Your blind box might feature their famous Salmon Aglio Olio, a fluffy waffle, or a savoury egg dish — comfort food with a homely touch.',

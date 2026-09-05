@@ -391,7 +391,10 @@ include '../includes/navigation.php';
 ?>
 
 <link rel="stylesheet" href="../css/status.css">
-<link rel="stylesheet" href="../css/details.css">
+<link
+    rel="stylesheet"
+    href="../css/details.css?v=<?php echo rawurlencode((string) filemtime(__DIR__ . '/../css/details.css')); ?>"
+>
 
 
 <main class="details-page">
@@ -418,8 +421,9 @@ include '../includes/navigation.php';
         <?php if ($restaurant) : ?>
 
 
-            <!-- IMAGE -->
+            <!-- PRODUCT IMAGE AND PURCHASE ACTIONS -->
 
+            <div class="details-product-panel">
             <div class="details-image-wrap">
                 <img
                     src="<?php echo htmlspecialchars(restaurant_image_url($restaurant['blind_box_image'] ?? null)); ?>"
@@ -435,6 +439,67 @@ include '../includes/navigation.php';
                         <small>(<?php echo count($reviews); ?>)</small>
                     </span>
                 </div>
+            </div>
+
+            <div class="details-purchase-panel">
+                <form method="POST" id="addToCartForm" class="cart-action-form">
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantity</span>
+
+                        <div class="quantity-controls">
+                            <button
+                                type="button"
+                                class="qty-btn qty-minus"
+                                aria-label="Decrease quantity"
+                            >−</button>
+
+                            <input
+                                type="number"
+                                name="quantity"
+                                id="quantityInput"
+                                class="qty-input"
+                                value="1"
+                                min="1"
+                                readonly
+                                aria-label="Quantity"
+                            >
+
+                            <button
+                                type="button"
+                                class="qty-btn qty-plus"
+                                aria-label="Increase quantity"
+                            >+</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" name="add_to_cart" class="add-cart-btn">
+                        Add to Cart
+                    </button>
+                </form>
+
+                <form method="POST" class="wishlist-action-form">
+                    <button
+                        type="submit"
+                        name="add_to_wishlist"
+                        class="wishlist-btn"
+                        aria-label="Add to wishlist"
+                        title="Add to wishlist"
+                    >
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 20.5S4 15.7 4 9.4A4.4 4.4 0 0 1 12 6.8a4.4 4.4 0 0 1 8 2.6c0 6.3-8 11.1-8 11.1Z" />
+                        </svg>
+                    </button>
+                </form>
+
+                <p id="cartClosedMessage" class="cart-closed-message">
+                    This restaurant is currently closed. You can still add it to your wishlist.
+                </p>
+
+                <div class="view-buttons">
+                    <a href="cart.php" class="view-cart-btn">View Cart</a>
+                    <a href="wishlist.php" class="view-wishlist-btn">View Wishlist</a>
+                </div>
+            </div>
             </div>
 
 
@@ -555,118 +620,6 @@ include '../includes/navigation.php';
                             </a>
                         </div>
                     </div>
-
-                </div>
-
-
-                <!-- ================================================= -->
-                <!-- BUTTONS -->
-                <!-- ================================================= -->
-
-                <div class="action-buttons">
-
-
-                    <!-- ADD TO CART -->
-
-                    <form method="POST" id="addToCartForm">
-
-                        <!-- QUANTITY SELECTOR -->
-
-                        <div class="quantity-selector">
-
-                            <span class="quantity-label">Quantity</span>
-
-                            <div class="quantity-controls">
-
-                                <button
-                                    type="button"
-                                    class="qty-btn qty-minus"
-                                    aria-label="Decrease quantity"
-                                >
-                                    −
-                                </button>
-
-                                <input
-                                    type="number"
-                                    name="quantity"
-                                    id="quantityInput"
-                                    class="qty-input"
-                                    value="1"
-                                    min="1"
-                                    readonly
-                                >
-
-                                <button
-                                    type="button"
-                                    class="qty-btn qty-plus"
-                                    aria-label="Increase quantity"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                        <button
-                            type="submit"
-                            name="add_to_cart"
-                            class="add-cart-btn"
-                        >
-
-                            🛒 Add to Cart
-
-                        </button>
-
-                    </form>
-
-
-                    <!-- ADD TO WISHLIST -->
-
-                    <form method="POST">
-
-                        <button
-                            type="submit"
-                            name="add_to_wishlist"
-                            class="wishlist-btn"
-                        >
-
-                            ♡ Add to Wishlist
-
-                        </button>
-
-                    </form>
-
-                    <p id="cartClosedMessage" class="cart-closed-message">
-                        This restaurant is currently closed. You can still add it to your wishlist.
-                    </p>
-
-
-                </div>
-
-
-                <!-- ================================================= -->
-                <!-- VIEW BUTTONS -->
-                <!-- ================================================= -->
-
-                <div class="view-buttons">
-
-
-                    <a
-                        href="cart.php"
-                        class="view-cart-btn"
-                    >
-                        View Cart
-                    </a>
-
-
-                    <a
-                        href="wishlist.php"
-                        class="view-wishlist-btn"
-                    >
-                        View Wishlist
-                    </a>
-
 
                 </div>
 
