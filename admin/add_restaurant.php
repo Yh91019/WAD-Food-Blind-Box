@@ -289,14 +289,16 @@ $conn->close();
                         type="text"
                         id="restaurant_phone_number"
                         name="restaurant_phone_number"
-                        placeholder="e.g. 0123456789"
-                        pattern="01[0-9]{8,9}"
-                        maxlength="11"
+                        pattern="0[3-9]-[0-9]{7,8}"
+                        maxlength="12"
                         inputmode="numeric"
-                        title="Enter 10 or 11 digits starting with 01"
-                        value="<?php echo htmlspecialchars($form['restaurant_phone_number']); ?>"
+                        title="Enter a valid Malaysian landline number, e.g. 03-90111452"
+                        value="<?php echo htmlspecialchars(
+                            $form['restaurant_phone_number']
+                        ); ?>"
                         required
-                    >
+                    > 
+
 
                 </div>
 
