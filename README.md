@@ -35,7 +35,7 @@ Blind Bite is a PHP and MySQL food blind-box ordering website. Customers can bro
 
 No Composer or Node.js installation is required.
 
-## Installation
+## Installation Instructions
 
 ### 1. Copy the project
 
@@ -46,8 +46,6 @@ For WampServer, the recommended location is:
 ```text
 C:\wamp64\www\WAD-Food-Blind-Box
 ```
-
-For XAMPP, place it inside `C:\xampp\htdocs\` instead.
 
 ### 2. Start the services
 
@@ -65,25 +63,17 @@ Using phpMyAdmin:
 1. Open `http://localhost/phpmyadmin/`.
 2. Select the **Import** tab.
 3. Import `database/create_table.sql` first. This creates the `blindbite` database and all required tables.
-4. Import `database/insert_data.sql` second. This adds sample restaurants, promotions, and the default administrator account.
+4. Import `database/promotions and vouchers.sql`, `database/insert_data.sql` and `database/update_default_restauran_image.sql`. This adds sample restaurants, promotions and vouchers, default administrator account, review, ratings, orderhistory from default user account and the images of the sample restauratns
+
 
 The required import order is:
 
 ```text
 1. database/create_table.sql
 2. database/insert_data.sql
+3. database/promotions and vouchers.sqlatabase/
+4. database/update_default_restauran_image.sql
 ```
-
-`database/promotions and vouchers.sql` is an optional migration for an older copy of the database. Do not import it during a normal fresh installation.
-
-You can also import the files from Windows Command Prompt while it is open in the project folder:
-
-```bat
-mysql -u root -P 3308 < database/create_table.sql
-mysql -u root -P 3308 blindbite < database/insert_data.sql
-```
-
-If the MySQL root account has a password, add `-p` and enter the password when prompted.
 
 ## Database configuration
 
@@ -94,8 +84,9 @@ $dbhost = "localhost";
 $dbUser = "root";
 $dbPass = "";
 $dbName = "blindbite";
-$port = 3308;
+$port = 3308; 
 ```
+Edit the port number in order to connect sucessfully
 
 Update these values to match the local MySQL installation:
 
@@ -148,7 +139,6 @@ Password: admin123
 
 Sign in through `authentication/login.php`. A customer account can be created from the Sign Up page.
 
-> The default administrator password is intended for local demonstration only. Change it before placing the project on a public server.
 
 ## Project structure
 

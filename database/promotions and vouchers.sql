@@ -1,30 +1,5 @@
 USE blindbite;
 
-CREATE TABLE IF NOT EXISTS promotions (
-    promotion_id INT AUTO_INCREMENT PRIMARY KEY,
-    code VARCHAR(40) NOT NULL UNIQUE,
-    title VARCHAR(120) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    discount_type ENUM('Percentage', 'Fixed') NOT NULL,
-    discount_value DECIMAL(10,2) NOT NULL,
-    minimum_spend DECIMAL(10,2) NOT NULL DEFAULT 0,
-    starts_at DATETIME NOT NULL,
-    ends_at DATETIME NOT NULL,
-    is_active TINYINT(1) NOT NULL DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS user_vouchers (
-    user_voucher_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    promotion_id INT NOT NULL,
-    claimed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    used_at TIMESTAMP NULL DEFAULT NULL,
-    UNIQUE KEY unique_user_promotion (username, promotion_id),
-    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
-    FOREIGN KEY (promotion_id) REFERENCES promotions(promotion_id) ON DELETE CASCADE
-);
-
 SET @sql = IF(
     (SELECT COUNT(*) FROM information_schema.COLUMNS
      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'history' AND COLUMN_NAME = 'voucher_code') = 0,
